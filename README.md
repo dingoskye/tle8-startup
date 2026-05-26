@@ -9,11 +9,12 @@
 
 ## Project Structure
 
+## ERD
 
 ## Deployment
 
 
-## AI integration
+## AI Integration
 
 
 ## Edge Cases
