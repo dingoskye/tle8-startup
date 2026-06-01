@@ -1,11 +1,16 @@
 import './index.css'
+import {Routes, Route} from "react-router";
+import Home from "./pages/home.jsx";
+import Layout from "./layout.jsx";
 
 function App() {
 
     return (
-        <>
-            <h1 className="text-green-600">Test</h1>
-        </>
+        <Routes>
+            <Route element={<Layout/>}>
+                <Route path="/" element={<Home/>}/>
+            </Route>
+        </Routes>
     )
 }
 
