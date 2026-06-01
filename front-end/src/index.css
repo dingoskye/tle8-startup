@@ -1,9 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
 @import "tailwindcss";
 
 :root {
     --background: #F0E2C7;
     --nav-brown: #B17F59;
-    --thoas-white: #F0EFF2;
+    --thomas-white: #F0EFF2;
     --flamingo-pink: #FFB6C1;
     --ruas-red: #C91F1F;
     --jade-green: #7EE572;
@@ -11,5 +13,20 @@
     --skye-blue: #7CC1EC;
     --font-blue: #003340;
 
+    --headers: "Permanent Marker", sans-serif;
+    --paragraph: "Indie Flower", sans-serif;
+}
 
+@theme {
+    --color-background: var(--background);
+    --color-nav-brown: var(--nav-brown);
+    --color-white: var(--thomas-white);
+    --color-punaise: var(--ruas-red);
+    --color-border-punaise: #7c1313;
+    --color-primary: var(--skye-blue);
+
+    --color-deadline-red: #E57472;
+
+    --font-headers: var(--headers);
+    --font-paragraph: var(--paragraph);
 }
