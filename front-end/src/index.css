@@ -1,1 +1,15 @@
 @import "tailwindcss";
+
+:root {
+    --background: #F0E2C7;
+    --nav-brown: #B17F59;
+    --thoas-white: #F0EFF2;
+    --flamingo-pink: #FFB6C1;
+    --ruas-red: #C91F1F;
+    --jade-green: #7EE572;
+    --christa-yellow: #FCF457;
+    --skye-blue: #7CC1EC;
+    --font-blue: #003340;
+
+
+}
