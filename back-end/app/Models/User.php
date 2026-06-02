@@ -41,7 +41,7 @@ class User extends Authenticatable
     public function mainTasks(): BelongsToMany
     {
         return $this->belongsToMany(MainTask::class, 'user_main_task')
-            ->withPivot('progress', 'level');
+            ->withPivot('progress', 'level', 'score', 'completed');
     }
 
     public function groups(): BelongsToMany

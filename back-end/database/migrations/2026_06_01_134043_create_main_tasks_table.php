@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,6 +12,11 @@ return new class extends Migration
     {
         Schema::create('main_tasks', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
+            $table->text('description')->nullable();
+            $table->dateTime('deadline');
+            $table->dateTime('completed_at')->nullable();
+            $table->string('ai_file')->nullable();
             $table->timestamps();
         });
     }

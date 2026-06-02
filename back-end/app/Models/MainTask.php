@@ -15,7 +15,7 @@ class MainTask extends Model
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'user_main_tasks')
-            ->withPivot('progress', 'level');
+            ->withPivot('progress', 'level', 'score', 'completed');
 
     }
 }
