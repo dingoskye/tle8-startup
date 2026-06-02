@@ -1,11 +1,16 @@
 import './index.css'
+import {Route, Routes} from "react-router";
+import Layout from "./layout.jsx";
+import Subtask from "./pages/subtask.jsx";
 
 function App() {
 
     return (
-        <>
-            <h1 className="text-green-600">Test</h1>
-        </>
+        <Routes>
+            <Route element={<Layout/>}>
+                <Route path="/subtaak" element={<Subtask/>}/>
+            </Route>
+        </Routes>
     )
 }
 

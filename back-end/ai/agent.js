@@ -1,6 +1,6 @@
 import { AzureChatOpenAI } from "@langchain/openai"
 import { createAgent, tool } from "langchain";
-import {getDate, getDepartures, getTrip, retrieve} from "./tools.js"
+import {retrieve} from "./tools.js"
 import { MemorySaver } from "@langchain/langgraph";
 
 const model = new AzureChatOpenAI({temperature: 0.2});
@@ -8,9 +8,9 @@ const checkpointer = new MemorySaver();
 
 const agent = createAgent({
     model,
-    tools: [getDate, getTrip, getDepartures, retrieve],
+    tools: [retrieve],
     checkpointer,
-    systemPrompt: ""
+    systemPrompt: "You are a "
 });
 
 export async function callAgent(prompt) {
