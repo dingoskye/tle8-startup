@@ -1,33 +1,38 @@
-import Punaise from "./punaise.jsx";
+import Punaise from "@/components/ui/punaise.jsx";
 import {LuSquare, LuSquareCheckBig} from "react-icons/lu";
+import Card from "@/components/ui/cards.jsx";
+import Tape from "@/components/ui/tape.jsx";
 
 function TaskCard({task}) {
     return (
-        <article
-            className="bg-white shadow-xl rounded-lg p-4 w-[80%] mx-auto relative flex flex-col gap-3 mt-2">
-            <Punaise/>
-            <div className="flex gap-4 mt-2">
-                <div className="bg-deadline-red p-2 relative flex items-center max-w-[18%]">
-                    <div className="w-8 h-2 absolute translate-x-1/3 rotate-45 top-0 right-0 bg-nav-brown"/>
-                    <div className="w-8 h-2 absolute -translate-x-1/3 rotate-45 bottom-0 left-0 bg-nav-brown"/>
-                    <p className="text-center font-headers text-md">{task.deadline}</p>
+        <div className="w-[95%] mx-auto h-full">
+            <Card variant="white">
+                <div className="gap-4 mt-2 grid grid-cols-3 grow">
+                    <div
+                        className="bg-deadline-red p-1 relative flex items-center col-span-1 rounded-sm shadow-md">
+                        <Tape variant="small-r"/>
+                        <Tape variant="small-l"/>
+                        <p className="w-full text-center font-headers text-md lg:break-all">{task.deadline}</p>
+                    </div>
+                    <div className="col-span-2">
+                        <h2 className="text-xl font-headers text-left">{task.title}</h2>
+                        <p className="text-left">{task.group}</p>
+                    </div>
                 </div>
                 <div>
-                    <h2 className="text-xl font-headers">{task.title}</h2>
-                    <p>{task.group}</p>
+                    <div className="flex gap-2 items-center">
+                        <p className="sr-only">To do item niet af</p>
+                        <LuSquare/>
+                        <p>{task.subtasks.todo}</p>
+                    </div>
+                    <div className="flex gap-2 items-center">
+                        <p className="sr-only">To do item wel af</p>
+                        <LuSquareCheckBig/>
+                        <p className="line-through">{task.subtasks.done}</p>
+                    </div>
                 </div>
-            </div>
-            <div>
-                <div className="flex gap-2 items-center">
-                    <LuSquare/>
-                    <p>{task.subtasks.todo}</p>
-                </div>
-                <div className="flex gap-2 items-center">
-                    <LuSquareCheckBig/>
-                    <p className="line-through">{task.subtasks.done}</p>
-                </div>
-            </div>
-        </article>
+            </Card>
+        </div>
     )
 }
 

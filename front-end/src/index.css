@@ -1,6 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/inter";
 
 :root {
     --background: #F0E2C7;
@@ -12,6 +15,7 @@
     --christa-yellow: #FCF457;
     --skye-blue: #7CC1EC;
     --font-blue: #003340;
+    --purple: #DDAEFE;
 
     --headers: "Permanent Marker", sans-serif;
     --paragraph: "Indie Flower", sans-serif;
@@ -25,8 +29,22 @@
     --color-border-punaise: #7c1313;
     --color-primary: var(--skye-blue);
 
+    --color-text: var(--font-blue);
+
+    --color-button-purple: var(--purple);
     --color-deadline-red: #E57472;
 
     --font-headers: var(--headers);
     --font-paragraph: var(--paragraph);
 }
+
+/* dit is voor het testen van WCAG 1.4.12 Text Spacing */
+/** {*/
+/*    line-height: 1.5 !important;*/
+/*    letter-spacing: 0.12em !important;*/
+/*    word-spacing: 0.16em !important;*/
+/*}*/
+
+/*p {*/
+/*    margin-bottom: 2em !important;*/
+/*}*/
