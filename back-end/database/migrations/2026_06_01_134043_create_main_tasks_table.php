@@ -16,7 +16,8 @@ return new class extends Migration {
             $table->text('description')->nullable();
             $table->dateTime('deadline');
             $table->dateTime('completed_at')->nullable();
-            $table->string('ai_file')->nullable();
+            $table->string('ai_file');
+            $table->foreignId('group_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

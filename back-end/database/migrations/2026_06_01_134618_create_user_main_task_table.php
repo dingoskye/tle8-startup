@@ -16,6 +16,8 @@ return new class extends Migration {
             $table->string('level');
             $table->integer('score')->nullable();
             $table->boolean('completed')->nullable();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('main_task_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

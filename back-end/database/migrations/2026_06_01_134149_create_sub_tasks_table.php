@@ -14,9 +14,11 @@ return new class extends Migration {
             $table->id();
             $table->string('title');
             $table->text('description')->nullable();
-            $table->boolean('completed');
+            $table->boolean('completed')->default(false);
             $table->dateTime('deadline')->nullable();
             $table->dateTime('completed_at')->nullable();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('main_task_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

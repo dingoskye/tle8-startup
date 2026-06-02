@@ -13,6 +13,8 @@ return new class extends Migration {
         Schema::create('user_settings', function (Blueprint $table) {
             $table->id();
             $table->boolean('written_font');
+            $table->foreignId('theme_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

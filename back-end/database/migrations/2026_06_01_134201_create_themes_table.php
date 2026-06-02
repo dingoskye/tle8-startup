@@ -13,6 +13,7 @@ return new class extends Migration {
         Schema::create('themes', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->foreignId('user_setting_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }
