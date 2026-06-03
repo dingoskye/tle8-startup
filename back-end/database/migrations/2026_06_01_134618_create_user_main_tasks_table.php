@@ -10,15 +10,16 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('user_main_task', function (Blueprint $table) {
+        Schema::create('user_main_tasks', function (Blueprint $table) {
             $table->id();
-            $table->tinyInteger('progress');
-            $table->string('level');
+            $table->tinyInteger('progress')->default(0);
+            $table->string('level')->default('beginner');
             $table->integer('score')->nullable();
             $table->boolean('completed')->nullable();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('main_task_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -27,6 +28,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_main_task');
+        Schema::dropIfExists('user_main_tasks');
     }
 };
