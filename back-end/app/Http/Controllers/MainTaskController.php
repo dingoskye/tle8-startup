@@ -13,9 +13,10 @@ class MainTaskController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(string $id)
     {
-        return MainTask::with('group')->get();
+
+        return MainTask::with(['group', 'users'])->find($id);
     }
 
     /**
