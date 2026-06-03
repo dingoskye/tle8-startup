@@ -54,15 +54,18 @@ class GroupController extends Controller
     public function edit(string $id, request $request)
     {
         try {
-            if (!$request->name || !$request->role) {
+            echo $request->role;
+            if (!$request->name || !$request->role || !$request->user_id) {
                 return response(['error' => 'you are stupid'], 404);
             }
             $group = Group::query()->findOrFail($id);
-            $group->name = $request->name;
-            $group->role = $request->role;
-            $group->user_id = $request->user_id;
+            $group->users()->updateExistingPivot($request->user_id, [
+                'role' => $request->role
+            ]);
 
-            $group->update();
+            $group->update([
+                'name' => $request->name
+            ]);
 
             return $group;
         } catch (ModelNotFoundException $e) {
