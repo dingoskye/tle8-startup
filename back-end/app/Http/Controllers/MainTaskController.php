@@ -38,8 +38,8 @@ class MainTaskController extends Controller
             $mainTask->save();
 
             $mainTask->users()->attach($request->user_id, [
-                'level' => $request->level ?? null,
-                'progress' => $request->progress ?? null,
+                'level' => $request->level ?? "beginner",
+                'progress' => $request->progress ?? 0,
                 'score' => $request->score ?? null,
             ]);
 
