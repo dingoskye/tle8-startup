@@ -1,5 +1,7 @@
+// DEZE FILE IS VOOR TESTEN, VERWIJDER VOOR DE VOLLEDIGE VERSIE.
 import React, {useEffect, useState} from "react";
 
+// Submit component met Session Storage om te testen. Later vervangen door echte database.
 export function SubmitTest() {
     const [results, setResults] = useState([]);
 
@@ -28,6 +30,7 @@ export function SubmitTest() {
         console.log("Results updated:", results);
     }, [results]);
 
+    // HTML render.
     return (
         <div>
             <h1 className="text-3xl font-bold mb-8 text-center">Ingediende Taken</h1>
