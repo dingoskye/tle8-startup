@@ -21,4 +21,9 @@ class MainTask extends Model
             ->withPivot('progress', 'level', 'score', 'completed');
 
     }
+
+    public function group(): BelongsTo
+    {
+        return $this->belongsTo(Group::class, 'group_id');
+    }
 }
