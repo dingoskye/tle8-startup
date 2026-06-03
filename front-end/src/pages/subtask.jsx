@@ -14,7 +14,7 @@ function Subtask() {
     //     try {
     //         setLoading(true);
     //
-    //         const result = await fetch(`http://145.24.237.33:8000/circuits/${id}`, {
+    //         const result = await fetch(`http://localhost:8000/main_tasks/${id}`, {
     //             method: "GET",
     //             headers: {
     //                 'Accept': 'application/json'
@@ -42,7 +42,7 @@ function Subtask() {
     //     } finally {
     //         setLoading(false);
     //     }
-    //     console.log("FETCH URL:", `http://145.24.237.33:8000/circuits/${id}`);
+    //     console.log("FETCH URL:", `http://localhost:8000/main_tasks/${id}`);
     // };
     //
     // useEffect(() => {
@@ -89,13 +89,36 @@ function Subtask() {
         // } catch (err) {
         //     console.error(err);
         // }
+
+        // try {
+        //     const res = await fetch("http://localhost:8000/api/subtasks/generate", {
+        //         method: "POST",
+        //         headers: {
+        //             "Content-Type": "application/json",
+        //             "Accept": "application/json",
+        //         },
+        //         body: JSON.stringify(formData),
+        //     });
+        //
+        //     if (!res.ok) {
+        //         throw new Error("Subtasks genereren mislukt");
+        //     }
+        //
+        //     const data = await res.json();
+        //
+        //     navigate(`/subtaken/${data.taskId}`);
+        //
+        // } catch (err) {
+        //     console.error(err);
+        // }
     };
 
     return (
         <div className="relative max-w-md mx-auto min-h-175 bg-[#F0EFF2] p-8 rounded shadow-lg">
             <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-red-600 rounded-full shadow-md"></div>
 
-            <h1 className="text-4xl font-bold text-black mb-10 font-serif">
+            <h1 className="text-4xl font-bold text-black mb-10 font-serif flex items-center justify-center">
+                {/*{main_tasks.title}*/}
                 Ontwerpen 4
             </h1>
 
@@ -143,8 +166,7 @@ function Subtask() {
                                                 niveau: value,
                                             }))
                                         }
-                                        className="relative flex h-12 justify-center"
-                                    >
+                                        className="relative flex h-12 justify-center">
                                         {/* verticale lijn */}
                                         <span className="absolute top-0 h-12 w-0.5 bg-black"></span>
 

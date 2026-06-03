@@ -8,7 +8,7 @@ function App() {
     return (
         <Routes>
             <Route element={<Layout/>}>
-                <Route path="/subtaak" element={<Subtask/>}/>
+                <Route path="/subtaak-aanmaken" element={<Subtask/>}/>
             </Route>
         </Routes>
     )
