@@ -16,7 +16,9 @@ class MainTaskController extends Controller
     public function index(string $id)
     {
 
-        return MainTask::with(['group', 'users'])->find($id);
+        return MainTask::with(['group', 'users'])->whereHas('users', function ($query) use ($id) {
+            $query->where('users.id', $id);
+        })->get();
     }
 
     /**
