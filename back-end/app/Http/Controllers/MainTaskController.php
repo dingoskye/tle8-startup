@@ -15,7 +15,7 @@ class MainTaskController extends Controller
      */
     public function index()
     {
-        return MainTask::all();
+        return MainTask::with('group')->get();
     }
 
     /**
@@ -70,6 +70,7 @@ class MainTaskController extends Controller
             }
             $mainTask = MainTask::query()->findOrFail($id);
 
+            // is kinda redundant, but we'll leave it there for safety
             $mainTask->update([
                 'title' => $request->title ?? $mainTask->title,
                 'deadline' => $request->deadline ?? $mainTask->deadline,
