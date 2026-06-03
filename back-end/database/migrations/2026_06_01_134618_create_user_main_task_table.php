@@ -12,8 +12,8 @@ return new class extends Migration {
     {
         Schema::create('user_main_task', function (Blueprint $table) {
             $table->id();
-            $table->tinyInteger('progress');
-            $table->string('level');
+            $table->tinyInteger('progress')->default(0);
+            $table->string('level')->default('beginner');
             $table->integer('score')->nullable();
             $table->boolean('completed')->nullable();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();

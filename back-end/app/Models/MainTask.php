@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 
-#[fillable(['name', 'description', 'deadline', 'ai_file'])]
+#[fillable(['title', 'description', 'deadline', 'ai_file', 'group_id'])]
 class MainTask extends Model
 {
     public function users(): BelongsToMany
