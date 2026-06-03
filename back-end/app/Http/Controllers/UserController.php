@@ -51,10 +51,10 @@ class UserController extends Controller
             if ($request === decrypt($user->password)) {
                 return $user;
             } else {
-                return error('not the right login info');
-            };
+                return response(['error' => 'you are stupid'], 404);
+            }
         } catch (ModelNotFoundException $e) {
-            return $e->getMessage();
+            return response(['error' => $e], 500);
         }
     }
 
