@@ -30,6 +30,7 @@ class MainTaskController extends Controller
             $mainTask = new MainTask([
                 'title' => $request->title,
                 'deadline' => $request->deadline,
+                'description' => $request->description,
                 'ai_file' => $request->ai_file,
                 'group_id' => $request->group_id,
 
@@ -72,6 +73,7 @@ class MainTaskController extends Controller
             $mainTask->update([
                 'title' => $request->title ?? $mainTask->title,
                 'deadline' => $request->deadline ?? $mainTask->deadline,
+                'description' => $request->description ?? $mainTask->description,
                 'ai_file' => $request->ai_file ?? $mainTask->ai_file,
                 'group_id' => $request->group_id ?? $mainTask->group_id,
 

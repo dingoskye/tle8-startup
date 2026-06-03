@@ -27,11 +27,16 @@ class GroupController extends Controller
             }
             $group = new Group([
                 'name' => $request->name,
-                'role' => $request->role,
+                'description' => $request->description,
+                'image' => $request->image,
                 'user_id' => $request->user_id
             ]);
-
             $group->save();
+
+            $group->users()->attach($request->user_id, [
+                'role' => $request->role,
+            ]);
+
 
             return $group;
         } catch (ModelNotFoundException $e) {
@@ -59,13 +64,15 @@ class GroupController extends Controller
                 return response(['error' => 'you are stupid'], 404);
             }
             $group = Group::query()->findOrFail($id);
-            $group->users()->updateExistingPivot($request->user_id, [
-                'role' => $request->role
-            ]);
 
             $group->update([
-                'name' => $request->name
+                'name' => $request->name ?? $group->name,
+                'description' => $request->description ?? $group->description,
             ]);
+            $group->users()->updateExistingPivot($request->user_id, [
+                'role' => $request->role ?? $group->role
+            ]);
+
 
             return $group;
         } catch (ModelNotFoundException $e) {

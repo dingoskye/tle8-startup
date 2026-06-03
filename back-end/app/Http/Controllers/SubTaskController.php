@@ -28,6 +28,7 @@ class SubTaskController extends Controller
             $subTask = new SubTask([
                 'title' => $request->title,
                 'user_id' => $request->user_id,
+                'description' => $request->description,
                 'main_task_id' => $request->main_task_id,
             ]);
 
@@ -62,6 +63,7 @@ class SubTaskController extends Controller
             $subTask->update([
                 'title' => $request->title ?? $subTask->title,
                 'user_id' => $request->user_id ?? $subTask->user_id,
+                'description' => $request->description ?? $subTask->description,
                 'main_task_id' => $request->main_task_id ?? $subTask->main_task_id,
                 'group_id' => $request->group_id ?? $subTask->group_id,
 
