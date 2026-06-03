@@ -45,7 +45,7 @@ class GroupController extends Controller
      */
     public function show(string $id)
     {
-        return User::query()->findOrFail($id);
+        return Group::query()->findOrFail($id);
     }
 
     /**
@@ -77,8 +77,10 @@ class GroupController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function delete(string $id)
     {
-        //
+        $group = Group::query()->findOrFail($id);
+        $group->delete();
+        return $group;
     }
 }

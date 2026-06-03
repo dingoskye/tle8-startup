@@ -7,11 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 
 #[fillable(['title', 'description', 'deadline', 'ai_file', 'group_id'])]
 class MainTask extends Model
 {
+    use SoftDeletes;
+
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'user_main_tasks')

@@ -19,6 +19,7 @@ return new class extends Migration {
             $table->string('ai_file');
             $table->foreignId('group_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

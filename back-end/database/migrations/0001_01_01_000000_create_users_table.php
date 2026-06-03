@@ -21,6 +21,7 @@ return new class extends Migration {
             $table->timestamps();
             $table->boolean('is_admin')->default(false);
             $table->string('profile_image')->nullable();
+            $table->softDeletes();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

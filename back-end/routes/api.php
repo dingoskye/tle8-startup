@@ -20,5 +20,6 @@ Route::post('/group/create', [GroupController::class, 'create']);
 Route::get('/group/', [GroupController::class, 'index']);
 Route::get('/group/{id}', [GroupController::class, 'show']);
 Route::put('/group/edit/{id}', [GroupController::class, 'edit']);
+Route::delete('/group/delete/{id}', [GroupController::class, 'delete']);
 
 
