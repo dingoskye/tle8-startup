@@ -10,7 +10,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('user_main_task', function (Blueprint $table) {
+        Schema::create('user_main_tasks', function (Blueprint $table) {
             $table->id();
             $table->tinyInteger('progress')->default(0);
             $table->string('level')->default('beginner');
@@ -28,6 +28,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_main_task');
+        Schema::dropIfExists('user_main_tasks');
     }
 };
