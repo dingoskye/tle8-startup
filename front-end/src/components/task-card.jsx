@@ -7,6 +7,7 @@ import {useNavigate} from "react-router";
 
 function TaskCard({task}) {
     const navigate = useNavigate()
+    // console.log(task.progress)
 
     return (
         task !== "" ?
@@ -17,27 +18,30 @@ function TaskCard({task}) {
                             className="bg-deadline-red p-1 relative flex items-center col-span-1 rounded-sm shadow-md">
                             <Tape variant="small-r"/>
                             <Tape variant="small-l"/>
-                            <p className="w-full text-center font-headers text-md lg:break-all">{task.deadline}</p>
+                            <p className="w-full text-center font-headers text-md lg:break-all">
+                                {new Date(task.deadline).toLocaleDateString("nl-NL", {
+                                    day: "numeric", month: "long",
+                                })}</p>
                         </div>
                         <div className="col-span-2">
                             <h2 className="text-xl font-headers text-left">{task.title}</h2>
-                            <p className="text-left">{task.group}</p>
+                            <p className="text-left">{task.group.name}</p>
                         </div>
                     </div>
                     <div>
                         <div className="flex gap-2 items-center">
                             <p className="sr-only">To do item niet af</p>
                             <LuSquare/>
-                            <p>{task.subtasks.todo}</p>
+                            <p>Taak 1</p>
                         </div>
                         <div className="flex gap-2 items-center">
                             <p className="sr-only">To do item wel af</p>
                             <LuSquareCheckBig/>
-                            <p className="line-through">{task.subtasks.done}</p>
+                            <p className="line-through">Taak 2</p>
                         </div>
                     </div>
                     <div className="h-7">
-                        <Progressbar progress={task.progress}/>
+                        <Progressbar progress={task.users[0].pivot.progress}/>
                     </div>
 
                 </Card>

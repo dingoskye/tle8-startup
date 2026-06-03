@@ -5,37 +5,12 @@ import {MainButton} from "@/components/ui/buttons.jsx";
 import {useEffect} from "react";
 import {TapeCard} from "@/components/ui/cards.jsx";
 import GroupCard from "@/components/group-card.jsx";
+import {useMainTask} from "@/context/task-context.jsx";
+import {useGroup} from "@/context/group-context.jsx";
 
 function Home() {
-    //tijdelijke data
-    const tasks = [
-        {
-            title: "Techniek filosofie 4",
-            deadline: "10 juni",
-            group: "Team 4",
-            subtasks: {
-                todo: "Pitch in elkaar zetten.",
-                done: "Social impact onderbouwt."
-            },
-            progress: "10"
-        },
-        {
-            title: "Programmeren 4",
-            deadline: "15 juni",
-            group: "Team 4",
-            subtasks: {
-                todo: "Physics toegepast in de game.",
-                done: "Collision detection toegepast."
-            },
-            progress: "75"
-        }
-    ]
-
-    const groups = [
-        {name: "team 4", picture: null},
-        {name: "CMGT", picture: null},
-        {name: "Epic team", picture: null}
-    ]
+    const {fetchMainTasks, mainTasks} = useMainTask()
+    const {fetchGroups, groups} = useGroup()
 
     const variants = [
         "secondary",
@@ -47,6 +22,8 @@ function Home() {
     //documenten titels voor WCAG!!
     useEffect(() => {
         document.title = "Board-it | Home";
+        fetchMainTasks()
+        fetchGroups()
     }, []);
 
     return (
@@ -63,7 +40,7 @@ function Home() {
                 {/*task carousel*/}
                 <Carousel className="px-6 text-left">
                     <CarouselContent className="py-4">
-                        {tasks.length !== 0 ? tasks.map((task, index) =>
+                        {mainTasks !== null && mainTasks.length !== 0 ? mainTasks.map((task, index) =>
                             <CarouselItem key={index} className="flex md:basis-1/2 lg:basis-1/3">
                                 <TaskCard task={task}/>
                             </CarouselItem>
@@ -85,7 +62,7 @@ function Home() {
                     <h2 className="text-left text-xl font-headers mb-2">Studiegroepen:</h2>
                     <Carousel className="px-6 text-left">
                         <CarouselContent className="py-4">
-                            {groups.length !== 0 ? groups.map((group, index) =>
+                            {groups !== null && groups.length !== 0 ? groups.map((group, index) =>
                                 <CarouselItem key={index} className="flex basis-1/2 md:basis-1/3 lg:basis-1/5">
                                     <GroupCard key={index} group={group} variant={variants[index % variants.length]}/>
                                 </CarouselItem>
