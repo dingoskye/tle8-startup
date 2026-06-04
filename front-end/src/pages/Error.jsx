@@ -1,7 +1,8 @@
 import Tape from "@/components/ui/tape.jsx";
 import {TapeCard} from "@/components/ui/cards.jsx";
+import {useEffect} from "react";
 
-function ErrorPage({code, message}) {
+export function ErrorComponent({code, message}) {
     return (
         <div className="flex gap-8 flex-col grow justify-center">
             <header role="banner" className="text-center p-1 mt-2 relative">
@@ -18,4 +19,13 @@ function ErrorPage({code, message}) {
     )
 }
 
-export default ErrorPage
+export function ErrorPage() {
+    //documenten titels voor WCAG!!
+    useEffect(() => {
+        document.title = "Board-it | 404 error";
+    }, []);
+
+    return (
+        <ErrorComponent code="404" message="Pagina niet gevonden..."/>
+    )
+}

@@ -12,7 +12,7 @@ function Nav() {
             <NavLinks variant="small" link="/"><IoPerson className="text-xl"/></NavLinks>
             <NavLinks variant="big" link="/"><FaPlus className="text-3xl"/></NavLinks>
             <NavLinks variant="small" link="/hoofdtaken"><FaTasks className="text-xl"/></NavLinks>
-            <NavLinks variant="small" link="/"><HiUserGroup className="text-xl"/></NavLinks>
+            <NavLinks variant="small" link="/studiegroepen"><HiUserGroup className="text-xl"/></NavLinks>
         </nav>
     )
 }

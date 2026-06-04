@@ -1,8 +1,14 @@
 import Tape from "@/components/ui/tape.jsx";
 import {Card, TapeCard} from "@/components/ui/cards.jsx";
 import {MainButton} from "@/components/ui/buttons.jsx";
+import {useEffect} from "react";
 
 function Welcome() {
+    //documenten titels voor WCAG!!
+    useEffect(() => {
+        document.title = "Board-it | Welkom";
+    }, []);
+
     return (
         <>
             <header role="banner" className="text-center p-1 mt-2 relative">
@@ -10,6 +16,9 @@ function Welcome() {
                     <Tape variant="big-r"/>
                     <Tape variant="big-l"/>
                     <h1 className="text-4xl font-headers">Welkom bij Board-it!</h1>
+                    <p className="text-xl">{new Date().toLocaleDateString('nl-Nl', {
+                        day: "numeric", month: "long", year: "numeric"
+                    })}</p>
                 </div>
             </header>
 

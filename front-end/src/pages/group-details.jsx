@@ -1,16 +1,16 @@
 import {useEffect} from "react";
 
-function GroupOverview() {
+function GroupDetails() {
     //documenten titels voor WCAG!!
     useEffect(() => {
-        document.title = "Board-it | Studiegroepen";
+        document.title = "Board-it | Details groep";
     }, [])
 
     return (
         <div>
-            <p>Groepen overzicht</p>
+            <p>Taak details</p>
         </div>
     )
 }
 
-export default GroupOverview
+export default GroupDetails

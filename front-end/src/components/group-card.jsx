@@ -5,7 +5,7 @@ import {Link} from "react-router";
 function GroupCard({group, variant}) {
 
     return (
-        <Link className="w-full" to={`/studiegroep/${group.id ?? 1}`}>
+        <Link className="w-full" to={`/studiegroepen/${group.id ?? 1}`}>
             <Card variant={variant}>
                 {group.picture ?
                     <img
