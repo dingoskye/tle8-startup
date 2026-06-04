@@ -6,6 +6,7 @@ import TaskOverview from "@/pages/task-overview.jsx";
 import TaskDetails from "@/pages/task-details.jsx";
 import GroupOverview from "@/pages/group-overview.jsx";
 import Welcome from "@/pages/welcome.jsx";
+import ErrorPage from "@/pages/Error.jsx";
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
                 <Route path="/studiegroep/:id" element={<GroupOverview/>}/>
                 <Route path="/hoofdtaken" element={<TaskOverview/>}/>
                 <Route path="/hoofdtaken/:id" element={<TaskDetails/>}/>
+                <Route path="*" element={<ErrorPage code="404" message="Pagina niet gevonden..."/>}/>
             </Route>
         </Routes>
     )

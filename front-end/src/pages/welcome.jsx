@@ -13,12 +13,12 @@ function Welcome() {
                 </div>
             </header>
 
-            <Card kind="s" variant="secondary">
+            <TapeCard kind="s" variant="secondary">
                 <p className="text-2xl text-center w-full pt-4">Nooit meer wachten tot het laatste moment!</p>
-            </Card>
-            <Card kind="s" variant="tertiary">
+            </TapeCard>
+            <TapeCard kind="s" variant="tertiary">
                 <p className="text-2xl text-center w-full pt-4">Geef jezelf deadlines die echt werken!</p>
-            </Card>
+            </TapeCard>
             <Card kind="s" variant="primary">
                 <p className="text-2xl text-center w-full pt-4">Ga de strijd aan tegen klasgenoten en laat zien dat jij
                     de beste bent!</p>
