@@ -10,7 +10,7 @@ function Progressbar({progress}) {
     }
 
     return (
-        <div className="w-full h-full rounded-full border-white border-4 bg-gray-300 shadow-md overflow-hidden">
+        <div className="w-full h-full rounded-full border-white border-4 bg-gray-300 shadow-sm overflow-hidden">
             <div className={`h-full ${color}`} style={{width: `${progress}%`}}/>
             <p className="sr-only">Progressiebalk die laat zien dat je progressie {progress}% is</p>
         </div>

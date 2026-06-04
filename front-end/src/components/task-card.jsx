@@ -1,17 +1,15 @@
-import Punaise from "@/components/ui/punaise.jsx";
 import {LuSquare, LuSquareCheckBig} from "react-icons/lu";
 import {Card} from "@/components/ui/cards.jsx";
 import Tape from "@/components/ui/tape.jsx";
 import Progressbar from "@/components/ui/progressbar.jsx";
-import {useNavigate} from "react-router";
+import {Link} from "react-router";
 
 function TaskCard({task}) {
-    const navigate = useNavigate()
     // console.log(task.progress)
 
     return (
         task !== "" ?
-            <div className="w-[95%] mx-auto h-full" onClick={() => navigate(`/hoofdtaken/${task.id ?? 1}`)}>
+            <Link className="w-[95%] mx-auto h-full" to={`/hoofdtaken/${task.id ?? 1}`}>
                 <Card variant="white">
                     <div className="gap-4 mt-2 grid grid-cols-3 grow">
                         <div
@@ -45,7 +43,7 @@ function TaskCard({task}) {
                     </div>
 
                 </Card>
-            </div> : <div className="w-[95%] mx-auto h-[22vh] text-center">
+            </Link> : <div className="w-[95%] mx-auto h-[22vh] text-center">
                 <Card variant="white"><p className="pt-4 text-xl">Geen taken</p></Card>
             </div>
     )

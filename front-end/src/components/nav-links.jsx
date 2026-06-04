@@ -2,7 +2,7 @@ import {LuInbox} from "react-icons/lu";
 import {Link} from "react-router";
 
 function NavLinks({variant, link, children}) {
-    let style = "bg-button-purple rounded-full p-2 border-white border-4 shadow-md flex items-center justify-center"
+    let style = "bg-button-purple rounded-full p-2 border-white border-4 shadow-sm flex items-center justify-center my-3"
 
     switch (variant) {
         case "big" :
