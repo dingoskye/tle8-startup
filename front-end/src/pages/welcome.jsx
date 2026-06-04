@@ -29,8 +29,8 @@ function Welcome() {
                 <p className="text-2xl text-center w-full pt-4">Geef jezelf deadlines die echt werken!</p>
             </TapeCard>
             <Card kind="s" variant="primary">
-                <p className="text-2xl text-center w-full pt-4">Ga de strijd aan tegen klasgenoten en laat zien dat jij
-                    de beste bent!</p>
+                <p className="text-2xl text-center w-full pt-4">Ga de strijd aan tegen je klasgenoten en laat zien dat
+                    jij de beste bent!</p>
             </Card>
 
             <div className="w-[45%] mx-auto">
