@@ -39,7 +39,7 @@ class UserController extends Controller
     public function show(string $id)
     {
         return User::query()->findOrFail($id);
-
+        echo 'code';
     }
 
     public function login(Request $request)
