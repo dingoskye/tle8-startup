@@ -30,12 +30,12 @@ function TaskCard({task}) {
                         <div className="flex gap-2 items-center">
                             <p className="sr-only">To do item niet af</p>
                             <LuSquare/>
-                            <p>Taak 1</p>
+                            <p>Taak 2</p>
                         </div>
                         <div className="flex gap-2 items-center">
                             <p className="sr-only">To do item wel af</p>
                             <LuSquareCheckBig/>
-                            <p className="line-through">Taak 2</p>
+                            <p className="line-through">Taak 1</p>
                         </div>
                     </div>
                     <div className="h-7">
