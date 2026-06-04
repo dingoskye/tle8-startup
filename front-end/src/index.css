@@ -1,15 +1,51 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/inter";
 
 :root {
     --background: #F0E2C7;
     --nav-brown: #B17F59;
-    --thoas-white: #F0EFF2;
+    --thomas-white: #F0EFF2;
     --flamingo-pink: #FFB6C1;
     --ruas-red: #C91F1F;
     --jade-green: #7EE572;
     --christa-yellow: #FCF457;
     --skye-blue: #7CC1EC;
     --font-blue: #003340;
+    --purple: #DDAEFE;
 
-
+    --headers: "Permanent Marker", sans-serif;
+    --paragraph: "Indie Flower", sans-serif;
 }
+
+@theme {
+    /* Hoofd kleuren */
+    --color-background: var(--background);
+    --color-nav-brown: var(--nav-brown);
+    --color-bg-white: var(--thomas-white);
+    --color-punaise: var(--ruas-red);
+    --color-border-punaise: #7c1313;
+    --color-primary: var(--skye-blue);
+    --color-secondary: var(--jade-green);
+    --color-tertiary: var(--christa-yellow);
+    --color-quaternary: var(--flamingo-pink);
+    /* Overige kleuren */
+    --color-button-purple: var(--purple);
+    --color-deadline-red: #E57472;
+    /* Tekst dingen */
+    --color-text: var(--font-blue);
+    --font-headers: var(--headers);
+    --font-paragraph: var(--paragraph);
+}
+
+/* dit is voor het testen van WCAG 1.4.12 Text Spacing */
+/** {*/
+/*    line-height: 1.5 !important;*/
+/*    letter-spacing: 0.12em !important;*/
+/*    word-spacing: 0.16em !important;*/
+/*}*/
+
+/*p {*/
+/*    margin-bottom: 2em !important;*/
+/*}*/
