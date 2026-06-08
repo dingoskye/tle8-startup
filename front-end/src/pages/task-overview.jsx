@@ -22,7 +22,7 @@ function TaskOverview() {
                 </div>
             </header>
 
-            <section className="flex flex-col gap-4 w-[90%] mx-auto mt-5">
+            <section className="grid grid-cols-1 md:grid-cols-2 gap-4 mx-auto mt-5">
                 {mainTasks !== null && mainTasks.length !== 0 ? mainTasks.map((task, index) =>
                         <TaskCard kind="full" key={index} task={task}/>) :
                     <p>Geen openstaande taken</p>}

@@ -11,12 +11,13 @@ function TaskCard({task, kind}) {
 
     useEffect(() => {
         const slots = kind === "full" ? 6 : 2
+        const slice = kind === "full" ? 3 : 1
 
         if (task !== "") {
             if (task.sub_tasks !== []) {
                 const unfinishedTasks = task.sub_tasks
                     .filter(sub => !sub.completed)
-                    .slice(0, 1);
+                    .slice(0, slice);
 
                 const remainingSlots = slots - unfinishedTasks.length;
 
