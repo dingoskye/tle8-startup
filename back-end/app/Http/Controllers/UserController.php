@@ -159,7 +159,7 @@ class UserController extends Controller
     }
 }
 
-// todo: change password function aanmaken
+// ToDo: Change password route aanmaken.
 
-// todo: JWT connectie
+// ToDo: Logout route aanmaken.
 

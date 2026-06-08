@@ -17,6 +17,13 @@ class Group extends Model
 {
     use SoftDeletes;
 
+    protected $fillable = [
+        'name',
+        'description',
+        'image',
+        'user_id',
+    ];
+
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'user_group')
