@@ -17,7 +17,7 @@ class MainTaskController extends Controller
     {
         return MainTask::with(['group', 'users'])->whereHas('users', function ($query) use ($id) {
             $query->where('users.id', $id);
-        })->get();
+        })->orderBy('deadline', 'asc')->get();
     }
 
     /**

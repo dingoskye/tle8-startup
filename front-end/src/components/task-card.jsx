@@ -4,7 +4,7 @@ import Tape from "@/components/ui/tape.jsx";
 import Progressbar from "@/components/ui/progressbar.jsx";
 import {Link} from "react-router";
 
-function TaskCard({task}) {
+function TaskCard({task, kind}) {
     // console.log(task.progress)
 
     return (
@@ -26,18 +26,52 @@ function TaskCard({task}) {
                             <p className="text-left">{task.group.name}</p>
                         </div>
                     </div>
-                    <div>
-                        <div className="flex gap-2 items-center">
-                            <p className="sr-only">To do item niet af</p>
-                            <LuSquare/>
-                            <p>Taak 2</p>
+                    {kind === "full" ?
+                        <div>
+                            <div className="flex gap-2 items-center">
+                                <p className="sr-only">To do item niet af</p>
+                                <LuSquare/>
+                                <p>Taak 4</p>
+                            </div>
+                            <div className="flex gap-2 items-center">
+                                <p className="sr-only">To do item niet af</p>
+                                <LuSquare/>
+                                <p>Taak 5</p>
+                            </div>
+                            <div className="flex gap-2 items-center">
+                                <p className="sr-only">To do item niet af</p>
+                                <LuSquare/>
+                                <p>Taak 6</p>
+                            </div>
+                            <div className="flex gap-2 items-center">
+                                <p className="sr-only">To do item wel af</p>
+                                <LuSquareCheckBig/>
+                                <p className="line-through">Taak 3</p>
+                            </div>
+                            <div className="flex gap-2 items-center">
+                                <p className="sr-only">To do item wel af</p>
+                                <LuSquareCheckBig/>
+                                <p className="line-through">Taak 2</p>
+                            </div>
+                            <div className="flex gap-2 items-center">
+                                <p className="sr-only">To do item wel af</p>
+                                <LuSquareCheckBig/>
+                                <p className="line-through">Taak 1</p>
+                            </div>
+                        </div> :
+                        <div>
+                            <div className="flex gap-2 items-center">
+                                <p className="sr-only">To do item niet af</p>
+                                <LuSquare/>
+                                <p>Taak 2</p>
+                            </div>
+                            <div className="flex gap-2 items-center">
+                                <p className="sr-only">To do item wel af</p>
+                                <LuSquareCheckBig/>
+                                <p className="line-through">Taak 1</p>
+                            </div>
                         </div>
-                        <div className="flex gap-2 items-center">
-                            <p className="sr-only">To do item wel af</p>
-                            <LuSquareCheckBig/>
-                            <p className="line-through">Taak 1</p>
-                        </div>
-                    </div>
+                    }
                     <div className="h-7">
                         <Progressbar progress={task.users[0].pivot.progress}/>
                     </div>

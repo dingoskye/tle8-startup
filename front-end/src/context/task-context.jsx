@@ -17,7 +17,7 @@ export function MainTaskProvider({children}) {
                 }
             })
             setMainTasks(data)
-            console.log(data)
+            // console.log(data)
         } catch (e) {
             console.log(e.message)
         }
