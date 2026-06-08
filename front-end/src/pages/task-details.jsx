@@ -53,7 +53,7 @@ function TaskDetails() {
                     </header>
 
                     {task.sub_tasks && task.sub_tasks.length > 0 ?
-                        <section className="grid grid-cols-2 gap-4 mt-4">
+                        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-4">
                             {task.sub_tasks.map((sub, index) =>
                                 <SubTaskCard key={index} sub={sub} variant={variants[index % variants.length]}/>)}
                         </section> :

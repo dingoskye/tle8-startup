@@ -6,7 +6,7 @@ import {LuSquare, LuSquareCheckBig} from "react-icons/lu";
 function SubTaskCard({sub, variant}) {
 
     return (
-        <div className="col-span-2 md:col-span-1">
+        <div className="col-span-1 md:col-span-1">
             <Card variant={variant}>
                 <div className="flex gap-4 items-center">
                     {!sub.completed ?
