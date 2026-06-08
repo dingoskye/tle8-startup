@@ -1,15 +1,20 @@
-// front-end/src/pages/createTask.jsx
-import React, {useState} from "react";
+// javascript
+import {useState} from "react";
 import {useNavigate} from "react-router";
 
 export function CreateTask({onSubmit}) {
+    //Variabelen.
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [file, setFile] = useState(null);
     const [deadline, setDeadline] = useState("");
     const [errors, setErrors] = useState({});
+    const [submitting, setSubmitting] = useState(false);
     const navigate = useNavigate();
 
+    const API_BASE = import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000";
+
+    // Form validatie functie.
     const validateForm = () => {
         const newErrors = {};
         if (!title.trim()) newErrors.title = "Titel is verplicht.";
@@ -27,8 +32,10 @@ export function CreateTask({onSubmit}) {
         return newErrors;
     };
 
-    const handleImmediateSubmit = (e) => {
+    // Form submit functie.
+    const handleImmediateSubmit = async (e) => {
         if (e && typeof e.preventDefault === "function") e.preventDefault();
+        if (submitting) return;
         const newErrors = validateForm();
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
@@ -36,22 +43,76 @@ export function CreateTask({onSubmit}) {
         }
 
         setErrors({});
-        onSubmit?.({title, description, file, deadline});
+        setSubmitting(true);
+
+        const fd = new FormData();
+        fd.append("title", title);
+        fd.append("description", description);
+        fd.append("deadline", deadline);
+        fd.append("group_id", "1");
+        if (file) fd.append("ai_file", file);
+
+        // Console logs voor debugging.
+        console.log("API_BASE:", API_BASE);
+        const url = `${API_BASE}/api/main/create`;
+        console.log("POST ->", url);
+
         try {
-            sessionStorage.setItem(
-                "lastSubmittedTask",
-                JSON.stringify({
-                    title,
-                    description,
-                    fileName: file?.name || null,
-                    deadline,
-                })
-            );
+            const res = await fetch(url, {
+                method: "POST",
+                body: fd,
+                mode: "cors",
+                credentials: "include",
+                headers: {
+                    Accept: "application/json"
+                }
+            });
+
+
+            if (!res.ok) {
+                const text = await res.text().catch(() => "");
+                console.error("API error", res.status, text);
+                let payload;
+                try {
+                    payload = JSON.parse(text || "{}");
+                } catch {
+                    payload = {};
+                }
+                const backendErrors = payload.errors || {};
+                if (payload.message && Object.keys(backendErrors).length === 0) {
+                    backendErrors.general = payload.message;
+                }
+                setErrors(prev => ({...prev, ...backendErrors}));
+                setSubmitting(false);
+                return;
+            }
+
+            const payload = await res.json().catch(() => ({}));
+            onSubmit?.({title, description, file, deadline, group_id: 1, id: payload.id});
+
+            try {
+                sessionStorage.setItem(
+                    "lastSubmittedTask",
+                    JSON.stringify({
+                        title,
+                        description,
+                        fileName: file?.name || null,
+                        deadline,
+                    })
+                );
+            } catch {
+                void 0;
+            }
+
+            navigate("/submit-test");
         } catch (err) {
+            console.error("Network/fetch error:", err);
+            setErrors(prev => ({...prev, general: "Er is een netwerkfout opgetreden."}));
+            setSubmitting(false);
         }
-        navigate("/submit-test");
     };
 
+    // HTML render.
     return (
         <div className="flex items-center justify-center min-h-screen" style={{backgroundColor: "var(--background)"}}>
             <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
@@ -138,7 +199,6 @@ export function CreateTask({onSubmit}) {
                             Upload file (Afbeelding of PDF)
                         </label>
 
-                        {/* Verborgen voor screenreaders. */}
                         <span
                             id="upload-help"
                             style={{
@@ -214,9 +274,17 @@ export function CreateTask({onSubmit}) {
                                   }}>{errors.deadline}</span>}
                     </div>
 
+                    {errors.general &&
+                        <div role="alert" className="text-sm mt-1 border-2 rounded-lg flex justify-center" style={{
+                            backgroundColor: "var(--ruas-red)",
+                            color: "var(--font-blue)"
+                        }}>{errors.general}</div>}
+
                     <button type="submit"
+                            disabled={submitting}
                             className="mt-4 px-12 py-2 font-semibold rounded-md self-center hover:opacity-90 transition-opacity"
-                            style={{backgroundColor: "var(--ruas-red)", color: "var(--font-blue)"}}>Start
+                            style={{backgroundColor: "var(--ruas-red)", color: "var(--font-blue)"}}>
+                        {submitting ? "Versturen..." : "Start"}
                     </button>
                 </form>
             </div>
