@@ -1,4 +1,5 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
+
 
 // MOCK DATA: Acting as a temporary database for the frontend prototype.
 // Once the backend is connected, this will be replaced by an API fetch call.
@@ -10,6 +11,11 @@ const mockFriendsList = [
 ];
 
 const CreateGroup = () => {
+
+    //documenten titels voor WCAG!!
+    useEffect(() => {
+        document.title = "Board-it | Create group";
+    }, []);
 
     const [selectedMembers, setSelectedMembers] = useState([]);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -103,12 +109,12 @@ const CreateGroup = () => {
                 </div>
 
                 {/* --- FOTO SECTION --- */}
-                <div className="relative bg-[var(--jade-green)] w-[70%] p-6 shadow-lg rounded-sm mb-6">
+                <div className=" relative bg-[var(--jade-green)] w-[70%] p-6 shadow-lg rounded-sm mb-6">
                     <div
                         className="absolute -top-3 left-1/2 transform -translate-x-1/2 w-6 h-6 bg-[var(--ruas-red)] rounded-full shadow-md border border-red-900"></div>
                     <label htmlFor="foto" className="block mb-2 font-bold text-lg">Foto</label>
                     <input
-                        className="w-full bg-[var(--thoas-white)] shadow-xl/15 rounded-[3px] pl-5 pr-5 pt-2 pb-20"
+                        className="w-full bg-[var(--thoas-white)] shadow-xl/15 rounded-[3px] pl-5 pr-5 pt-2 pb-20 hover:brightness-85 transition-all duration-200 cursor-pointer"
                         type="file"
                         id="foto"
                         name="photo" /* Fixed: Changed from "foto" to "photo" to match English validation */
