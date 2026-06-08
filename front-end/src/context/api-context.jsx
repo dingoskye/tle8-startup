@@ -15,7 +15,7 @@ export function ApiProvider({children}) {
         console.log(res.status)
         if (!res.ok) {
             return {"status": res.status, "message": res.statusText}
-            throw new Error(`HTTP error! status: ${res.status}`);
+            // throw new Error(`HTTP error! status: ${res.status}`);
         }
 
         const text = await res.text()
