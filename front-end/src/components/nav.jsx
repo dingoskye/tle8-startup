@@ -1,4 +1,4 @@
-import {FaHome, FaPlus, FaTasks} from "react-icons/fa";
+import {FaPlus, FaTasks} from "react-icons/fa";
 import {IoPerson} from "react-icons/io5";
 import {LuInbox} from "react-icons/lu";
 import {HiUserGroup} from "react-icons/hi";

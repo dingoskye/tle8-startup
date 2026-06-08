@@ -30,6 +30,6 @@ class MainTask extends Model
 
     public function subTasks(): HasMany
     {
-        return $this->hasMany(SubTask::class, 'sub_task_id');
+        return $this->hasMany(SubTask::class);
     }
 }

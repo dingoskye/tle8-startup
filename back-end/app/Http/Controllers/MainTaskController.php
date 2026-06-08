@@ -15,7 +15,9 @@ class MainTaskController extends Controller
      */
     public function index(string $id)
     {
-        return MainTask::with(['group', 'users'])->whereHas('users', function ($query) use ($id) {
+        return MainTask::with(['group', 'users', 'subTasks' => function ($query) {
+            $query->orderBy('completed', 'asc')->orderBy('created_at', 'asc');
+        }])->whereHas('users', function ($query) use ($id) {
             $query->where('users.id', $id);
         })->orderBy('deadline', 'asc')->get();
     }
@@ -57,7 +59,9 @@ class MainTaskController extends Controller
      */
     public function show(string $id)
     {
-        return MainTask::query()->findOrFail($id);
+        return MainTask::with(['group', 'users', 'subTasks' => function ($query) {
+            $query->orderBy('completed', 'asc')->orderBy('created_at', 'asc');
+        }])->findOrFail($id);
     }
 
     /**

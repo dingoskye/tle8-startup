@@ -3,75 +3,62 @@ import {Card} from "@/components/ui/cards.jsx";
 import Tape from "@/components/ui/tape.jsx";
 import Progressbar from "@/components/ui/progressbar.jsx";
 import {Link} from "react-router";
+import {useEffect, useState} from "react";
+import DeadlineCard from "@/components/ui/deadline-card.jsx";
 
 function TaskCard({task, kind}) {
-    // console.log(task.progress)
+    const [visibleTasks, setVisibleTasks] = useState(null)
+
+    useEffect(() => {
+        const slots = kind === "full" ? 6 : 2
+
+        if (task !== "") {
+            if (task.sub_tasks !== []) {
+                const unfinishedTasks = task.sub_tasks
+                    .filter(sub => !sub.completed)
+                    .slice(0, 1);
+
+                const remainingSlots = slots - unfinishedTasks.length;
+
+                const completedTasks = task.sub_tasks
+                    .filter(sub => sub.completed)
+                    .slice(0, remainingSlots);
+
+                setVisibleTasks([...unfinishedTasks, ...completedTasks]);
+            }
+        }
+    }, [task]);
+
+    useEffect(() => {
+        console.log(visibleTasks)
+    }, [visibleTasks]);
 
     return (
         task !== "" ?
             <Link className="w-[95%] mx-auto h-full" to={`/hoofdtaken/${task.id ?? 1}`}>
                 <Card variant="white">
                     <div className="gap-4 mt-2 grid grid-cols-3 grow">
-                        <div
-                            className="bg-deadline-red p-1 relative flex items-center col-span-1 rounded-sm shadow-md">
-                            <Tape variant="small-r"/>
-                            <Tape variant="small-l"/>
-                            <p className="w-full text-center font-headers text-md lg:break-all">
-                                {new Date(task.deadline).toLocaleDateString("nl-NL", {
-                                    day: "numeric", month: "long",
-                                })}</p>
-                        </div>
+                        <DeadlineCard deadline={task.deadline}/>
                         <div className="col-span-2">
                             <h2 className="text-xl font-headers text-left">{task.title}</h2>
                             <p className="text-left">{task.group.name}</p>
                         </div>
                     </div>
-                    {kind === "full" ?
-                        <div>
-                            <div className="flex gap-2 items-center">
-                                <p className="sr-only">To do item niet af</p>
-                                <LuSquare/>
-                                <p>Taak 4</p>
-                            </div>
-                            <div className="flex gap-2 items-center">
-                                <p className="sr-only">To do item niet af</p>
-                                <LuSquare/>
-                                <p>Taak 5</p>
-                            </div>
-                            <div className="flex gap-2 items-center">
-                                <p className="sr-only">To do item niet af</p>
-                                <LuSquare/>
-                                <p>Taak 6</p>
-                            </div>
-                            <div className="flex gap-2 items-center">
-                                <p className="sr-only">To do item wel af</p>
-                                <LuSquareCheckBig/>
-                                <p className="line-through">Taak 3</p>
-                            </div>
-                            <div className="flex gap-2 items-center">
-                                <p className="sr-only">To do item wel af</p>
-                                <LuSquareCheckBig/>
-                                <p className="line-through">Taak 2</p>
-                            </div>
-                            <div className="flex gap-2 items-center">
-                                <p className="sr-only">To do item wel af</p>
-                                <LuSquareCheckBig/>
-                                <p className="line-through">Taak 1</p>
-                            </div>
-                        </div> :
-                        <div>
-                            <div className="flex gap-2 items-center">
-                                <p className="sr-only">To do item niet af</p>
-                                <LuSquare/>
-                                <p>Taak 2</p>
-                            </div>
-                            <div className="flex gap-2 items-center">
-                                <p className="sr-only">To do item wel af</p>
-                                <LuSquareCheckBig/>
-                                <p className="line-through">Taak 1</p>
-                            </div>
-                        </div>
-                    }
+                    <div>
+                        {visibleTasks !== null && visibleTasks.length !== 0 ? visibleTasks.map((task, index) =>
+                                <div className="flex gap-2 items-center">
+                                    {!task.completed ? <>
+                                        <p className="sr-only">To do item niet af</p>
+                                        <LuSquare/>
+                                        <p>{task.title}</p>
+                                    </> : <>
+                                        <p className="sr-only">To do item wel af</p>
+                                        <LuSquareCheckBig/>
+                                        <p className="line-through">{task.title}</p>
+                                    </>}
+                                </div>) :
+                            <p>Geen subtaken</p>}
+                    </div>
                     <div className="h-7">
                         <Progressbar progress={task.users[0].pivot.progress}/>
                     </div>
