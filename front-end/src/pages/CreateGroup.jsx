@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
 import {Card} from "@/components/ui/cards.jsx";
 import Tape from "@/components/ui/tape.jsx";
+import Punaise from "@/components/ui/punaise.jsx";
 
 // MOCK DATA: Acting as a temporary database for the frontend prototype.
 // Once the backend is connected, this will be replaced by an API fetch call.
@@ -20,7 +21,9 @@ const CreateGroup = () => {
 
     const [selectedMembers, setSelectedMembers] = useState([]);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+    const removeMember = (idToRemove) => {
+        setSelectedMembers(selectedMembers.filter(member => member.id !== idToRemove));
+    };
     const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitMessage, setSubmitMessage] = useState(null);
@@ -135,7 +138,11 @@ const CreateGroup = () => {
                 <div className="w-[70%]">
                     <Card variant="tertiary">
                         <label htmlFor="naam" className="block mb-2 font-bold text-lg">Naam</label>
-                        <div className="w-full">
+                        <div className="w-full relative">
+
+                            <Tape variant="small-r"/>
+                            <Tape variant="small-l"/>
+
                             <input
                                 id="naam"
                                 className="w-full bg-bg-white shadow-xl/15 rounded-[3px] pl-5 pt-2 pb-3"
@@ -152,12 +159,16 @@ const CreateGroup = () => {
                 <div className="w-[70%]">
                     <Card variant="quaternary">
                         <label htmlFor="beschrijving" className="block mb-2 font-bold text-lg">Beschrijving</label>
-                        <div className="w-full">
+
+                        <div className="relative">
+                            <Tape variant="big-r"/>
+                            <Tape variant="big-l"/>
                             <textarea
                                 id="beschrijving"
                                 className="w-full bg-bg-white shadow-xl/15 rounded-[3px] pl-5 pr-5 pt-2 pb-20"
                                 name="description"
                                 placeholder="geeft hier context over jou hoofdtaak"
+
                             />
                             {errors.description &&
                                 <p className="text-red-700 font-bold mt-2 text-sm">{errors.description}</p>}
@@ -166,16 +177,21 @@ const CreateGroup = () => {
                 </div>
 
                 {/* --- FOTO SECTION --- */}
-                <div className="w-[70%]">
+                <div className="w-[70%] ">
                     <Card variant="secondary">
+
                         <label htmlFor="foto" className="block mb-2 font-bold text-lg">Foto</label>
-                        <input
-                            className="w-full bg-bg-white shadow-xl/15 rounded-[3px] pl-5 pr-5 pt-2 pb-20 hover:brightness-85 transition-all duration-200 cursor-pointer"
-                            type="file"
-                            id="foto"
-                            name="photo"
-                            accept="image/png, image/jpeg, image/webp"
-                        />
+                        <div className="relative">
+                            <Tape variant="big-r"/>
+                            <Tape variant="big-l"/>
+                            <input
+                                className="w-full bg-bg-white shadow-xl/15 rounded-[3px] pl-5 pr-5 pt-2 pb-20 cursor-pointer"
+                                type="file"
+                                id="foto"
+                                name="photo"
+                                accept="image/png, image/jpeg, image/webp"
+                            />
+                        </div>
                         {errors.photo && <p className="text-red-700 font-bold mt-2 text-sm">{errors.photo}</p>}
                     </Card>
                 </div>
@@ -189,10 +205,30 @@ const CreateGroup = () => {
                         <div
                             className="relative bg-primary w-full p-4 shadow-inner rounded-sm min-h-[140px] flex items-center gap-4 flex-wrap">
 
+                            <Tape variant="big-r"/>
+                            <Tape variant="big-l"/>
                             {selectedMembers.map((member) => (
                                 <div key={member.id}
-                                     className="bg-bg-white p-2 rounded-sm shadow-md flex flex-col items-center w-20">
-                                    <span className="text-xs mb-2 whitespace-nowrap">{member.name}</span>
+                                     className="relative mt-4 bg-bg-white p-2 pt-4 rounded-sm shadow-md flex flex-col items-center shrink-0 w-24">
+
+                                    {/* --- THE CLICKABLE PUNAISE --- */}
+                                    <button
+                                        type="button"
+                                        // This filters out the clicked member, effectively removing them from the array
+                                        onClick={() => setSelectedMembers(selectedMembers.filter(m => m.id !== member.id))}
+                                        className="z-10 hover  cursor-pointer"
+                                        aria-label={`Verwijder ${member.name}`}
+                                        title="Verwijder lid"
+                                    >
+
+                                        <Punaise/>
+                                    </button>
+
+                                    <span
+                                        className="text-xs mb-2 whitespace-nowrap overflow-hidden text-ellipsis w-full text-center font-bold">{member.name}
+                                    </span>
+
+                                    {/* Placeholder Avatar */}
                                     <div className="w-8 h-8 border-2 border-black rounded-full mb-1"></div>
                                     <div className="w-12 h-6 border-2 border-black border-b-0 rounded-t-full"></div>
                                 </div>
