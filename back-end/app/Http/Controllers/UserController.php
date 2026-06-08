@@ -6,7 +6,8 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 class UserController extends Controller
 {
@@ -45,9 +46,17 @@ class UserController extends Controller
 
             // check of het wachtwoord overeen komt zo niet error
             if (Hash::check($request->password, $user->password)) {
-                return $user;
+                try {
+                    $token = JWTAuth::fromUser($user);
+                } catch (JWTException $e) {
+                    return response()->json(['error' => 'Could not create token'], 500);
+                }
+                return response()->json([
+                    'token' => $token,
+                    'user' => $user,
+                ], 201);
             } else {
-                return response(['error' => 'you are stupid'], 404);
+                return response()->json(['error' => 'you are stupid'], 404);
             }
         } catch (ModelNotFoundException $e) {
             return response(['error' => $e], 500);
@@ -85,8 +94,18 @@ class UserController extends Controller
             // user opslaan
             $register->save();
 
-            // user laten zien
-            return $register;
+            //token aanmaken anders error
+            try {
+                $token = JWTAuth::fromUser($register);
+            } catch (JWTException $e) {
+                return response()->json(['error' => 'Could not create token'], 500);
+            }
+
+            // user terug sturen met de token
+            return response()->json([
+                'token' => $token,
+                'user' => $register,
+            ], 201);
         } catch (ModelNotFoundException $e) {
             return response(['error' => $e], 500);
         }
@@ -144,4 +163,3 @@ class UserController extends Controller
 
 // todo: JWT connectie
 
-// todo: auth shit maken

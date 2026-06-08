@@ -8,11 +8,14 @@ use App\Http\Controllers\GroupController;
 use Illuminate\Support\Facades\Route;
 
 // User controller routes
+
 Route::get('/user/{id}', [UserController::class, 'show']);
 Route::get('/user', [UserController::class, 'index']);
+Route::put('/user/edit/{id}', [UserController::class, 'edit']);
+
+
 Route::post('/user/login', [UserController::class, 'login']);
 Route::post('/user/register', [UserController::class, 'register']);
-Route::put('/user/edit/{id}', [UserController::class, 'edit']);
 
 //Group controller routes
 Route::post('/group/create', [GroupController::class, 'create']);

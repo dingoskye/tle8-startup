@@ -13,11 +13,11 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
 #[Fillable(['user_name', 'name', 'email', 'password', 'image', 'admin'])]
 #[Hidden(['password', 'remember_token'])]
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
     use SoftDeletes;
 
@@ -58,5 +58,21 @@ class User extends Authenticatable
     public function subTasks(): HasMany
     {
         return $this->hasMany(SubTask::class);
+    }
+
+    /**
+     * Get the identifier that will be stored in the JWT token.
+     */
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * Return an array with custom claims to be added to the JWT token.
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
     }
 }
