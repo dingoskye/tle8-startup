@@ -21,9 +21,6 @@ const CreateGroup = () => {
 
     const [selectedMembers, setSelectedMembers] = useState([]);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const removeMember = (idToRemove) => {
-        setSelectedMembers(selectedMembers.filter(member => member.id !== idToRemove));
-    };
     const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitMessage, setSubmitMessage] = useState(null);
@@ -193,6 +190,30 @@ const CreateGroup = () => {
                             />
                         </div>
                         {errors.photo && <p className="text-red-700 font-bold mt-2 text-sm">{errors.photo}</p>}
+                    </Card>
+                </div>
+
+                {/* --- LEADERBOARD SECTION --- */}
+                <div className="w-[70%]">
+                    <Card variant="tertiary">
+                        <div className="flex items-center justify-between w-full">
+                            <div>
+                                <label htmlFor="leaderboard" className="block font-bold text-lg cursor-pointer">
+                                    Leaderboard Toevoegen?
+                                </label>
+                                <p className="text-sm opacity-80 mt-1">
+                                    Vink dit aan als je een ranglijst wilt bijhouden voor deze groep.
+                                </p>
+                            </div>
+
+                            {/* The Checkbox */}
+                            <input
+                                id="leaderboard"
+                                name="leaderboard"
+                                type="checkbox"
+                                className="w-8 h-8 cursor-pointer accent-button-purple bg-bg-white border-2 border-black rounded-md shadow-sm transition-transform hover:scale-110"
+                            />
+                        </div>
                     </Card>
                 </div>
 
