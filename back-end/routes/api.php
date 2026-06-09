@@ -10,10 +10,10 @@ use Illuminate\Support\Facades\Route;
 // User controller routes
 Route::post('/user/login', [UserController::class, 'login']);
 Route::post('/user/register', [UserController::class, 'register']);
+Route::get('/user', [UserController::class, 'index']);
 
 Route::middleware('jwt')->group(function () {
     Route::get('/user/{id}', [UserController::class, 'show']);
-    Route::get('/user', [UserController::class, 'index']);
     Route::put('/user/edit/{id}', [UserController::class, 'edit']);
 
 

@@ -16,6 +16,7 @@ class UserController extends Controller
      */
     public function index()
     {
+        // ToDo: alleen email en gebruikersnaam meegeven
         return User::all();
     }
 
@@ -66,9 +67,10 @@ class UserController extends Controller
     public function register(request $request)
     {
         try {
+
             // check als ze ingelogged zijn zo niet error
             if (!$request->password || !$request->email || !$request->user_name) {
-                return response(['error' => 'placed not filled'], 404);
+                return response()->json(['error' => 'placed not filled'], 403);
             }
 
             // kijken of de user en / email al bestaan in het systeem zowel error
