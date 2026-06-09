@@ -1,6 +1,5 @@
 <?php
 
-
 use App\Http\Controllers\SubTaskController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MainTaskController;
@@ -8,7 +7,9 @@ use App\Http\Controllers\GroupController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SubtaskAiController;
 
+//AI routes
 Route::post('/main-tasks/{id}/generate-subtasks', [SubtaskAiController::class, 'generate']);
+
 // User controller routes
 Route::get('/user/{id}', [UserController::class, 'show']);
 Route::get('/user', [UserController::class, 'index']);
