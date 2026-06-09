@@ -1,20 +1,30 @@
-// javascript
 import {useState} from "react";
-import {useNavigate} from "react-router";
+import {useMainTask} from "@/context/task-context.jsx";
+import {useApi} from "@/context/api-context.jsx";
+import Tape from '../components/ui/tape';
+import Punaise from '../components/ui/punaise';
 
-export function CreateTask({onSubmit}) {
-    //Variabelen.
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
-    const [file, setFile] = useState(null);
-    const [deadline, setDeadline] = useState("");
+export function CreateTask() {
+    const {fetchMainTasks} = useMainTask();
+    const {apiFetch} = useApi();
+    const [form, setForm] = useState({
+        title: "",
+        description: "",
+        file: null,
+        deadline: "",
+    });
+    const {title, description, file, deadline} = form;
+
+    const setField = (key, value) => setForm(prev => ({...prev, [key]: value}));
+    const setTitle = v => setField("title", v);
+    const setDescription = v => setField("description", v);
+    const setFile = v => setField("file", v);
+    const setDeadline = v => setField("deadline", v);
+
     const [errors, setErrors] = useState({});
     const [submitting, setSubmitting] = useState(false);
-    const navigate = useNavigate();
 
-    const API_BASE = import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000";
-
-    // Form validatie functie.
+    // Form valideren.
     const validateForm = () => {
         const newErrors = {};
         if (!title.trim()) newErrors.title = "Titel is verplicht.";
@@ -32,7 +42,7 @@ export function CreateTask({onSubmit}) {
         return newErrors;
     };
 
-    // Form submit functie.
+    // Form submit function.
     const handleImmediateSubmit = async (e) => {
         if (e && typeof e.preventDefault === "function") e.preventDefault();
         if (submitting) return;
@@ -52,79 +62,55 @@ export function CreateTask({onSubmit}) {
         fd.append("group_id", "1");
         if (file) fd.append("ai_file", file);
 
-        // Console logs voor debugging.
-        console.log("API_BASE:", API_BASE);
-        const url = `${API_BASE}/api/main/create`;
-        console.log("POST ->", url);
-
         try {
-            const res = await fetch(url, {
+            await apiFetch("/api/main/create", {
                 method: "POST",
                 body: fd,
-                mode: "cors",
-                credentials: "include",
-                headers: {
-                    Accept: "application/json"
-                }
             });
 
-
-            if (!res.ok) {
-                const text = await res.text().catch(() => "");
-                console.error("API error", res.status, text);
-                let payload;
-                try {
-                    payload = JSON.parse(text || "{}");
-                } catch {
-                    payload = {};
-                }
-                const backendErrors = payload.errors || {};
-                if (payload.message && Object.keys(backendErrors).length === 0) {
-                    backendErrors.general = payload.message;
-                }
-                setErrors(prev => ({...prev, ...backendErrors}));
-                setSubmitting(false);
-                return;
-            }
-
-            const payload = await res.json().catch(() => ({}));
-            onSubmit?.({title, description, file, deadline, group_id: 1, id: payload.id});
-
             try {
-                sessionStorage.setItem(
-                    "lastSubmittedTask",
-                    JSON.stringify({
-                        title,
-                        description,
-                        fileName: file?.name || null,
-                        deadline,
-                    })
-                );
-            } catch {
-                void 0;
+                await fetchMainTasks?.();
+            } catch (e) {
+                console.warn("refresh main tasks failed:", e);
             }
 
-            navigate("/submit-test");
+            setForm({
+                title: "",
+                description: "",
+                file: null,
+                deadline: "",
+            });
+
+            setSubmitting(false);
         } catch (err) {
-            console.error("Network/fetch error:", err);
-            setErrors(prev => ({...prev, general: "Er is een netwerkfout opgetreden."}));
+            console.error("submit error:", err);
+            const payload = err?.payload || {};
+            const backendErrors = (payload && payload.errors) ? payload.errors : {};
+            if (payload && payload.message && Object.keys(backendErrors).length === 0) {
+                backendErrors.general = payload.message;
+            }
+
+            setErrors(prev => ({
+                ...prev, ...backendErrors,
+                general: prev.general || "Er is een netwerkfout opgetreden."
+            }));
             setSubmitting(false);
         }
     };
 
-    // HTML render.
     return (
-        <div className="flex items-center justify-center min-h-screen" style={{backgroundColor: "var(--background)"}}>
-            <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
-                <h1 className="text-3xl font-bold mb-8 text-center" style={{color: "var(--font-blue)"}}>Hoofdtaak
-                    Maken</h1>
+        <div className="flex items-center justify-center min-h-screen">
+            <div className="relative w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
+                <Punaise/>
+                <h1 className="text-3xl font-bold mb-8 text-center text-[var(--font-blue)]">Hoofdtaak Maken</h1>
                 <form className="flex flex-col gap-6" onSubmit={handleImmediateSubmit} noValidate>
                     <div
-                        className="flex flex-col p-4 rounded-lg"
+                        className="relative flex flex-col p-4 rounded-lg bg-[var(--flamingo-pink)] text-[var(--font-blue)]"
                         role="group"
                         aria-labelledby="label-titel"
-                        style={{backgroundColor: "var(--flamingo-pink)", color: "var(--font-blue)"}}
                     >
+                        <Tape variant="small-r"/>
+                        <Tape variant="small-l"/>
                         <label id="label-titel" htmlFor="titel" className="font-semibold mb-2">Titel:</label>
                         <input
                             type="text"
@@ -137,8 +123,7 @@ export function CreateTask({onSubmit}) {
                             aria-required="true"
                             aria-invalid={!!errors.title}
                             required
-                            className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"
-                            style={{backgroundColor: "var(--thoas-white)", color: "var(--font-blue)"}}
+                            className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 bg-[var(--thoas-white)] text-[var(--font-blue)]"
                             value={title}
                             onChange={(e) => {
                                 setTitle(e.target.value);
@@ -147,18 +132,16 @@ export function CreateTask({onSubmit}) {
                         />
                         {errors.title &&
                             <span id="titel-error" role="alert" aria-live="assertive"
-                                  className="text-sm mt-1 border-2 rounded-lg flex justify-center" style={{
-                                backgroundColor: "var(--ruas-red)",
-                                color: "var(--font-blue)"
-                            }}>{errors.title}</span>}
+                                  className="text-sm mt-1 border-2 rounded-lg flex justify-center bg-[var(--ruas-red)] text-[var(--font-blue)]">{errors.title}</span>}
                     </div>
 
                     <div
-                        className="flex flex-col p-4 rounded-lg"
+                        className="relative flex flex-col p-4 rounded-lg bg-[var(--skye-blue)] text-[var(--font-blue)]"
                         role="group"
                         aria-labelledby="label-beschrijving"
-                        style={{backgroundColor: "var(--skye-blue)", color: "var(--font-blue)"}}
                     >
+                        <Tape variant="small-r"/>
+                        <Tape variant="small-l"/>
                         <label id="label-beschrijving" htmlFor="beschrijving"
                                className="font-semibold mb-2">Beschrijving:</label>
                         <textarea
@@ -172,8 +155,7 @@ export function CreateTask({onSubmit}) {
                             aria-required="true"
                             aria-invalid={!!errors.description}
                             required
-                            className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 resize-none"
-                            style={{backgroundColor: "var(--thoas-white)", color: "var(--font-blue)"}}
+                            className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 resize-none bg-[var(--thoas-white)] text-[var(--font-blue)]"
                             value={description}
                             onChange={(e) => {
                                 setDescription(e.target.value);
@@ -182,36 +164,24 @@ export function CreateTask({onSubmit}) {
                         />
                         {errors.description &&
                             <span id="beschrijving-error" role="alert" aria-live="assertive"
-                                  className="text-sm mt-1 border-2 rounded-lg flex justify-center"
-                                  style={{
-                                      backgroundColor: "var(--ruas-red)",
-                                      color: "var(--font-blue)"
-                                  }}>{errors.description}</span>}
+                                  className="text-sm mt-1 border-2 rounded-lg flex justify-center bg-[var(--ruas-red)] text-[var(--font-blue)]">{errors.description}</span>}
                     </div>
 
                     <div
-                        className="flex flex-col p-4 rounded-lg"
+                        className="relative flex flex-col p-4 rounded-lg bg-[var(--jade-green)] text-[var(--font-blue)]"
                         role="group"
                         aria-labelledby="label-upload"
-                        style={{backgroundColor: "var(--jade-green)", color: "var(--font-blue)"}}
+                        aria-describedby="upload-help"
                     >
+                        <Tape variant="big-r"/>
+                        <Tape variant="big-l"/>
                         <label id="label-upload" htmlFor="upload" className="font-semibold mb-2">
                             Upload file (Afbeelding of PDF)
                         </label>
 
-                        <span
-                            id="upload-help"
-                            style={{
-                                position: "absolute",
-                                left: "-10000px",
-                                top: "auto",
-                                width: "1px",
-                                height: "1px",
-                                overflow: "hidden"
-                            }}
-                        >
-                            Toegestane bestandstypen: PNG, JPEG of PDF.
-                        </span>
+                        <span id="upload-help" className="sr-only">
+                        Toegestane bestandstypen: PNG, JPEG of PDF.
+                    </span>
 
                         <input
                             type="file"
@@ -224,8 +194,7 @@ export function CreateTask({onSubmit}) {
                             aria-required="true"
                             aria-invalid={!!errors.file}
                             required
-                            className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"
-                            style={{backgroundColor: "var(--thoas-white)", color: "var(--font-blue)"}}
+                            className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 bg-[var(--thoas-white)] text-[var(--font-blue)]"
                             onChange={(e) => {
                                 const f = e.target.files?.[0] || null;
                                 setFile(f);
@@ -234,18 +203,16 @@ export function CreateTask({onSubmit}) {
                         />
                         {errors.file &&
                             <span id="upload-error" role="alert" aria-live="assertive"
-                                  className="text-sm mt-1 border-2 rounded-lg flex justify-center" style={{
-                                backgroundColor: "var(--ruas-red)",
-                                color: "var(--font-blue)"
-                            }}>{errors.file}</span>}
+                                  className="text-sm mt-1 border-2 rounded-lg flex justify-center bg-[var(--ruas-red)] text-[var(--font-blue)]">{errors.file}</span>}
                     </div>
 
                     <div
-                        className="flex flex-col p-4 rounded-lg"
+                        className="relative flex flex-col p-4 rounded-lg bg-[var(--christa-yellow)] text-[var(--font-blue)]"
                         role="group"
                         aria-labelledby="label-deadline"
-                        style={{backgroundColor: "var(--christa-yellow)", color: "var(--font-blue)"}}
                     >
+                        <Tape variant="small-r"/>
+                        <Tape variant="small-l"/>
                         <label id="label-deadline" htmlFor="deadline" className="font-semibold mb-2">Deadline:</label>
                         <input
                             type="date"
@@ -257,8 +224,7 @@ export function CreateTask({onSubmit}) {
                             aria-required="true"
                             aria-invalid={!!errors.deadline}
                             required
-                            className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"
-                            style={{backgroundColor: "var(--thoas-white)", color: "var(--font-blue)"}}
+                            className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 bg-[var(--thoas-white)] text-[var(--font-blue)]"
                             value={deadline}
                             onChange={(e) => {
                                 setDeadline(e.target.value);
@@ -267,23 +233,18 @@ export function CreateTask({onSubmit}) {
                         />
                         {errors.deadline &&
                             <span id="deadline-error" role="alert" aria-live="assertive"
-                                  className="text-sm mt-1 border-2 rounded-lg flex justify-center"
-                                  style={{
-                                      backgroundColor: "var(--ruas-red)",
-                                      color: "var(--font-blue)"
-                                  }}>{errors.deadline}</span>}
+                                  className="text-sm mt-1 border-2 rounded-lg flex justify-center bg-[var(--ruas-red)] text-[var(--font-blue)]">{errors.deadline}</span>}
                     </div>
 
                     {errors.general &&
-                        <div role="alert" className="text-sm mt-1 border-2 rounded-lg flex justify-center" style={{
-                            backgroundColor: "var(--ruas-red)",
-                            color: "var(--font-blue)"
-                        }}>{errors.general}</div>}
+                        <div role="alert"
+                             className="text-sm mt-1 border-2 rounded-lg flex justify-center bg-[var(--ruas-red)] text-[var(--font-blue)]">{errors.general}</div>}
 
-                    <button type="submit"
-                            disabled={submitting}
-                            className="mt-4 px-12 py-2 font-semibold rounded-md self-center hover:opacity-90 transition-opacity"
-                            style={{backgroundColor: "var(--ruas-red)", color: "var(--font-blue)"}}>
+                    <button
+                        type="submit"
+                        disabled={submitting}
+                        className=" mt-4 px-12 py-2 font-semibold rounded-full self-center hover:opacity-90 transition-opacity bg-[var(--ruas-red)] text-white border-2 border-white shadow-md "
+                    >
                         {submitting ? "Versturen..." : "Start"}
                     </button>
                 </form>
