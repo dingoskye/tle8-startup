@@ -6,8 +6,10 @@ import {Link, useNavigate} from "react-router";
 import {useEffect, useState} from "react";
 import DeadlineCard from "@/components/ui/deadline-card.jsx";
 import SubtaskCheck from "@/components/ui/subtask-check.jsx";
+import {useMainTask} from "@/context/task-context.jsx";
 
 function TaskCard({task, kind}) {
+    const {fetchMainTasks} = useMainTask()
     const [visibleTasks, setVisibleTasks] = useState(null)
     const navigation = useNavigate()
 
@@ -49,7 +51,8 @@ function TaskCard({task, kind}) {
                     </div>
                     <div>
                         {visibleTasks !== null && visibleTasks.length !== 0 ? visibleTasks.map((task, index) =>
-                                <SubtaskCheck completedNow={task.completed} id={task.id} main={task.main_task_id}>
+                                <SubtaskCheck onUpdated={() => fetchMainTasks()} completedNow={task.completed} id={task.id}
+                                              main={task.main_task_id}>
                                     <p className={task.completed ? "line-through" : null}>{task.title}</p>
                                 </SubtaskCheck>
                             ) :
@@ -58,7 +61,6 @@ function TaskCard({task, kind}) {
                     <div className="h-7">
                         <Progressbar progress={task.users[0].pivot.progress}/>
                     </div>
-                    <Link className="sr-only" to={`/hoofdtaken/${task.id ?? 1}`}/>
                 </Card>
             </div> : <div className="w-[95%] mx-auto h-[22vh] text-center">
                 <Card variant="white"><p className="pt-4 text-xl">Geen taken</p></Card>

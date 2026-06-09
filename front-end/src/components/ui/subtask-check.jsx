@@ -1,13 +1,27 @@
 import {LuSquare, LuSquareCheckBig} from "react-icons/lu";
 import {useMainTask} from "@/context/task-context.jsx";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 
-function SubtaskCheck({completedNow, id, main, children}) {
+function SubtaskCheck({completedNow, id, main, children, onUpdated}) {
     const {completeSubTask} = useMainTask()
     const [completed, setCompleted] = useState(completedNow)
+    const firstRender = useRef(true);
 
     useEffect(() => {
-        completeSubTask(completed, id, main)
+        if (firstRender.current) {
+            firstRender.current = false;
+            return;
+        }
+
+        const run = async () => {
+            await completeSubTask(completed, id, main);
+
+            if (onUpdated) {
+                onUpdated();
+            }
+        };
+
+        run();
     }, [completed]);
 
     return (

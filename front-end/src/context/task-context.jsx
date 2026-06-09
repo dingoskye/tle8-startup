@@ -6,7 +6,6 @@ const MainTaskContext = createContext()
 export function MainTaskProvider({children}) {
     const {apiFetch} = useApi();
     const [mainTasks, setMainTasks] = useState(null)
-    const [task, setTasks] = useState(null)
 
     async function fetchMainTasks() {
         try {
@@ -33,7 +32,7 @@ export function MainTaskProvider({children}) {
                     "Content-Type": "application/json",
                 }
             })
-            setTasks(data)
+            return data
             // console.log(data)
         } catch (e) {
             console.log(e.message)
@@ -53,8 +52,6 @@ export function MainTaskProvider({children}) {
 
             if (data) {
                 await fetchMainTasks()
-                await fetchTaskDetails(main)
-                // console.log(data)
             }
         } catch (e) {
             console.log(e.message)
@@ -64,7 +61,6 @@ export function MainTaskProvider({children}) {
     return (
         <MainTaskContext.Provider value={{
             mainTasks,
-            task,
             fetchMainTasks,
             fetchTaskDetails,
             completeSubTask
