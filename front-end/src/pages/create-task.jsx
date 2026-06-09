@@ -7,19 +7,21 @@ import Punaise from '../components/ui/punaise';
 export function CreateTask() {
     const {fetchMainTasks} = useMainTask();
     const {apiFetch} = useApi();
-    const [form, setForm] = useState({
+    const initialForm = {
         title: "",
         description: "",
         file: null,
         deadline: "",
-    });
-    const {title, description, file, deadline} = form;
+    };
 
-    const setField = (key, value) => setForm(prev => ({...prev, [key]: value}));
-    const setTitle = v => setField("title", v);
-    const setDescription = v => setField("description", v);
-    const setFile = v => setField("file", v);
-    const setDeadline = v => setField("deadline", v);
+    const [form, setForm] = useState(initialForm);
+
+    const setField = (key, value) => {
+        setForm(prev => ({
+            ...prev,
+            [key]: value,
+        }));
+    };
 
     const [errors, setErrors] = useState({});
     const [submitting, setSubmitting] = useState(false);
@@ -27,73 +29,72 @@ export function CreateTask() {
     // Form valideren.
     const validateForm = () => {
         const newErrors = {};
-        if (!title.trim()) newErrors.title = "Titel is verplicht.";
-        if (!description.trim()) newErrors.description = "Beschrijving is verplicht.";
-        if (!file) {
+
+        if (!form.title.trim()) {
+            newErrors.title = "Titel is verplicht.";
+        }
+
+        if (!form.description.trim()) {
+            newErrors.description = "Beschrijving is verplicht.";
+        }
+
+        if (!form.file) {
             newErrors.file = "Bestand is verplicht.";
-        } else if (!["image/png", "image/jpeg", "application/pdf"].includes(file.type)) {
-            newErrors.file = "Alleen afbeeldingen (PNG/JPEG) of PDF's zijn toegestaan.";
+        } else if (
+            !["image/png", "image/jpeg", "application/pdf"].includes(form.file.type)
+        ) {
+            newErrors.file =
+                "Alleen afbeeldingen (PNG/JPEG) of PDF's zijn toegestaan.";
         }
-        if (!deadline) {
+
+        if (!form.deadline) {
             newErrors.deadline = "Deadline is verplicht.";
-        } else if (deadline && isNaN(Date.parse(deadline))) {
-            newErrors.deadline = "Ongeldige datum.";
         }
+
         return newErrors;
     };
 
     // Form submit function.
-    const handleImmediateSubmit = async (e) => {
-        if (e && typeof e.preventDefault === "function") e.preventDefault();
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
         if (submitting) return;
-        const newErrors = validateForm();
-        if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors);
+
+        const validationErrors = validateForm();
+
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
             return;
         }
 
         setErrors({});
         setSubmitting(true);
 
-        const fd = new FormData();
-        fd.append("title", title);
-        fd.append("description", description);
-        fd.append("deadline", deadline);
-        fd.append("group_id", "1");
-        if (file) fd.append("ai_file", file);
+        const formData = new FormData();
+
+        formData.append("title", form.title);
+        formData.append("description", form.description);
+        formData.append("deadline", form.deadline);
+        formData.append("group_id", "1");
+        formData.append("ai_file", form.file);
 
         try {
             await apiFetch("/api/main/create", {
                 method: "POST",
-                body: fd,
+                body: formData,
             });
 
-            try {
-                await fetchMainTasks?.();
-            } catch (e) {
-                console.warn("refresh main tasks failed:", e);
-            }
+            await fetchMainTasks?.();
 
-            setForm({
-                title: "",
-                description: "",
-                file: null,
-                deadline: "",
-            });
+            setForm(initialForm);
 
-            setSubmitting(false);
         } catch (err) {
-            console.error("submit error:", err);
-            const payload = err?.payload || {};
-            const backendErrors = (payload && payload.errors) ? payload.errors : {};
-            if (payload && payload.message && Object.keys(backendErrors).length === 0) {
-                backendErrors.general = payload.message;
-            }
+            console.error("Failed to create task:", err);
 
-            setErrors(prev => ({
-                ...prev, ...backendErrors,
-                general: prev.general || "Er is een netwerkfout opgetreden."
-            }));
+            setErrors({
+                general: "Er is een fout opgetreden bij het aanmaken van de taak.",
+            });
+        } finally {
             setSubmitting(false);
         }
     };
@@ -103,7 +104,7 @@ export function CreateTask() {
             <div className="relative w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
                 <Punaise/>
                 <h1 className="text-3xl font-bold mb-8 text-center text-[var(--font-blue)]">Hoofdtaak Maken</h1>
-                <form className="flex flex-col gap-6" onSubmit={handleImmediateSubmit} noValidate>
+                <form className="flex flex-col gap-6" onSubmit={handleSubmit} noValidate>
                     <div
                         className="relative flex flex-col p-4 rounded-lg bg-[var(--flamingo-pink)] text-[var(--font-blue)]"
                         role="group"
@@ -124,10 +125,13 @@ export function CreateTask() {
                             aria-invalid={!!errors.title}
                             required
                             className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 bg-[var(--thoas-white)] text-[var(--font-blue)]"
-                            value={title}
+                            value={form.title}
                             onChange={(e) => {
-                                setTitle(e.target.value);
-                                setErrors(prev => ({...prev, title: undefined}));
+                                setField("title", e.target.value);
+                                setErrors(prev => ({
+                                    ...prev,
+                                    title: undefined,
+                                }));
                             }}
                         />
                         {errors.title &&
@@ -156,10 +160,13 @@ export function CreateTask() {
                             aria-invalid={!!errors.description}
                             required
                             className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 resize-none bg-[var(--thoas-white)] text-[var(--font-blue)]"
-                            value={description}
+                            value={form.description}
                             onChange={(e) => {
-                                setDescription(e.target.value);
-                                setErrors(prev => ({...prev, description: undefined}));
+                                setField("description", e.target.value);
+                                setErrors(prev => ({
+                                    ...prev,
+                                    description: undefined,
+                                }));
                             }}
                         />
                         {errors.description &&
@@ -176,7 +183,7 @@ export function CreateTask() {
                         <Tape variant="big-r"/>
                         <Tape variant="big-l"/>
                         <label id="label-upload" htmlFor="upload" className="font-semibold mb-2">
-                            Upload file (Afbeelding of PDF)
+                            Upload het document of afbeelding waarop de taak gebaseerd is.
                         </label>
 
                         <span id="upload-help" className="sr-only">
@@ -196,9 +203,12 @@ export function CreateTask() {
                             required
                             className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 bg-[var(--thoas-white)] text-[var(--font-blue)]"
                             onChange={(e) => {
-                                const f = e.target.files?.[0] || null;
-                                setFile(f);
-                                setErrors(prev => ({...prev, file: undefined}));
+                                setField("file", e.target.files?.[0] || null);
+
+                                setErrors(prev => ({
+                                    ...prev,
+                                    file: undefined,
+                                }));
                             }}
                         />
                         {errors.file &&
@@ -225,10 +235,13 @@ export function CreateTask() {
                             aria-invalid={!!errors.deadline}
                             required
                             className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 bg-[var(--thoas-white)] text-[var(--font-blue)]"
-                            value={deadline}
+                            value={form.deadline}
                             onChange={(e) => {
-                                setDeadline(e.target.value);
-                                setErrors(prev => ({...prev, deadline: undefined}));
+                                setField("deadline", e.target.value);
+                                setErrors(prev => ({
+                                    ...prev,
+                                    deadline: undefined,
+                                }));
                             }}
                         />
                         {errors.deadline &&
