@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import {Card} from "@/components/ui/cards.jsx";
+import Tape from "@/components/ui/tape.jsx";
 
 function Subtask() {
 
@@ -114,10 +116,9 @@ function Subtask() {
     };
 
     return (
-        <div className="relative max-w-md mx-auto min-h-175 bg-[#F0EFF2] p-8 rounded shadow-lg">
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-red-600 rounded-full shadow-md"></div>
+      <Card variant={"white"}>
 
-            <h1 className="text-4xl font-bold text-black mb-10 font-serif flex items-center justify-center">
+            <h1 className="text-4xl font-bold font-headers mb-10  flex items-center justify-center">
                 {/*{main_tasks.title}*/}
                 Ontwerpen 4
             </h1>
@@ -126,10 +127,10 @@ function Subtask() {
                 <form onSubmit={handleSubmit} className="flex flex-col gap-10">
 
                     <div className="relative bg-(--flamingo-pink) p-4 shadow-md">
-                        <div className="absolute -top-2 -left-2 w-8 h-2 bg-amber-700/60 -rotate-45"></div>
-                        <div className="absolute -top-2 -right-2 w-8 h-2 bg-amber-700/60 rotate-45"></div>
+                        <Tape variant="big-r"/>
+                        <Tape variant="big-l"/>
 
-                        <label htmlFor="context" className="block font-bold mb-2">
+                        <label htmlFor="context" className="block font-bold mb-4 font-paragraph">
                             Context:
                         </label>
 
@@ -144,12 +145,15 @@ function Subtask() {
 
                     <div className="relative bg-(--christa-yellow) p-4 shadow-md">
 
-                        <div className="absolute -top-2 -left-2 w-8 h-2 bg-amber-700/60 -rotate-45"></div>
-                        <div className="absolute -top-2 -right-2 w-8 h-2 bg-amber-700/60 rotate-45"></div>
+                        {/*<div className="absolute -top-2 -left-2 w-8 h-2 bg-amber-700/60 -rotate-45"></div>*/}
+                        {/*<div className="absolute -top-2 -right-2 w-8 h-2 bg-amber-700/60 rotate-45"></div>*/}
+                        <Tape variant="big-r"/>
+                        <Tape variant="big-l"/>
 
-                        <label htmlFor="niveau" className="block font-bold mb-4">
+                        <label htmlFor="niveau" className="block font-bold mb-4 font-paragraph">
                             Niveau:
                         </label>
+
                         <div className="relative">
                             {/* lijn */}
                             <div className="absolute left-0 right-0 top-6 h-0.5 bg-black"></div>
@@ -160,6 +164,8 @@ function Subtask() {
                                     <button
                                         key={value}
                                         type="button"
+                                        aria-label={`Niveau ${value}`}
+                                        aria-pressed={Number(formData.niveau) === value}
                                         onClick={() =>
                                             setFormData((prev) => ({
                                                 ...prev,
@@ -172,12 +178,13 @@ function Subtask() {
 
                                         {/* slider dot */}
                                         {Number(formData.niveau) === value && (
-                                            <span className="absolute top-4 z-30 h-5 w-5 rounded-full border-2 border-red-800 bg-red-600 shadow-md"></span>
+                                            // <span className="absolute top-4 z-30 h-5 w-5 rounded-full border-2 border-red-800 bg-red-600 shadow-md"></span>
+                                            <span className="absolute top-4 z-30 h-5 w-5 rounded-full bg-red-600 [box-shadow:2px_2px_6px_rgba(0,0,0,0.7)] before:absolute before:top-1/2 before:left-1/2 before:block before:size-3.5 before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-full before:bg-red-600 before:[box-shadow:inset_2px_2px_4px_rgba(255,255,255,0.25),2px_2px_6px_rgba(80,80,80,0.5)] before:content-['']" />
                                         )}
                                     </button>
                                 ))}
                             </div>
-                            <div className="grid grid-cols-4 mt-3 text-[10px]">
+                            <div className="grid grid-cols-4 mt-3 text-[15px] font-paragraph">
                                 <span className="text-center">Beginner</span>
                                 <span className="text-center">In ontwikkeling</span>
                                 <span className="text-center">Gevorderd</span>
@@ -191,7 +198,7 @@ function Subtask() {
                     </button>
                 </form>
             </section>
-        </div>
+      </Card>
     );
 }
 

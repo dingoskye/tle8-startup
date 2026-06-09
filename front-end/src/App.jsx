@@ -8,8 +8,6 @@ import GroupOverview from "@/pages/group-overview.jsx";
 import Welcome from "@/pages/welcome.jsx";
 import {ErrorPage} from "@/pages/Error.jsx";
 import GroupDetails from "@/pages/group-details.jsx";
-import {Route, Routes} from "react-router";
-import Layout from "./layout.jsx";
 import Subtask from "./pages/subtask.jsx";
 
 function App() {
