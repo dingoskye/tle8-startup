@@ -5,6 +5,7 @@ import Progressbar from "@/components/ui/progressbar.jsx";
 import {Link, useNavigate} from "react-router";
 import {useEffect, useState} from "react";
 import DeadlineCard from "@/components/ui/deadline-card.jsx";
+import SubtaskCheck from "@/components/ui/subtask-check.jsx";
 
 function TaskCard({task, kind}) {
     const [visibleTasks, setVisibleTasks] = useState(null)
@@ -31,9 +32,9 @@ function TaskCard({task, kind}) {
         }
     }, [task]);
 
-    useEffect(() => {
-        console.log(visibleTasks)
-    }, [visibleTasks]);
+    // useEffect(() => {
+    //     console.log(visibleTasks)
+    // }, [visibleTasks]);
 
     return (
         task !== "" ?
@@ -48,16 +49,9 @@ function TaskCard({task, kind}) {
                     </div>
                     <div>
                         {visibleTasks !== null && visibleTasks.length !== 0 ? visibleTasks.map((task, index) =>
-                                !task.completed ?
-                                    <div className="flex gap-2 items-center">
-                                        <p className="sr-only">To do item niet af</p>
-                                        <LuSquare/>
-                                        <p>{task.title}</p>
-                                    </div> : <div className="flex gap-2 items-center">
-                                        <p className="sr-only">To do item wel af</p>
-                                        <LuSquareCheckBig/>
-                                        <p className="line-through">{task.title}</p>
-                                    </div>
+                                <SubtaskCheck completedNow={task.completed} id={task.id} main={task.main_task_id}>
+                                    <p className={task.completed ? "line-through" : null}>{task.title}</p>
+                                </SubtaskCheck>
                             ) :
                             <p>Geen subtaken</p>}
                     </div>

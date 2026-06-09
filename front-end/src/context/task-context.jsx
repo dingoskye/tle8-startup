@@ -34,7 +34,28 @@ export function MainTaskProvider({children}) {
                 }
             })
             setTasks(data)
-            console.log(data)
+            // console.log(data)
+        } catch (e) {
+            console.log(e.message)
+        }
+    }
+
+    async function completeSubTask(completed, id, main) {
+        try {
+            const data = await apiFetch(`/api/sub/complete/${id}`, {
+                method: "PATCH",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({completed: completed})
+            })
+
+            if (data) {
+                await fetchMainTasks()
+                await fetchTaskDetails(main)
+                // console.log(data)
+            }
         } catch (e) {
             console.log(e.message)
         }
@@ -45,7 +66,8 @@ export function MainTaskProvider({children}) {
             mainTasks,
             task,
             fetchMainTasks,
-            fetchTaskDetails
+            fetchTaskDetails,
+            completeSubTask
         }}>
             {children}
         </MainTaskContext.Provider>
