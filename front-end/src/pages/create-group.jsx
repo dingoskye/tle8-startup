@@ -1,10 +1,11 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useState, useRef} from 'react';
 import {Card} from "@/components/ui/cards.jsx";
 import Tape from "@/components/ui/tape.jsx";
 import Punaise from "@/components/ui/punaise.jsx";
-
+import { useApi } from "@/context/api-context.jsx";
+import { User } from 'lucide-react';
 // MOCK DATA: Acting as a temporary database for the frontend prototype.
-// Once the backend is connected, this will be replaced by an API fetch call.
+
 const mockFriendsList = [
     {id: '1', name: 'John Doe'},
     {id: '2', name: 'Barry Berry'},
@@ -24,6 +25,8 @@ const CreateGroup = () => {
     const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitMessage, setSubmitMessage] = useState(null);
+    const { apiFetch } = useApi();
+    const plusButtonRef = useRef(null);
 
     const handleCreateGroup = async (e) => {
         e.preventDefault();
@@ -75,35 +78,28 @@ const CreateGroup = () => {
         setIsSubmitting(true);
 
         try {
-            // We append the selected members to the formData
-            // For a file upload (FormData), we need to send the members array properly.
-            // A common way is to send it as a JSON string.
             formData.append('members', JSON.stringify(selectedMembers.map(m => m.id)));
 
-            // Replace 'http://localhost:8080/api/groups' with your actual backend URL
-            const response = await fetch('http://127.0.0.1:8000', {
+            // 1. Use apiFetch instead of standard fetch.
+            // 2. Set the endpoint path
+            const data = await apiFetch('/api/group/create', {
                 method: 'POST',
-
                 body: formData,
             });
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const data = await response.json();
+            // Handle success response
             console.log("Success:", data);
 
             // Clear form and show success
             e.target.reset();
             setSelectedMembers([]);
-            setSubmitMessage({type: 'success', text: 'Group created successfully!'});
+            setSubmitMessage({type: 'success', text: 'Groep succesvol aangemaakt!'});
 
         } catch (error) {
             console.error("Error submitting form:", error);
             setSubmitMessage({
                 type: 'error',
-                text: 'Failed to create group. Please check your connection and try again.'
+                text: 'Het aanmaken van de groep is mislukt. Controleer uw verbinding en probeer het opnieuw.'
             });
         } finally {
             setIsSubmitting(false);
@@ -111,14 +107,13 @@ const CreateGroup = () => {
     };
 
     return (
-        <main className="bg-background w-full min-h-screen flex flex-col pb-10">
-
+        <>
             {/* --- HEADER SECTION --- */}
             <header role="banner" className="text-center p-1 mt-10 mb-10 relative">
                 <div className="bg-primary w-[70%] mx-auto p-4 rounded-lg shadow-md relative">
                     <Tape variant="big-r"/>
                     <Tape variant="big-l"/>
-                    <h1 className="text-3xl font-bold font-headers">Create Group</h1>
+                    <h1 className="text-3xl font-bold font-headers">Groep aanmaken</h1>
                 </div>
             </header>
 
@@ -131,17 +126,17 @@ const CreateGroup = () => {
 
             <form className="flex flex-col items-center gap-6" onSubmit={handleCreateGroup}>
 
-                {/* --- NAAM SECTION --- */}
+                {/* --- NAME SECTION --- */}
                 <div className="w-[70%]">
                     <Card variant="tertiary">
-                        <label htmlFor="naam" className="block mb-2 font-bold text-lg">Naam</label>
+                        <label htmlFor="name" className="block mb-2 font-headings text-lg">Naam</label>
                         <div className="w-full relative">
 
                             <Tape variant="small-r"/>
                             <Tape variant="small-l"/>
 
                             <input
-                                id="naam"
+                                id="name"
                                 className="w-full bg-bg-white shadow-xl/15 rounded-[3px] pl-5 pt-2 pb-3"
                                 type="text"
                                 name="name"
@@ -152,16 +147,16 @@ const CreateGroup = () => {
                     </Card>
                 </div>
 
-                {/* --- BESCHRIJVING SECTION --- */}
+                {/* --- DESCRIPTION SECTION --- */}
                 <div className="w-[70%]">
                     <Card variant="quaternary">
-                        <label htmlFor="beschrijving" className="block mb-2 font-bold text-lg">Beschrijving</label>
+                        <label htmlFor="description" className="block mb-2 font-headings text-lg">Beschrijving</label>
 
                         <div className="relative">
                             <Tape variant="big-r"/>
                             <Tape variant="big-l"/>
                             <textarea
-                                id="beschrijving"
+                                id="description"
                                 className="w-full bg-bg-white shadow-xl/15 rounded-[3px] pl-5 pr-5 pt-2 pb-20"
                                 name="description"
                                 placeholder="geeft hier context over jou hoofdtaak"
@@ -173,18 +168,18 @@ const CreateGroup = () => {
                     </Card>
                 </div>
 
-                {/* --- FOTO SECTION --- */}
+                {/* --- PHOTO SECTION --- */}
                 <div className="w-[70%] ">
                     <Card variant="secondary">
 
-                        <label htmlFor="foto" className="block mb-2 font-bold text-lg">Foto</label>
+                        <label htmlFor="photo" className="block mb-2 font-headings text-lg">Foto</label>
                         <div className="relative">
                             <Tape variant="big-r"/>
                             <Tape variant="big-l"/>
                             <input
                                 className="w-full bg-bg-white shadow-xl/15 rounded-[3px] pl-5 pr-5 pt-2 pb-20 cursor-pointer"
                                 type="file"
-                                id="foto"
+                                id="photo"
                                 name="photo"
                                 accept="image/png, image/jpeg, image/webp"
                             />
@@ -198,7 +193,7 @@ const CreateGroup = () => {
                     <Card variant="tertiary">
                         <div className="flex items-center justify-between w-full">
                             <div>
-                                <label htmlFor="leaderboard" className="block font-bold text-lg cursor-pointer">
+                                <label htmlFor="leaderboard" className="block font-headings text-lg cursor-pointer">
                                     Leaderboard Toevoegen?
                                 </label>
                                 <p className="text-sm opacity-80 mt-1">
@@ -217,7 +212,7 @@ const CreateGroup = () => {
                     </Card>
                 </div>
 
-                {/* --- LEDEN (MEMBERS) SECTION --- */}
+                {/* --- MEMBERS SECTION --- */}
                 <div className="w-[70%]">
                     <Card variant="white">
                         <h2 className="block text-2xl font-bold mb-4">Leden:</h2>
@@ -233,31 +228,30 @@ const CreateGroup = () => {
                                      className="relative mt-4 bg-bg-white p-2 pt-4 rounded-sm shadow-md flex flex-col items-center shrink-0 w-24">
 
                                     {/* --- THE CLICKABLE PUNAISE --- */}
+
                                     <button
                                         type="button"
-                                        // This filters out the clicked member, effectively removing them from the array
                                         onClick={() => setSelectedMembers(selectedMembers.filter(m => m.id !== member.id))}
-                                        className="z-10 hover  cursor-pointer"
+                                         className="z-10 cursor-pointer rounded-full focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-black hover:scale-110 transition-transform"
                                         aria-label={`Verwijder ${member.name}`}
                                         title="Verwijder lid"
                                     >
-
                                         <Punaise/>
                                     </button>
+
+                                    {/* Placeholder Avatar */}
+                                    <User className="w-10 h-10 mb-1 text-black bg-bg-white border-2 border-black rounded-full p-1" />
 
                                     <span
                                         className="text-xs mb-2 whitespace-nowrap overflow-hidden text-ellipsis w-full text-center font-bold">{member.name}
                                     </span>
-
-                                    {/* Placeholder Avatar */}
-                                    <div className="w-8 h-8 border-2 border-black rounded-full mb-1"></div>
-                                    <div className="w-12 h-6 border-2 border-black border-b-0 rounded-t-full"></div>
                                 </div>
                             ))}
 
                             {/* --- DROPDOWN MENU LOGIC --- */}
                             <div className="relative">
                                 <button
+                                    ref={plusButtonRef}
                                     type="button"
                                     aria-label="Voeg een lid toe"
                                     onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -278,6 +272,12 @@ const CreateGroup = () => {
                                                             setSelectedMembers([...selectedMembers, friend]);
                                                         }
                                                         setIsMenuOpen(false);
+
+                                                        setTimeout(() => {
+                                                            if (plusButtonRef.current) {
+                                                                plusButtonRef.current.focus();
+                                                            }
+                                                        }, 0);
                                                     }}
                                                 >
                                                     {friend.name}
@@ -298,7 +298,7 @@ const CreateGroup = () => {
                     {isSubmitting ? 'Bezig met aanmaken...' : 'Aanmaken'}
                 </button>
             </form>
-        </main>
+        </>
     );
 };
 
