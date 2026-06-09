@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -20,6 +21,11 @@ class Group extends Model
     {
         return $this->belongsToMany(User::class, 'user_group')
             ->withPivot('role');
+    }
+
+    public function mainTasks(): HasMany
+    {
+        return $this->hasMany(MainTask::class, 'main_task_id');
     }
 }
 

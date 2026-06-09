@@ -19,4 +19,9 @@ class SubTask extends Model
     {
         return $this->hasOne(User::class);
     }
+
+    public function mainTasks(): BelongsTo
+    {
+        return $this->belongsTo(MainTask::class, 'main_task_id');
+    }
 }

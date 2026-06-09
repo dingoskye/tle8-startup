@@ -24,8 +24,8 @@ Route::delete('/group/delete/{id}', [GroupController::class, 'delete']);
 
 //Main task controller routes
 Route::post('/main/create', [MainTaskController::class, 'create']);
-Route::get('/main/', [MainTaskController::class, 'index']);
-Route::get('/main/{id}', [MainTaskController::class, 'show']);
+Route::get('/main/{id}', [MainTaskController::class, 'index']);
+Route::get('/main/details/{id}', [MainTaskController::class, 'show']);
 Route::put('/main/edit/{id}', [MainTaskController::class, 'edit']);
 Route::delete('/main/delete/{id}', [MainTaskController::class, 'delete']);
 

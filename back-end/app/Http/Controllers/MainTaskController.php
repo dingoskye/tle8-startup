@@ -13,9 +13,13 @@ class MainTaskController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(string $id)
     {
-        return MainTask::all();
+        return MainTask::with(['group', 'users', 'subTasks' => function ($query) {
+            $query->orderBy('completed', 'asc')->orderBy('created_at', 'asc');
+        }])->whereHas('users', function ($query) use ($id) {
+            $query->where('users.id', $id);
+        })->orderBy('deadline', 'asc')->get();
     }
 
     /**
@@ -38,9 +42,9 @@ class MainTaskController extends Controller
             $mainTask->save();
 
             $mainTask->users()->attach($request->user_id, [
-                'level' => $request->level,
-                'progress' => $request->progress,
-                'score' => $request->score,
+                'level' => $request->level ?? "beginner",
+                'progress' => $request->progress ?? 0,
+                'score' => $request->score ?? null,
             ]);
 
 
@@ -55,7 +59,9 @@ class MainTaskController extends Controller
      */
     public function show(string $id)
     {
-        return MainTask::query()->findOrFail($id);
+        return MainTask::with(['group', 'users', 'subTasks' => function ($query) {
+            $query->orderBy('completed', 'asc')->orderBy('created_at', 'asc');
+        }])->findOrFail($id);
     }
 
     /**
@@ -70,6 +76,7 @@ class MainTaskController extends Controller
             }
             $mainTask = MainTask::query()->findOrFail($id);
 
+            // is kinda redundant, but we'll leave it there for safety
             $mainTask->update([
                 'title' => $request->title ?? $mainTask->title,
                 'deadline' => $request->deadline ?? $mainTask->deadline,
