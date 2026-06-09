@@ -9,7 +9,7 @@ export function MainTaskProvider({children}) {
 
     async function fetchMainTasks() {
         try {
-            const data = await apiFetch(`/api/main/1`, { //tijdelijke hardcoded user id
+            const data = await apiFetch(`main/1`, { //tijdelijke hardcoded user id
                 method: "GET",
                 headers: {
                     Accept: "application/json",
