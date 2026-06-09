@@ -2,7 +2,7 @@ import {createContext, useContext} from "react"
 
 const ApiContext = createContext()
 
-const BASE_URL = "/api/"
+const BASE_URL = "/api"
 
 export function ApiProvider({children}) {
     async function apiFetch(endpoint, options = {}) {
