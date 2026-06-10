@@ -19,6 +19,10 @@ const CreateSubtasks = () => {
     const [submitMessage, setSubmitMessage] = useState(null);
     const { apiFetch } = useApi();
     const cardVariants = ["tertiary", "primary", "quaternary", "secondary"];
+    const today = new Date().toISOString().split('T')[0];
+    const maxDate = new Date();
+    maxDate.setFullYear(maxDate.getFullYear() + 5);
+    const maxDateString = maxDate.toISOString().split('T')[0];
 
     const handleAddSubtask = () => {
         setSubtasks([
@@ -167,7 +171,7 @@ const CreateSubtasks = () => {
                                             className="w-full bg-bg-white shadow-xl/15 rounded-[3px] p-3 border border-transparent focus:border-black outline-none"
                                             placeholder="e.g. Schrijf introductie"
                                             value={task.title}
-                                            
+                                            maxLength={500}
                                             onChange={(e) => handleChange(task.id, 'title', e.target.value)}
                                             required
                                         />
@@ -188,6 +192,7 @@ const CreateSubtasks = () => {
                                             className="w-full bg-bg-white shadow-xl/15 rounded-[3px] p-3 min-h-[100px] border border-transparent focus:border-black outline-none"
                                             placeholder="Details over deze taak..."
                                             value={task.description}
+                                            maxLength={4000}
                                             onChange={(e) => handleChange(task.id, 'description', e.target.value)}
                                         />
                                     </div>
@@ -205,6 +210,8 @@ const CreateSubtasks = () => {
                                             className="w-full bg-bg-white shadow-xl/15 rounded-[3px] p-3 cursor-pointer border border-transparent focus:border-black outline-none"
                                             value={task.deadline}
                                             onChange={(e) => handleChange(task.id, 'deadline', e.target.value)}
+                                            min={today}
+                                            max={maxDateString}
                                         />
                                         </div>
                                     </div>
