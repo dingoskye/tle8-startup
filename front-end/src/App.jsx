@@ -21,8 +21,9 @@ function App() {
                 <Route path="/studiegroepen/:id" element={<GroupDetails/>}/>
                 <Route path="/hoofdtaken" element={<TaskOverview/>}/>
                 <Route path="/hoofdtaken/:id" element={<TaskDetails/>}/>
+                <Route path="/hoofdtaak/aanmaken" element={<CreateTask/>}/>
                 <Route path="*" element={<ErrorPage/>}/>
-                <Route path="/taak-aanmaken" element={<CreateTask/>}/>
+
             </Route>
         </Routes>
     )

@@ -14,13 +14,13 @@ function Nav() {
                  className="bg-nav-brown h-[8vh] mt-6 flex items-center justify-between px-[12vw] gap-2">
                 <NavLinks variant="small" link="/"><FaHome className="text-xl"/></NavLinks>
                 <NavLinks variant="small" link="/hoofdtaken"><FaTasks className="text-xl"/></NavLinks>
-                <NavLinks variant="big" link="/"><FaPlus className="text-3xl"/></NavLinks>
+                <NavLinks variant="big" link="/hoofdtaak/aanmaken"><FaPlus className="text-3xl"/></NavLinks>
                 <NavLinks variant="small" link="/"><LuInbox className="text-xl"/></NavLinks>
                 <NavLinks variant="small" link="/"><IoPerson className="text-xl"/></NavLinks>
             </nav> :
             <nav role="navigation"
                  className="bg-nav-brown h-[8vh] mt-6 flex items-center justify-between px-[12vw] gap-2">
-                <NavLinks variant="small" link="/"><FaPlus className="text-xl"/></NavLinks>
+                <NavLinks variant="small" link="/hoofdtaak/aanmaken"><FaPlus className="text-xl"/></NavLinks>
                 <NavLinks variant="small" link="/hoofdtaken"><FaTasks className="text-xl"/></NavLinks>
                 <NavLinks variant="big" link="/"><FaHome className="text-3xl"/></NavLinks>
                 <NavLinks variant="small" link="/"><LuInbox className="text-xl"/></NavLinks>
