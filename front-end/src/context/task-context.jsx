@@ -39,7 +39,7 @@ export function MainTaskProvider({children}) {
         }
     }
 
-    async function completeSubTask(completed, id, main) {
+    async function completeSubTask(completed, id) {
         try {
             const data = await apiFetch(`/api/sub/complete/${id}`, {
                 method: "PATCH",
@@ -61,6 +61,8 @@ export function MainTaskProvider({children}) {
     return (
         <MainTaskContext.Provider value={{
             mainTasks,
+            
+            //de functies vinden dat ze niet gebruikt worden, maar dat worden ze wel
             fetchMainTasks,
             fetchTaskDetails,
             completeSubTask

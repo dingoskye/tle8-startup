@@ -32,7 +32,7 @@ function TaskDetails() {
         console.log(params.id)
         setTask(null)
 
-        reloadTask()
+        reloadTask() //negeer de kringeltjes xD
     }, [params.id]);
 
     useEffect(() => {
@@ -66,6 +66,7 @@ function TaskDetails() {
                     {task.sub_tasks && task.sub_tasks.length > 0 ?
                         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-4">
                             {task.sub_tasks.map((sub, index) =>
+                                // de onSubtaskUpdated geef ik mee zodat als de taak afgevinkt word de taak gereload
                                 <SubTaskCard onSubtaskUpdated={reloadTask} key={index} sub={sub}
                                              variant={variants[index % variants.length]}/>)}
                         </section> :
