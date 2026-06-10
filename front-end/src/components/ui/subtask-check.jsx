@@ -29,16 +29,16 @@ function SubtaskCheck({completedNow, id, main, children, onUpdated}) {
             <div className="flex gap-2 items-center" onClick={(e) => {
                 e.stopPropagation();
                 setCompleted(false)
-            }} tabIndex={1}>
-                <p className="sr-only">To do item wel af</p>
+            }} tabIndex={0}>
+                <p className="sr-only">To do item uitvinken</p>
                 <LuSquareCheckBig className="text-2xl bg-white shadow-sm rounded-sm"/>
                 {children}
             </div> :
             <div className="flex gap-2 items-center" onClick={(e) => {
                 e.stopPropagation();
                 setCompleted(true)
-            }} tabIndex={1}>
-                <p className="sr-only">To do item niet af</p>
+            }} tabIndex={0}>
+                <p className="sr-only">To do item afvinken</p>
                 <LuSquare className="text-2xl bg-white shadow-sm rounded-sm"/>
                 {children}
             </div>

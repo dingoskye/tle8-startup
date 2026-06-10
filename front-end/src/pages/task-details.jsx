@@ -22,10 +22,6 @@ function TaskDetails() {
         "quaternary",
     ];
 
-    //documenten titels voor WCAG!!
-    useEffect(() => {
-        document.title = "Board-it | Details taak";
-    }, [])
 
     const reloadTask = async () => {
         const data = await fetchTaskDetails(params.id)
@@ -38,6 +34,11 @@ function TaskDetails() {
 
         reloadTask()
     }, [params.id]);
+
+    useEffect(() => {
+        //documenten titels voor WCAG!!
+        document.title = `Board-it | Details ${task?.title ?? ""}`;
+    }, [task])
 
 
     return (

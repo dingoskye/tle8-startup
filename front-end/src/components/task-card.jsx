@@ -40,7 +40,8 @@ function TaskCard({task, kind}) {
 
     return (
         task !== "" ?
-            <div className="w-[95%] mx-auto h-full" onClick={() => navigation(`/hoofdtaken/${task.id ?? 1}`)}>
+            <div className="w-[95%] mx-auto h-full" onClick={() => navigation(`/hoofdtaken/${task.id ?? 1}`)}
+                 tabIndex={0}>
                 <Card variant="white">
                     <div className="gap-4 mt-2 grid grid-cols-3 grow">
                         <DeadlineCard deadline={task.deadline}/>
