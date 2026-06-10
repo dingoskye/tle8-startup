@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Card, TapeCard } from "@/components/ui/cards.jsx";
 import Tape from "@/components/ui/tape.jsx";
-import { useApi } from "@/context/api-context.jsx"; // 1. Import useApi
+import { useApi } from "@/context/api-context.jsx";
+import { Button } from "@/components/ui/button.jsx";
 
 const CreateSubtasks = () => {
+
     useEffect(() => {
-        document.title = "Board-it | Create Subtasks";
+        document.title = "Board-it | Subtaken Aanmaken";
     }, []);
 
     const [subtasks, setSubtasks] = useState([
@@ -98,9 +100,9 @@ const CreateSubtasks = () => {
     };
 
     return (
-        <main className="pb-12">
+        <>
             {/* --- HEADER SECTION (Matches Home.jsx exactly) --- */}
-            <header role="banner" className="text-center p-1 mt-10 mb-8 relative w-[90%] md:w-[70%] mx-auto">
+            <header role="banner" className="text-center p-1 mt-10 mb-5 relative w-[90%] md:w-[70%] mx-auto">
                 <div className="bg-primary w-full p-4 rounded-lg shadow-md relative">
                     <Tape variant="big-r" />
                     <Tape variant="big-l" />
@@ -134,13 +136,15 @@ const CreateSubtasks = () => {
                                 <div className="flex justify-between items-center mb-4 mt-2">
                                     <h2 className="text-2xl font-bold font-headers">Subtaak #{index + 1}</h2>
                                     {subtasks.length > 1 && (
-                                        <button
+                                        <Button
                                             type="button"
+                                            variant="boardit-white"
+                                            size="boardit-sm"
                                             onClick={() => handleRemoveSubtask(task.id)}
-                                            className="text-red-700 hover:text-red-900 font-bold underline cursor-pointer focus-visible:outline-black"
+                                            aria-label={`Verwijder subtaak ${index + 1}`}
                                         >
                                             Verwijder
-                                        </button>
+                                        </Button>
                                     )}
                                 </div>
 
@@ -148,17 +152,22 @@ const CreateSubtasks = () => {
                                     {/* Titel Input */}
                                     <div>
 
-                                        <label className="block mb-2 font-headings text-lg font-bold">Titel</label>
+                                        <label htmlFor={`title-${task.id}`} className="block mb-2 font-headings text-lg font-bold">
+                                            Titel <span aria-hidden="true" className="text-red-600">*</span>
+                                            <span className="sr-only">(Verplicht)</span>
+                                        </label>
 
                                     <div className="relative">
                                         <Tape variant="small-r"  />
                                         <Tape variant="small-l" />
                                         <input
+
+                                            id={`title-${task.id}`}
                                             type="text"
                                             className="w-full bg-bg-white shadow-xl/15 rounded-[3px] p-3 border border-transparent focus:border-black outline-none"
                                             placeholder="e.g. Schrijf introductie"
                                             value={task.title}
-                                            // Update 'title' here!
+                                            
                                             onChange={(e) => handleChange(task.id, 'title', e.target.value)}
                                             required
                                         />
@@ -169,12 +178,13 @@ const CreateSubtasks = () => {
 
                                     {/* Description Input */}
                                     <div>
-                                        <label className="block mb-2 font-headings text-lg font-bold">Beschrijving</label>
+                                        <label htmlFor={`description-${task.id}`} className="block mb-2 font-headings text-lg font-bold">Beschrijving</label>
 
                                         <div className="relative">
                                             <Tape variant="big-r"  />
                                             <Tape variant="big-l" />
                                         <textarea
+                                            id={`description-${task.id}`}
                                             className="w-full bg-bg-white shadow-xl/15 rounded-[3px] p-3 min-h-[100px] border border-transparent focus:border-black outline-none"
                                             placeholder="Details over deze taak..."
                                             value={task.description}
@@ -185,11 +195,12 @@ const CreateSubtasks = () => {
 
                                     {/* Deadline Input */}
                                     <div>
-                                        <label className="block mb-2 font-headings text-lg font-bold">Deadline</label>
+                                        <label htmlFor={`deadline-${task.id}`}  className="block mb-2 font-headings text-lg font-bold">Deadline</label>
                                         <div className="relative">
-                                            <Tape variant="-r"  />
-                                            <Tape variant="-l" />
+                                            <Tape variant="small-r"  />
+                                            <Tape variant="small-l" />
                                         <input
+                                            id={`deadline-${task.id}`}
                                             type="date"
                                             className="w-full bg-bg-white shadow-xl/15 rounded-[3px] p-3 cursor-pointer border border-transparent focus:border-black outline-none"
                                             value={task.deadline}
@@ -205,24 +216,27 @@ const CreateSubtasks = () => {
 
                 {/* --- ACTION BUTTONS --- */}
                 <div className="flex flex-col sm:flex-row gap-4 mt-6 w-[90%] md:w-[70%] justify-between">
-                    <button
+
+                    <Button
                         type="button"
+                        variant="green"
+                        size="boardit"
                         onClick={handleAddSubtask}
-                        className="bg-secondary text-black px-6 py-3 rounded-full border-4 border-white shadow-md font-bold hover:scale-105 transition-transform"
                     >
                         + Extra Subtaak
-                    </button>
+                    </Button>
 
-                    <button
+                    <Button
                         type="submit"
+                        variant="purple"
+                        size="boardit"
                         disabled={isSubmitting}
-                        className={`bg-button-purple text-black px-8 py-3 rounded-full border-4 border-white shadow-md font-bold hover:scale-105 transition-transform ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
                     >
                         {isSubmitting ? 'Bezig met opslaan...' : 'Alles Opslaan'}
-                    </button>
+                    </Button>
                 </div>
             </form>
-        </main>
+        </>
     );
 };
 
