@@ -11,6 +11,7 @@ export function CreateTask() {
         title: "",
         description: "",
         deadline: "",
+        ai_file: null
     };
 
     const [form, setForm] = useState(initialForm);
@@ -31,8 +32,8 @@ export function CreateTask() {
         const newErrors = {};
         if (!form.title.trim()) newErrors.title = "Titel is verplicht.";
         if (!form.description.trim()) newErrors.description = "Beschrijving is verplicht.";
-        if (!form.file) newErrors.file = "Bestand is verplicht.";
-        else if (!["image/png", "image/jpeg", "application/pdf"].includes(form.file.type)) {
+        if (!form.ai_file) newErrors.file = "Bestand is verplicht.";
+        else if (!["image/png", "image/jpeg", "application/pdf"].includes(form.ai_file.type)) {
             newErrors.file = "Alleen afbeeldingen (PNG/JPEG) of PDF's zijn toegestaan.";
         }
         if (!form.deadline) newErrors.deadline = "Deadline is verplicht.";
@@ -57,6 +58,7 @@ export function CreateTask() {
         const formData = new FormData();
 
         for (const [key, value] of Object.entries(form)) {
+            console.log(key, value);
             if (value !== null) {
                 let sendValue = value;
 
@@ -67,7 +69,6 @@ export function CreateTask() {
                 formData.append(key, sendValue);
             }
         }
-        formData.append("ai_file", e.target.files[0])
         formData.append("group_id", "1");
         formData.append("user_id", "1");
 
@@ -160,7 +161,7 @@ export function CreateTask() {
                                 aria-invalid={!!errors.file}
                                 className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 bg-[var(--thoas-white)]"
                                 onChange={(e) => {
-                                    setField("file", e.target.files?.[0] ?? null);
+                                    setField("ai_file", e.target?.files[0]);
                                     setErrors(prev => ({...prev, file: undefined}));
                                 }}
                             />
