@@ -2,61 +2,122 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {Card} from "@/components/ui/cards.jsx";
 import Tape from "@/components/ui/tape.jsx";
+import {useApi} from "@/context/api-context.jsx";
 
 function Subtask() {
+    const {apiFetch} = useApi();
 
-    const params = useParams()
+
+    const params = useParams();
+    console.log("PARAMS:", params);
+
     const id = params.id;
+    console.log("ID:", id);
+
     const navigate = useNavigate();
 
-    const [details, setDetails] = useState(null);
-    const [loading, setLoading] = useState(true);
 
     const [formData, setFormData] = useState({
         context: '',
         niveau: 1,
         main_task_id: id,
     });
+    const [details, setDetails] = useState(null);
 
-    const loadDetails = async () => {
+    useEffect(() => {
+        if (!id) return;
+
+        setFormData((prev) => ({
+            ...prev,
+            main_task_id: id,
+        }));
+
+        fetchTaskDetails(id);
+    }, [id]);
+
+    async function fetchTaskDetails(id) {
+            console.log("ID IN LOADDETAILS:", id);
         try {
-            setLoading(true);
-
-            const result = await fetch(`http://localhost:8000/main_tasks/${id}`, {
+            const data = await apiFetch(`/main/details/${id}`, {
                 method: "GET",
                 headers: {
-                    'Accept': 'application/json'
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
                 },
             });
-
-            if (result.status === 404) {
-                navigate("/");
-                return;
-            }
-
-            if (!result.ok) {
-                throw new Error(`HTTP error! status: ${result.status}`);
-            }
-
-            const data = await result.json();
-
-            console.log("DATA:", data);
 
             setDetails(data);
             console.log(data);
         } catch (e) {
-            console.log(e);
+            console.log(e.message);
             navigate("/");
-        } finally {
-            setLoading(false);
         }
-        console.log("FETCH URL:", `http://localhost:8000/main_tasks/${id}`);
-    };
+    }
 
-    useEffect(() => {
-        loadDetails();
-    }, [id]);
+    // const loadDetails = async () => {
+    //     console.log("ID IN LOADDETAILS:", id);
+    //     try {
+    //
+    //         const result = await apiFetch(`/main/${id}`, {
+    //             method: "GET",
+    //             headers: {
+    //                 'Accept': 'application/json',
+    //                 "Content-Type": "application/json",
+    //             },
+    //         });
+    //
+    //         // if (result.status === 404) {
+    //         //     navigate("/");
+    //         //     return;
+    //         // }
+    //
+    //         // if (!result.ok) {
+    //         //     throw new Error(`HTTP error! status: ${result.status}`);
+    //         // }
+    //
+    //         const data = await result.json();
+    //
+    //         console.log("DATA:", data);
+    //
+    //         setDetails(data);
+    //         console.log(data);
+    //     } catch (e) {
+    //         console.log(e);
+    //         // navigate("/");
+    //     }
+    //     // finally {
+    //     //     setLoading(false);
+    //     // }
+    //     console.log("FETCH URL:", `http://127.0.0.1:8000/api/main/${id}`);
+    // };
+    // async function loadDetails(id) {
+    //     try {
+    //         const data = await apiFetch(`/main/${id}`, {
+    //             method: "GET",
+    //             headers: {
+    //                 Accept: "application/json",
+    //                 "Content-Type": "application/json",
+    //             }
+    //         })
+    //         setDetails(data)
+    //         console.log(data)
+    //         console.log(id)
+    //     } catch (e) {
+    //         console.log(e.message)
+    //     }
+    // }
 
+
+    // useEffect(() => {
+    //     loadDetails();
+    // }, []);
+
+
+    // const [formData, setFormData] = useState({
+    //     context: '',
+    //     niveau: 1,
+    //     main_task_id: id,
+    // });
 
 
     const handleInputChange = (e) => {
@@ -66,14 +127,18 @@ function Subtask() {
             ...prev,
             [name]: value,
         }));
+
     };
+
+    useEffect(() => {
+        console.log("FORMDATA:", formData);
+    }, [formData]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(formData);
         try {
-            const res = await fetch(
-                `http://localhost:8000/api/main-tasks/${id}/generate-subtasks`,
+            const res = await apiFetch(`/main-tasks/${id}/generate-subtasks`,
                 {
                     method: 'POST',
                     headers: {
@@ -102,7 +167,7 @@ function Subtask() {
       <Card variant={"white"}>
 
             <h1 className="text-4xl font-bold font-headers mb-10  flex items-center justify-center">
-                {/*{main_tasks.title}*/}
+                {details?.title}
                 Ontwerpen 4
             </h1>
 
@@ -176,7 +241,7 @@ function Subtask() {
                         </div>
 
                     </div>
-                    <button type="submit" onClick={generateSubtasks} className="self-center mt-16 px-8 py-2 rounded-full bg-[#ddaefe] text-black border-2 border-white shadow-md font-bold hover:scale-105 transition">
+                    <button type="submit" className="self-center mt-16 px-8 py-2 rounded-full bg-[#ddaefe] text-black border-2 border-white shadow-md font-bold hover:scale-105 transition">
                         Genereren
                     </button>
                 </form>
