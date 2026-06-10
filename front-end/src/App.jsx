@@ -21,7 +21,7 @@ function App() {
                 <Route path="/studiegroepen/:id" element={<GroupDetails/>}/>
                 <Route path="/hoofdtaken" element={<TaskOverview/>}/>
                 <Route path="/hoofdtaken/:id" element={<TaskDetails/>}/>
-                <Route path="/groupmaken" element={<CreateGroup/>}/>
+                <Route path="/studiegroepen/aanmaken" element={<CreateGroup/>}/>
                 <Route path="*" element={<ErrorPage/>}/>
             </Route>
         </Routes>

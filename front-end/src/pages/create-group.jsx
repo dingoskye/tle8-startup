@@ -1,9 +1,11 @@
 import {useEffect, useState, useRef} from 'react';
+import { useNavigate } from 'react-router-dom';
 import {Card} from "@/components/ui/cards.jsx";
 import Tape from "@/components/ui/tape.jsx";
 import Punaise from "@/components/ui/punaise.jsx";
 import { useApi } from "@/context/api-context.jsx";
 import { User } from 'lucide-react';
+import {MainButton} from "@/components/ui/buttons.jsx";
 // MOCK DATA: Acting as a temporary database for the frontend prototype.
 
 const mockFriendsList = [
@@ -14,10 +16,11 @@ const mockFriendsList = [
 ];
 
 const CreateGroup = () => {
+    const navigate = useNavigate();
 
     //documenten titels voor WCAG!!
     useEffect(() => {
-        document.title = "Board-it | Create group";
+        document.title = "Board-it | studiengroep aanmaken";
     }, []);
 
     const [selectedMembers, setSelectedMembers] = useState([]);
@@ -43,27 +46,27 @@ const CreateGroup = () => {
 
         // --- RULE 1: Name ---
         if (!name || name.trim() === "") {
-            newErrors.name = "Name cannot be empty or just spaces.";
+            newErrors.name = "Naam kan niet leeg zijn of alleen uit spaties bestaan.";
         }
 
         // --- RULE 2: Description ---
         if (!description || description.trim() === "") {
-            newErrors.description = "Please provide a description.";
+            newErrors.description = "Geef een beschrijving.";
         }
 
         // --- RULE 3: Photo limit (Max 5MB) ---
         if (photo && photo.size > 0) {
             const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
             if (photo.size > maxSizeInBytes) {
-                newErrors.photo = "The image is too large! Maximum size is 5MB.";
+                newErrors.photo = "De afbeelding is te groot! Maximale grootte is 5MB.";
             }
         }
 
         // --- RULE 4: Members limit (Min 1, Max 10) ---
         if (selectedMembers.length === 0) {
-            newErrors.members = "You must add at least one member to the group.";
+            newErrors.members = "Je moet minstens één lid aan de groep toevoegen.";
         } else if (selectedMembers.length > 10) {
-            newErrors.members = "You can only add a maximum of 10 members.";
+            newErrors.members = "Je kunt maximaal 10 leden toevoegen.";
         }
 
         // --- CHECK RESULTS ---
@@ -90,10 +93,12 @@ const CreateGroup = () => {
             // Handle success response
             console.log("Success:", data);
 
-            // Clear form and show success
-            e.target.reset();
-            setSelectedMembers([]);
-            setSubmitMessage({type: 'success', text: 'Groep succesvol aangemaakt!'});
+            setSubmitMessage({type: 'success', text: 'Groep succesvol aangemaakt! U wordt nu doorgestuurd...'});
+
+            setTimeout(() => {
+                // Assuming the backend returns the new ID as data.id
+                navigate(`/studiegroepen/${data.id}`);
+            }, 2000);
 
         } catch (error) {
             console.error("Error submitting form:", error);
@@ -101,19 +106,19 @@ const CreateGroup = () => {
                 type: 'error',
                 text: 'Het aanmaken van de groep is mislukt. Controleer uw verbinding en probeer het opnieuw.'
             });
-        } finally {
             setIsSubmitting(false);
         }
     };
 
     return (
         <>
+
             {/* --- HEADER SECTION --- */}
             <header role="banner" className="text-center p-1 mt-10 mb-10 relative">
-                <div className="bg-primary w-[70%] mx-auto p-4 rounded-lg shadow-md relative">
+                <div className="bg-primary w-[80%] mx-auto p-4 rounded-lg shadow-md relative">
                     <Tape variant="big-r"/>
                     <Tape variant="big-l"/>
-                    <h1 className="text-3xl font-bold font-headers">Groep aanmaken</h1>
+                    <h1 className="text-3xl  font-headers">Groep aanmaken</h1>
                 </div>
             </header>
 
@@ -124,12 +129,12 @@ const CreateGroup = () => {
                 </div>
             )}
 
-            <form className="flex flex-col items-center gap-6" onSubmit={handleCreateGroup}>
+            <form className="flex flex-col items-center gap-6 w-full" onSubmit={handleCreateGroup}>
 
                 {/* --- NAME SECTION --- */}
-                <div className="w-[70%]">
+                <div className="w-[80%]">
                     <Card variant="tertiary">
-                        <label htmlFor="name" className="block mb-2 font-headings text-lg">Naam</label>
+                        <label htmlFor="name" className="block mb-2 font-headers text-lg">Naam</label>
                         <div className="w-full relative">
 
                             <Tape variant="small-r"/>
@@ -148,9 +153,9 @@ const CreateGroup = () => {
                 </div>
 
                 {/* --- DESCRIPTION SECTION --- */}
-                <div className="w-[70%]">
+                <div className="w-[80%]">
                     <Card variant="quaternary">
-                        <label htmlFor="description" className="block mb-2 font-headings text-lg">Beschrijving</label>
+                        <label htmlFor="description" className="block mb-2 font-headers text-lg">Beschrijving</label>
 
                         <div className="relative">
                             <Tape variant="big-r"/>
@@ -169,10 +174,10 @@ const CreateGroup = () => {
                 </div>
 
                 {/* --- PHOTO SECTION --- */}
-                <div className="w-[70%] ">
+                <div className="w-[80%]">
                     <Card variant="secondary">
 
-                        <label htmlFor="photo" className="block mb-2 font-headings text-lg">Foto</label>
+                        <label htmlFor="photo" className="block mb-2 font-headers text-lg">Foto</label>
                         <div className="relative">
                             <Tape variant="big-r"/>
                             <Tape variant="big-l"/>
@@ -189,11 +194,14 @@ const CreateGroup = () => {
                 </div>
 
                 {/* --- LEADERBOARD SECTION --- */}
-                <div className="w-[70%]">
+                <div className="w-[80%]">
                     <Card variant="tertiary">
-                        <div className="flex items-center justify-between w-full">
-                            <div>
-                                <label htmlFor="leaderboard" className="block font-headings text-lg cursor-pointer">
+                        {/* Added gap-4 here so they don't collide */}
+                        <div className="flex items-center justify-between w-full gap-4">
+
+                            {/* Added flex-1 here so the text wraps nicely on mobile */}
+                            <div className="flex-1">
+                                <label htmlFor="leaderboard" className="block font-headers text-lg cursor-pointer">
                                     Leaderboard Toevoegen?
                                 </label>
                                 <p className="text-sm opacity-80 mt-1">
@@ -201,21 +209,21 @@ const CreateGroup = () => {
                                 </p>
                             </div>
 
-                            {/* The Checkbox */}
+                            {/* Added shrink-0 here so the checkbox never gets squished or pushed out */}
                             <input
                                 id="leaderboard"
                                 name="leaderboard"
                                 type="checkbox"
-                                className="w-8 h-8 cursor-pointer accent-button-purple bg-bg-white border-2 border-black rounded-md shadow-sm transition-transform hover:scale-110"
+                                className="shrink-0 w-8 h-8 cursor-pointer accent-button-purple bg-bg-white border-2 border-black rounded-md shadow-sm transition-transform hover:scale-110"
                             />
                         </div>
                     </Card>
                 </div>
 
                 {/* --- MEMBERS SECTION --- */}
-                <div className="w-[70%]">
+                <div className="w-[80%]">
                     <Card variant="white">
-                        <h2 className="block text-2xl font-bold mb-4">Leden:</h2>
+                        <h2 className="block text-2xl font-headers mb-4">Leden:</h2>
                         {errors.members && <p className="text-red-700 font-bold mb-4 text-sm">{errors.members}</p>}
 
                         <div
@@ -242,9 +250,9 @@ const CreateGroup = () => {
                                     {/* Placeholder Avatar */}
                                     <User className="w-10 h-10 mb-1 text-black bg-bg-white border-2 border-black rounded-full p-1" />
 
-                                    <span
+                                    <p
                                         className="text-xs mb-2 whitespace-nowrap overflow-hidden text-ellipsis w-full text-center font-bold">{member.name}
-                                    </span>
+                                    </p>
                                 </div>
                             ))}
 
@@ -291,13 +299,20 @@ const CreateGroup = () => {
                     </Card>
                 </div>
 
-                <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className={`bg-button-purple text-black px-8 py-2 rounded-full border-4 border-white shadow-md font-bold hover:scale-105 transition-transform mb-10 ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                    {isSubmitting ? 'Bezig met aanmaken...' : 'Aanmaken'}
-                </button>
+
+            <div>
+                <div>
+                    <MainButton
+                        className="mt-2 mb-2 ml-3 mr-3"
+                        type="submit"
+                        disabled={isSubmitting}
+                    >
+                        {isSubmitting ? 'Bezig met aanmaken...' : 'Aanmaken'}
+                    </MainButton>
+                </div>
+            </div>
             </form>
+
         </>
     );
 };
