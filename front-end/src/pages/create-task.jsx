@@ -5,6 +5,7 @@ import Tape from '../components/ui/tape';
 import Punaise from '../components/ui/punaise';
 
 export function CreateTask() {
+    // Variabelen en states.
     const {fetchMainTasks} = useMainTask();
     const {apiFetch} = useApi();
     const initialForm = {
@@ -70,6 +71,8 @@ export function CreateTask() {
         setErrors({});
         setSubmitting(true);
 
+        // Verzend data uit het formulier.
+
         const formData = new FormData();
 
         formData.append("title", form.title);
@@ -78,6 +81,7 @@ export function CreateTask() {
         formData.append("group_id", "1");
         formData.append("ai_file", form.file);
 
+        // API call voor de taak.
         try {
             await apiFetch("/api/main/create", {
                 method: "POST",
@@ -99,6 +103,7 @@ export function CreateTask() {
         }
     };
 
+    // HTML render.
     return (
         <div className="flex items-center justify-center min-h-screen">
             <div className="relative w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
