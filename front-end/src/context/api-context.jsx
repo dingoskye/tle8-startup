@@ -12,9 +12,10 @@ export function ApiProvider({children}) {
             },
             ...options,
         })
-
+        console.log(res.status)
         if (!res.ok) {
-            throw new Error(`HTTP error! status: ${res.status}`);
+            return {"status": res.status, "message": res.statusText}
+            // throw new Error(`HTTP error! status: ${res.status}`);
         }
 
         const text = await res.text()
