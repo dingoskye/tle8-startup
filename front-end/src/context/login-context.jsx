@@ -33,7 +33,7 @@ export function LoginProvider({children}) {
         try {
             console.log(formData)
             console.log(formData.user_name, formData.email, formData.password)
-            const data = await apiFetch(`/api/user/register`, {
+            const data = await apiFetch(`/user/register`, {
                 method: "POST",
                 headers: {
                     Accept: "application/json",
@@ -50,7 +50,7 @@ export function LoginProvider({children}) {
 
     async function fetchUsers() {
         try {
-            const data = await apiFetch(`/api/user`, {
+            const data = await apiFetch(`/user`, {
                 method: "GET",
                 headers: {
                     Accept: "application/json",

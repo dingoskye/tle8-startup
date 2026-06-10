@@ -54,13 +54,12 @@ function Login() {
 
                 // alle users bekijken als er een user is met de mail verder.
                 for (let user of users) {
+                    users.indexOf(user)
                     if (formData.email === user.email) {
-
                         // proberen in te loggen.
                         fetchLogin(formData)
                         break;
-
-                    } else if (users.length && formData.email !== user.email) {
+                    } else if (users.indexOf(user) >= users.length - 1 && formData.email !== user.email) {
                         setErrors({
                             email: "informatie is niet correct.",
                             password: "informatie is niet correct."

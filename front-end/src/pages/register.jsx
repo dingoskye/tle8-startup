@@ -167,10 +167,7 @@ function Register() {
                         </InputCard>
                         {errors.password &&
                             <p className="text-red-700 font-bold mt-2 text-sm">{errors.password}</p>}
-                    </Card>
-                </div>
-                <div className="pb-6">
-                    <Card variant="primary">
+                 
                         <label htmlFor="repeatPassword" className="text-left text-xl font-headers mb-2">Wachtwoord
                             herhalen:</label>
                         <InputCard>
