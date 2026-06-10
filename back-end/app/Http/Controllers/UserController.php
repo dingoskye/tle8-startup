@@ -42,7 +42,7 @@ class UserController extends Controller
             // check of de email bestaat zo niet error
             $user = User::query()->where('email', $request->email)->first();
             if (!$user) {
-                return response(['error' => 'user not found'], 404);
+                return response()->json(['error' => 'user not found'], 403);
             }
 
             // check of het wachtwoord overeen komt zo niet error

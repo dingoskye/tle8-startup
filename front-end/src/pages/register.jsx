@@ -3,12 +3,12 @@ import {Card} from "@/components/ui/cards.jsx";
 import {SubmitButton} from "@/components/ui/buttons.jsx";
 import InputCard from "@/components/ui/input-card.jsx";
 import {useEffect, useState} from "react";
-// import {useNavigate} from "react-router";
+import {useNavigate} from "react-router";
 import {useLogin} from "@/context/login-context.jsx";
 
 
 function Register() {
-    // const navigate = useNavigate()
+    const navigate = useNavigate()
 
     const [formData, setFormData,] = useState({
         user_name: "",
@@ -68,13 +68,14 @@ function Register() {
                     newErrors.email = "Email wordt al gebruikt.";
                 }
             }
-            
+
             setErrors(newErrors);
 
 
             if (Object.keys(errors).length === 0) {
                 fetchRegister(formData)
-                // navigate("/")
+                localStorage.setItem("token", loginData.token);
+                navigate("/")
 
             }
 

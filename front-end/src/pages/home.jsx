@@ -26,6 +26,12 @@ function Home() {
         fetchGroups()
     }, []);
 
+
+    // dit kan toch gewoon weg?
+    useEffect(() => {
+        console.log(groups)
+    }, [groups]);
+
     return (
         <>
             <header role="banner" className="text-center p-1 mt-2 relative">
@@ -40,13 +46,16 @@ function Home() {
                 {/*task carousel*/}
                 <Carousel className="px-6 text-left">
                     <CarouselContent className="py-4">
-                        {mainTasks !== null && mainTasks.length !== 0 ? mainTasks.map((task, index) =>
-                            <CarouselItem key={index} className="flex md:basis-1/2 lg:basis-1/3">
-                                <TaskCard task={task}/>
-                            </CarouselItem>
-                        ) : <CarouselItem className="flex">
-                            <TaskCard task={""}/>
-                        </CarouselItem>}
+                        {
+
+
+                            mainTasks !== null && mainTasks.length !== 0 ? mainTasks.map((task, index) =>
+                                <CarouselItem key={index} className="flex md:basis-1/2 lg:basis-1/3">
+                                    <TaskCard task={task}/>
+                                </CarouselItem>
+                            ) : <CarouselItem className="flex">
+                                <TaskCard task={""}/>
+                            </CarouselItem>}
                     </CarouselContent>
                     <CarouselPrevious/>
                     <CarouselNext/>

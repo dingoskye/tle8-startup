@@ -4,23 +4,23 @@ import {useApi} from "@/context/api-context.jsx";
 const LoginContext = createContext()
 
 export function LoginProvider({children}) {
-    const {apiFetch} = useApi();
-    const [loginData, setLoginData] = useState(null)
+    const {apiFetch, setLoginData, loginData} = useApi();
+
     const [users, setUsers] = useState(null)
 
     async function fetchLogin(formData) {
         try {
 
-            const data = await apiFetch(`/api/user/login`, {
+            const data = await apiFetch(`/user/login`, {
                 method: "POST",
                 headers: {
                     Accept: "application/json",
                     "Content-Type": "application/json",
+
+
                 },
-                body: {
-                    email: formData.email,
-                    password: formData.password,
-                }
+                body: JSON.stringify(formData)
+
             })
             setLoginData(data)
 
@@ -66,7 +66,6 @@ export function LoginProvider({children}) {
 
     return (
         <LoginContext.Provider value={{
-            loginData,
             fetchLogin,
             fetchRegister,
             fetchUsers,

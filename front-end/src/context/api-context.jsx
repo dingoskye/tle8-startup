@@ -1,10 +1,14 @@
-import {createContext, useContext} from "react"
+import {createContext, useContext, useState} from "react"
 
 const ApiContext = createContext()
 
-const BASE_URL = "http://127.0.0.1:8000"
+const BASE_URL = "http://127.0.0.1:8000/api"
 
 export function ApiProvider({children}) {
+    const [loginData, setLoginData] = useState(null)
+    const token = localStorage.getItem("token");
+
+
     async function apiFetch(endpoint, options = {}) {
         const res = await fetch(BASE_URL + endpoint, {
 
@@ -12,10 +16,13 @@ export function ApiProvider({children}) {
                 ...options.headers,
             },
             ...options,
+
         })
 
+        console.log(res.status)
         if (!res.ok) {
-            throw new Error(`HTTP error! status: ${res.status}`);
+            return {"status": res.status, "message": res.statusText}
+            // throw new Error(`HTTP error! status: ${res.status}`);
         }
 
         const text = await res.text()
@@ -23,7 +30,7 @@ export function ApiProvider({children}) {
     }
 
     return (
-        <ApiContext.Provider value={{apiFetch}}>
+        <ApiContext.Provider value={{apiFetch, setLoginData, loginData, token}}>
             {children}
         </ApiContext.Provider>
     );

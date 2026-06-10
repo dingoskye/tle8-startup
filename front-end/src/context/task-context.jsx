@@ -4,16 +4,19 @@ import {useApi} from "@/context/api-context.jsx";
 const MainTaskContext = createContext()
 
 export function MainTaskProvider({children}) {
-    const {apiFetch} = useApi();
+    const {apiFetch, token} = useApi();
     const [mainTasks, setMainTasks] = useState(null)
 
     async function fetchMainTasks() {
         try {
-            const data = await apiFetch(`/api/main/1`, { //tijdelijke hardcoded user id
+
+
+            const data = await apiFetch(`/main`, {
                 method: "GET",
                 headers: {
                     Accept: "application/json",
                     "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
                 }
             })
             setMainTasks(data)

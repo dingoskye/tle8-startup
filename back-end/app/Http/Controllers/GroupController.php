@@ -17,7 +17,8 @@ class GroupController extends Controller
     public function index()
     {
         $userId = JWTAuth::parseToken()->authenticate()->id;
-
+//        echo JWTAuth::parseToken()->authenticate()->id;
+//        echo $userId;
 
         return Group::with('users')->whereHas('users', function ($query) use ($userId) {
             $query->where('users.id', $userId);
@@ -38,8 +39,8 @@ class GroupController extends Controller
             $group = new Group([
                 'name' => $request->name,
                 'description' => $request->description,
+
                 'image' => $request->image,
-                'user_id' => $userId
             ]);
             $group->save();
 
