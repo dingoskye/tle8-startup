@@ -1,13 +1,12 @@
 import {useState} from "react";
-import {useMainTask} from "@/context/task-context.jsx";
 import {useApi} from "@/context/api-context.jsx";
-import Tape from '../components/ui/tape';
-import Punaise from '../components/ui/punaise';
+import {Card} from "@/components/ui/cards.jsx";
+import {TapeCard} from "@/components/ui/cards.jsx";
 
 export function CreateTask() {
     // Variabelen en states.
-    const {fetchMainTasks} = useMainTask();
     const {apiFetch} = useApi();
+    const BASE_URL = "http://127.0.0.1:8000/api"
     const initialForm = {
         title: "",
         description: "",
@@ -31,6 +30,7 @@ export function CreateTask() {
     const validateForm = () => {
         const newErrors = {};
 
+        // Zonder trim wordt het niet gepakt zodra er op start wordt gedrukt.
         if (!form.title.trim()) {
             newErrors.title = "Titel is verplicht.";
         }
@@ -71,24 +71,25 @@ export function CreateTask() {
         setErrors({});
         setSubmitting(true);
 
-        // Verzend data uit het formulier.
-
+        // Verzend data uit het formulier. FormData is nodig voor het uploaden van bestanden.
         const formData = new FormData();
 
-        formData.append("title", form.title);
-        formData.append("description", form.description);
-        formData.append("deadline", form.deadline);
+
+        for (const [key, value] of Object.entries(form)) {
+            if (value !== null) {
+                formData.append(key, value);
+            }
+        }
+
         formData.append("group_id", "1");
-        formData.append("ai_file", form.file);
 
         // API call voor de taak.
         try {
-            await apiFetch("/api/main/create", {
+            await apiFetch(`${BASE_URL}/main/create`, {
                 method: "POST",
-                body: formData,
+                body: FormData,
             });
 
-            await fetchMainTasks?.();
 
             setForm(initialForm);
 
@@ -105,168 +106,251 @@ export function CreateTask() {
 
     // HTML render.
     return (
-        <div className="flex items-center justify-center min-h-screen">
-            <div className="relative w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
-                <Punaise/>
-                <h1 className="text-3xl font-bold mb-8 text-center text-[var(--font-blue)]">Hoofdtaak Maken</h1>
-                <form className="flex flex-col gap-6" onSubmit={handleSubmit} noValidate>
-                    <div
-                        className="relative flex flex-col p-4 rounded-lg bg-[var(--flamingo-pink)] text-[var(--font-blue)]"
-                        role="group"
-                        aria-labelledby="label-titel"
-                    >
-                        <Tape variant="small-r"/>
-                        <Tape variant="small-l"/>
-                        <label id="label-titel" htmlFor="titel" className="font-semibold mb-2">Titel:</label>
-                        <input
-                            type="text"
-                            id="titel"
-                            name="titel"
-                            placeholder="Voer de taak titel in."
-                            title="Taak titel"
+        <div className="flex items-center justify-center">
+            <Card variant="white">
+                <h1 className="text-3xl font-bold mb-8 text-center">
+                    Hoofdtaak Maken
+                </h1>
+
+                <form
+                    className="flex flex-col gap-6"
+                    onSubmit={handleSubmit}
+                    noValidate
+                >
+                    <TapeCard variant="quaternary">
+                        <div
+                            role="group"
                             aria-labelledby="label-titel"
-                            aria-describedby={errors.title ? "titel-error" : undefined}
-                            aria-required="true"
-                            aria-invalid={!!errors.title}
-                            required
-                            className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 bg-[var(--thoas-white)] text-[var(--font-blue)]"
-                            value={form.title}
-                            onChange={(e) => {
-                                setField("title", e.target.value);
-                                setErrors(prev => ({
-                                    ...prev,
-                                    title: undefined,
-                                }));
-                            }}
-                        />
-                        {errors.title &&
-                            <span id="titel-error" role="alert" aria-live="assertive"
-                                  className="text-sm mt-1 border-2 rounded-lg flex justify-center bg-[var(--ruas-red)] text-[var(--font-blue)]">{errors.title}</span>}
-                    </div>
+                            className="flex flex-col"
+                        >
+                            <label
+                                id="label-titel"
+                                htmlFor="titel"
+                                className="font-header font-semibold mb-2"
+                            >
+                                Titel:
+                            </label>
 
-                    <div
-                        className="relative flex flex-col p-4 rounded-lg bg-[var(--skye-blue)] text-[var(--font-blue)]"
-                        role="group"
-                        aria-labelledby="label-beschrijving"
-                    >
-                        <Tape variant="small-r"/>
-                        <Tape variant="small-l"/>
-                        <label id="label-beschrijving" htmlFor="beschrijving"
-                               className="font-semibold mb-2">Beschrijving:</label>
-                        <textarea
-                            id="beschrijving"
-                            name="beschrijving"
-                            rows="5"
-                            title="Taak beschrijving"
-                            placeholder="Beschrijf de taak in detail."
+                            <input
+                                type="text"
+                                id="titel"
+                                name="titel"
+                                placeholder="Voer de taak titel in."
+                                title="Taak titel"
+                                aria-labelledby="label-titel"
+                                aria-describedby={
+                                    errors.title ? "titel-error" : undefined
+                                }
+                                aria-invalid={!!errors.title}
+                                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 bg-[var(--thoas-white)]"
+                                value={form.title}
+                                onChange={(e) => {
+                                    setField("title", e.target.value);
+
+                                    setErrors(prev => ({
+                                        ...prev,
+                                        title: undefined,
+                                    }));
+                                }}
+                            />
+
+                            {errors.title && (
+                                <span
+                                    id="titel-error"
+                                    role="alert"
+                                    aria-live="assertive"
+                                    className="text-sm mt-1 border-2 rounded-lg flex justify-center bg-[var(--ruas-red)]"
+                                >
+                                {errors.title}
+                            </span>
+                            )}
+                        </div>
+                    </TapeCard>
+
+                    <TapeCard variant="primary">
+                        <div
+                            role="group"
                             aria-labelledby="label-beschrijving"
-                            aria-describedby={errors.description ? "beschrijving-error" : undefined}
-                            aria-required="true"
-                            aria-invalid={!!errors.description}
-                            required
-                            className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 resize-none bg-[var(--thoas-white)] text-[var(--font-blue)]"
-                            value={form.description}
-                            onChange={(e) => {
-                                setField("description", e.target.value);
-                                setErrors(prev => ({
-                                    ...prev,
-                                    description: undefined,
-                                }));
-                            }}
-                        />
-                        {errors.description &&
-                            <span id="beschrijving-error" role="alert" aria-live="assertive"
-                                  className="text-sm mt-1 border-2 rounded-lg flex justify-center bg-[var(--ruas-red)] text-[var(--font-blue)]">{errors.description}</span>}
-                    </div>
+                            className="flex flex-col"
+                        >
+                            <label
+                                id="label-beschrijving"
+                                htmlFor="beschrijving"
+                                className="font-header font-semibold mb-2"
+                            >
+                                Beschrijving:
+                            </label>
 
-                    <div
-                        className="relative flex flex-col p-4 rounded-lg bg-[var(--jade-green)] text-[var(--font-blue)]"
-                        role="group"
-                        aria-labelledby="label-upload"
-                        aria-describedby="upload-help"
-                    >
-                        <Tape variant="big-r"/>
-                        <Tape variant="big-l"/>
-                        <label id="label-upload" htmlFor="upload" className="font-semibold mb-2">
-                            Upload het document of afbeelding waarop de taak gebaseerd is.
-                        </label>
+                            <textarea
+                                id="beschrijving"
+                                name="beschrijving"
+                                rows="5"
+                                title="Taak beschrijving"
+                                placeholder="Beschrijf de taak in detail."
+                                aria-labelledby="label-beschrijving"
+                                aria-describedby={
+                                    errors.description
+                                        ? "beschrijving-error"
+                                        : undefined
+                                }
+                                aria-invalid={!!errors.description}
+                                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 resize-none bg-[var(--thoas-white)]"
+                                value={form.description}
+                                onChange={(e) => {
+                                    setField("description", e.target.value);
 
-                        <span id="upload-help" className="sr-only">
-                        Toegestane bestandstypen: PNG, JPEG of PDF.
-                    </span>
+                                    setErrors(prev => ({
+                                        ...prev,
+                                        description: undefined,
+                                    }));
+                                }}
+                            />
 
-                        <input
-                            type="file"
-                            id="upload"
-                            name="upload"
-                            accept="image/png,image/jpeg,application/pdf"
-                            title="Upload afbeelding of PDF"
+                            {errors.description && (
+                                <span
+                                    id="beschrijving-error"
+                                    role="alert"
+                                    aria-live="assertive"
+                                    className="text-sm mt-1 border-2 rounded-lg flex justify-center bg-[var(--ruas-red)]"
+                                >
+                                {errors.description}
+                            </span>
+                            )}
+                        </div>
+                    </TapeCard>
+
+                    <TapeCard variant="secondary">
+                        <div
+                            role="group"
                             aria-labelledby="label-upload"
-                            aria-describedby={errors.file ? "upload-help upload-error" : "upload-help"}
-                            aria-required="true"
-                            aria-invalid={!!errors.file}
-                            required
-                            className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 bg-[var(--thoas-white)] text-[var(--font-blue)]"
-                            onChange={(e) => {
-                                setField("file", e.target.files?.[0] || null);
+                            aria-describedby="upload-help"
+                            className="flex flex-col"
+                        >
+                            <label
+                                id="label-upload"
+                                htmlFor="upload"
+                                className="font-header font-semibold mb-2"
+                            >
+                                Upload hier document of afbeelding van de rubric
+                                (PNG, JPEG of PDF).
+                            </label>
 
-                                setErrors(prev => ({
-                                    ...prev,
-                                    file: undefined,
-                                }));
-                            }}
-                        />
-                        {errors.file &&
-                            <span id="upload-error" role="alert" aria-live="assertive"
-                                  className="text-sm mt-1 border-2 rounded-lg flex justify-center bg-[var(--ruas-red)] text-[var(--font-blue)]">{errors.file}</span>}
-                    </div>
+                            <span
+                                id="upload-help"
+                                className="sr-only"
+                            >
+                            Toegestane bestandstypen: PNG, JPEG of PDF.
+                        </span>
 
-                    <div
-                        className="relative flex flex-col p-4 rounded-lg bg-[var(--christa-yellow)] text-[var(--font-blue)]"
-                        role="group"
-                        aria-labelledby="label-deadline"
-                    >
-                        <Tape variant="small-r"/>
-                        <Tape variant="small-l"/>
-                        <label id="label-deadline" htmlFor="deadline" className="font-semibold mb-2">Deadline:</label>
-                        <input
-                            type="date"
-                            id="deadline"
-                            name="deadline"
-                            title="Kies een deadline"
+                            <input
+                                type="file"
+                                id="upload"
+                                name="upload"
+                                accept="image/png,image/jpeg,application/pdf"
+                                title="Upload afbeelding of PDF"
+                                aria-labelledby="label-upload"
+                                aria-describedby={
+                                    errors.file
+                                        ? "upload-help upload-error"
+                                        : "upload-help"
+                                }
+                                aria-invalid={!!errors.file}
+                                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 bg-[var(--thoas-white)]"
+                                onChange={(e) => {
+                                    setField(
+                                        "file",
+                                        e.target.files?.[0] ?? null
+                                    );
+
+                                    setErrors(prev => ({
+                                        ...prev,
+                                        file: undefined,
+                                    }));
+                                }}
+                            />
+
+                            {errors.file && (
+                                <span
+                                    id="upload-error"
+                                    role="alert"
+                                    aria-live="assertive"
+                                    className="text-sm mt-1 border-2 rounded-lg flex justify-center bg-[var(--ruas-red)]"
+                                >
+                                {errors.file}
+                            </span>
+                            )}
+                        </div>
+                    </TapeCard>
+
+                    <TapeCard variant="tertiary">
+                        <div
+                            role="group"
                             aria-labelledby="label-deadline"
-                            aria-describedby={errors.deadline ? "deadline-error" : undefined}
-                            aria-required="true"
-                            aria-invalid={!!errors.deadline}
-                            required
-                            className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 bg-[var(--thoas-white)] text-[var(--font-blue)]"
-                            value={form.deadline}
-                            onChange={(e) => {
-                                setField("deadline", e.target.value);
-                                setErrors(prev => ({
-                                    ...prev,
-                                    deadline: undefined,
-                                }));
-                            }}
-                        />
-                        {errors.deadline &&
-                            <span id="deadline-error" role="alert" aria-live="assertive"
-                                  className="text-sm mt-1 border-2 rounded-lg flex justify-center bg-[var(--ruas-red)] text-[var(--font-blue)]">{errors.deadline}</span>}
-                    </div>
+                            className="flex flex-col"
+                        >
+                            <label
+                                id="label-deadline"
+                                htmlFor="deadline"
+                                className="font-header font-semibold mb-2"
+                            >
+                                Deadline:
+                            </label>
 
-                    {errors.general &&
-                        <div role="alert"
-                             className="text-sm mt-1 border-2 rounded-lg flex justify-center bg-[var(--ruas-red)] text-[var(--font-blue)]">{errors.general}</div>}
+                            <input
+                                type="date"
+                                id="deadline"
+                                name="deadline"
+                                title="Kies een deadline"
+                                aria-labelledby="label-deadline"
+                                aria-describedby={
+                                    errors.deadline
+                                        ? "deadline-error"
+                                        : undefined
+                                }
+                                aria-invalid={!!errors.deadline}
+                                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 bg-[var(--thoas-white)]"
+                                value={form.deadline}
+                                onChange={(e) => {
+                                    setField("deadline", e.target.value);
+
+                                    setErrors(prev => ({
+                                        ...prev,
+                                        deadline: undefined,
+                                    }));
+                                }}
+                            />
+
+                            {errors.deadline && (
+                                <span
+                                    id="deadline-error"
+                                    role="alert"
+                                    aria-live="assertive"
+                                    className="text-sm mt-1 border-2 rounded-lg flex justify-center bg-[var(--ruas-red)]"
+                                >
+                                {errors.deadline}
+                            </span>
+                            )}
+                        </div>
+                    </TapeCard>
+
+                    {errors.general && (
+                        <div
+                            role="alert"
+                            className="text-sm mt-1 border-2 rounded-lg flex justify-center bg-[var(--ruas-red)] text-white"
+                        >
+                            {errors.general}
+                        </div>
+                    )}
 
                     <button
                         type="submit"
                         disabled={submitting}
-                        className=" mt-4 px-12 py-2 font-semibold rounded-full self-center hover:opacity-90 transition-opacity bg-[var(--ruas-red)] text-white border-2 border-white shadow-md "
+                        className="mt-4 px-12 py-2 font-semibold rounded-full self-center hover:opacity-90 transition-opacity bg-[var(--purple)] text-white border-2 border-white shadow-md"
                     >
                         {submitting ? "Versturen..." : "Start"}
                     </button>
                 </form>
-            </div>
+            </Card>
         </div>
     );
 }
