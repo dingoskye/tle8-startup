@@ -9,10 +9,10 @@ function Subtask() {
 
 
     const params = useParams();
-    console.log("PARAMS:", params);
+    // console.log("PARAMS:", params);
 
     const id = params.id;
-    console.log("ID:", id);
+    // console.log("ID:", id);
 
     const navigate = useNavigate();
 
@@ -36,7 +36,7 @@ function Subtask() {
     }, [id]);
 
     async function fetchTaskDetails(id) {
-            console.log("ID IN LOADDETAILS:", id);
+            // console.log("ID IN LOADDETAILS:", id);
         try {
             const data = await apiFetch(`/main/details/${id}`, {
                 method: "GET",
@@ -102,7 +102,6 @@ function Subtask() {
 
             <h1 className="text-4xl font-bold font-headers mb-10  flex items-center justify-center">
                 {details?.title}
-                Ontwerpen 4
             </h1>
 
             <section>
