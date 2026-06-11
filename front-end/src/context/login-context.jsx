@@ -69,8 +69,6 @@ export function LoginProvider({children}) {
 
     async function logout() {
         await localStorage.clear()
-        navigate('/login')
-
     }
 
     return (
