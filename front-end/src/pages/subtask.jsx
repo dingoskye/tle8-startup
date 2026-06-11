@@ -23,6 +23,7 @@ function Subtask() {
         main_task_id: id,
     });
     const [details, setDetails] = useState(null);
+    const [errors, setErrors] = useState({});
 
     useEffect(() => {
         if (!id) return;
@@ -50,7 +51,7 @@ function Subtask() {
             console.log(data);
         } catch (e) {
             console.log(e.message);
-            navigate("/");
+            // navigate("/");
         }
     }
 
@@ -64,37 +65,64 @@ function Subtask() {
 
     };
 
+
     useEffect(() => {
         console.log("FORMDATA:", formData);
     }, [formData]);
 
+    const validateForm = () => {
+        const newErrors = {};
+
+        if (!formData.context.trim()) {
+            newErrors.context = "Context is verplicht.";
+        }
+
+        if (!formData.niveau) {
+            newErrors.niveau = "Niveau is verplicht.";
+        } else if (Number(formData.niveau) < 1 || Number(formData.niveau) > 4) {
+            newErrors.niveau = "Niveau moet tussen 1 en 4 zijn.";
+        }
+
+        return newErrors;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(formData);
-        try {
-            const res = await apiFetch(`/main-tasks/${id}/generate-subtasks`,
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                     body: JSON.stringify({
-                        ...formData,
-                        main_task_id: id,
-                    }),
-                });
 
-            if (!res.ok) {
-                throw new Error("Create failed");
-            }
+        const validationErrors = validateForm();
 
-            const created = await res.json();
-            navigate("/hoofdtaken/:id", { state: { created } });
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return;
+        }
 
-            } catch (e) {
-                console.error(e);
-            }
+        setErrors({});
+        //
+        // try {
+        //     const res = await apiFetch(`/main-tasks/${id}/generate-subtasks`,
+        //         {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Content-Type': 'application/json',
+        //                 'Accept': 'application/json'
+        //             },
+        //              body: JSON.stringify({
+        //                 ...formData,
+        //                 main_task_id: id,
+        //             }),
+        //         });
+        //
+        //     if (!res.ok) {
+        //         throw new Error("Create failed");
+        //     }
+        //
+        //     const created = await res.json();
+        //     navigate("/hoofdtaken/:id", { state: { created } });
+        //
+        //     } catch (e) {
+        //         console.error(e);
+        //     }
     };
 
     return (
@@ -122,6 +150,12 @@ function Subtask() {
                             onChange={handleInputChange}
                             className="w-full min-h-30 bg-white/80 p-3 outline-none resize-none"
                         />
+
+                        {errors.context && (
+                            <p className="text-red-600 text-sm mt-1">
+                                {errors.context}
+                            </p>
+                        )}
                     </div>
 
                     <div className="relative bg-(--christa-yellow) p-4 shadow-md">
@@ -171,6 +205,12 @@ function Subtask() {
                                 <span className="text-center">Gevorderd</span>
                                 <span className="text-center">Expert</span>
                             </div>
+
+                            {errors.niveau && (
+                                <p className="text-red-600 text-sm mt-1">
+                                    {errors.niveau}
+                                </p>
+                            )}
                         </div>
 
                     </div>
