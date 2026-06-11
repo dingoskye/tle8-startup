@@ -30,6 +30,79 @@ with peer pressure and making progression visual.
 
 ## ERD
 
+```mermaid
+erDiagram
+    users {
+        BIGINT id
+        VARCHAR name
+        VARCHAR user_name
+        VARCHAR email
+        VARCHAR password
+        VARCHAR profile_image
+        BOOLEAN is_admin
+    }
+    user_settings {
+        BIGINT id
+        BIGINT theme_id
+        BOOLEAN written_font
+    }
+    theme {
+        BIGINT id
+        VARCHAR name
+    }
+    user_main_tasks {
+        BIGINT id
+        BIGINT user_id
+        BIGINT main_task_id
+        TINYINT progres
+        VARCHAR level
+        BIGINT score
+        BOOLEAN completed
+    }
+    main_tasks {
+        BIGINT id
+        BIGINT group_id
+        VARCHAR title
+        TEXT description
+        DATETIME deadline
+        VARCHAR ai_file
+    }
+
+    groups {
+        BIGINT id
+        VARCHAR name
+        TEXT description
+        VARCHAR image
+    }
+    user_groups {
+        BIGINT id
+        BIGINT user_id
+        BIGINT group_id
+        VARCHAR role
+    }
+    sub_tasks {
+        BIGINT id
+        BIGINT user_id
+        BIGINT main_task_id
+        VARCHAR title
+        TEXT description
+        BOOLEAN completed
+        DATETIME deadline
+        DATETIME datetime
+    }
+    users ||--o{ user_main_tasks: has
+    main_tasks ||--o{ user_main_tasks: has
+    users ||--o{ sub_tasks: has
+    users ||--o{ user_settings: has
+    users ||--o{ user_groups: has
+    theme ||--o{ user_settings: has
+    groups ||--o{ user_main_tasks: has
+    user_main_tasks ||--o{ sub_tasks: has
+    groups ||--o{ user_groups: has
+
+
+```
+
 ## API Endpoints
 
 ### Authentication & Login/register
