@@ -31,4 +31,5 @@ Route::post('/sub/create', [SubTaskController::class, 'create']);
 Route::get('/sub/', [SubTaskController::class, 'index']);
 Route::get('/sub/{id}', [SubTaskController::class, 'show']);
 Route::put('/sub/edit/{id}', [SubTaskController::class, 'edit']);
+Route::patch('/sub/complete/{id}', [SubTaskController::class, 'completed']);
 Route::delete('/sub/delete/{id}', [SubTaskController::class, 'delete']);

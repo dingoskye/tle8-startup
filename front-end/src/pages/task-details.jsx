@@ -12,7 +12,8 @@ import {ErrorComponent} from "@/pages/Error.jsx";
 
 function TaskDetails() {
     const params = useParams()
-    const {fetchTaskDetails, task} = useMainTask()
+    const {fetchTaskDetails} = useMainTask()
+    const [task, setTask] = useState(null)
     const [showCompleted, setShowCompleted] = useState(true)
 
     const variants = [
@@ -22,18 +23,28 @@ function TaskDetails() {
         "quaternary",
     ];
 
-    //documenten titels voor WCAG!!
-    useEffect(() => {
-        document.title = "Board-it | Details taak";
-    }, [])
+
+    const reloadTask = async () => {
+        const data = await fetchTaskDetails(params.id)
+        setTask(data);
+    }
 
     useEffect(() => {
-        fetchTaskDetails(params.id)
+        console.log(params.id)
+        setTask(null)
+
+        reloadTask() //negeer de kringeltjes xD
     }, [params.id]);
+
+    useEffect(() => {
+        //documenten titels voor WCAG!!
+        document.title = `Board-it | Details ${task?.title ?? ""}`;
+    }, [task])
+
 
     return (
         task !== null ?
-            task.status ?
+            task?.status ?
                 <ErrorComponent code={task.status} message="Taak bestaat niet"/> :
                 <div>
                     <header role="banner" className="text-center p-1 mt-2 relative">
@@ -66,10 +77,15 @@ function TaskDetails() {
 
                     {task.sub_tasks && task.sub_tasks.length > 0 ?
                         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-4">
+                            {task.sub_tasks.map((sub, index) =>
+                                // de onSubtaskUpdated geef ik mee zodat als de taak afgevinkt word de taak gereload
+
                             {showCompleted ? task.sub_tasks.map((sub, index) =>
-                                    <SubTaskCard key={index} sub={sub} variant={variants[index % variants.length]}/>) :
+                                <SubTaskCard onSubtaskUpdated={reloadTask} key={index} sub={sub}
+                                             variant={variants[index % variants.length]}/>) :
                                 task.sub_tasks.filter(sub => !sub.completed).map((sub, index) =>
-                                    <SubTaskCard key={index} sub={sub} variant={variants[index % variants.length]}/>)}
+                                    <SubTaskCard onSubtaskUpdated={reloadTask} key={index} sub={sub}
+                                                 variant={variants[index % variants.length]}/>)})
                         </section> :
                         <Link className="w-[50%] mx-auto h-full" to="/">
                             <div className="w-[40vw] h-[40vw] md:w-[30vw] md:h-[30vw] m-auto mt-5">

@@ -6,7 +6,6 @@ const MainTaskContext = createContext()
 export function MainTaskProvider({children}) {
     const {apiFetch} = useApi();
     const [mainTasks, setMainTasks] = useState(null)
-    const [task, setTasks] = useState(null)
 
     async function fetchMainTasks() {
         try {
@@ -33,8 +32,27 @@ export function MainTaskProvider({children}) {
                     "Content-Type": "application/json",
                 }
             })
-            setTasks(data)
-            console.log(data)
+            return data
+            // console.log(data)
+        } catch (e) {
+            console.log(e.message)
+        }
+    }
+
+    async function completeSubTask(completed, id) {
+        try {
+            const data = await apiFetch(`/api/sub/complete/${id}`, {
+                method: "PATCH",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({completed: completed})
+            })
+
+            if (data) {
+                await fetchMainTasks()
+            }
         } catch (e) {
             console.log(e.message)
         }
@@ -43,9 +61,11 @@ export function MainTaskProvider({children}) {
     return (
         <MainTaskContext.Provider value={{
             mainTasks,
-            task,
+            
+            //de functies vinden dat ze niet gebruikt worden, maar dat worden ze wel
             fetchMainTasks,
-            fetchTaskDetails
+            fetchTaskDetails,
+            completeSubTask
         }}>
             {children}
         </MainTaskContext.Provider>
