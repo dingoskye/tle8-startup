@@ -6,8 +6,13 @@ const BASE_URL = "http://127.0.0.1:8000/api"
 
 export function ApiProvider({children}) {
     const [loginData, setLoginData] = useState(null)
-    const token = localStorage.getItem("token");
+    const [token, setToken] = useState(localStorage.getItem("token"))
 
+    async function refreshToken() {
+     
+        setToken(loginData.token)
+        await localStorage.setItem('token', loginData.token)
+    }
 
     async function apiFetch(endpoint, options = {}) {
         const res = await fetch(BASE_URL + endpoint, {
@@ -30,7 +35,7 @@ export function ApiProvider({children}) {
     }
 
     return (
-        <ApiContext.Provider value={{apiFetch, setLoginData, loginData, token}}>
+        <ApiContext.Provider value={{apiFetch, setLoginData, loginData, token, refreshToken}}>
             {children}
         </ApiContext.Provider>
     );

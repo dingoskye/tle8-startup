@@ -1,23 +1,24 @@
 import Tape from "@/components/ui/tape.jsx";
 import {Card} from "@/components/ui/cards.jsx";
-
 import {SubmitButton} from "@/components/ui/buttons.jsx";
 import {useEffect, useState} from "react";
 import {useLogin} from "@/context/login-context.jsx";
 import InputCard from "@/components/ui/input-card.jsx";
 import {useNavigate} from "react-router";
 import {useApi} from "@/context/api-context.jsx";
+import {Link} from "react-router";
 
 function Login() {
     const navigate = useNavigate()
-
     const [formData, setFormData,] = useState({
         email: "",
         password: ""
     })
     const [errors, setErrors] = useState([])
     const {fetchLogin, fetchUsers, users} = useLogin()
-    const {loginData} = useApi()
+    const {loginData, token, refreshToken} = useApi()
+    const [isLoaded, setIsLoaded] = useState(false);
+    // const [submitted, setSubmitted,] = useState(false)
 
     const handleInputChange = (e) => {
         const {name, value} = e.target;
@@ -25,18 +26,32 @@ function Login() {
             ...formData,
             [name]: value
         });
-        console.log(formData)
+
     };
 
     useEffect(() => {
         document.title = "Board-it | Login";
+        console.log(`------------Login-----------`)
+        if (localStorage.getItem("token")) {
+            localStorage.removeItem("token");
+
+
+        }
+        console.log(errors, 'errors')
+
+        if (errors) {
+            setErrors({})
+        }
         fetchUsers();
+
+
     }, []);
 
     async function handleSubmit(e) {
         try {
             e.preventDefault();
-            setErrors({})
+
+            await setErrors({})
             const newErrors = {};
 
 
@@ -75,22 +90,43 @@ function Login() {
         }
     }
 
+// als de loginData veranderd, dan kijken of het een error is of het correct is
+
 
     useEffect(() => {
+        console.log(`------------Login Data-----------`)
+        if (!isLoaded) {
+            console.log(`------------Initial Load-----------`)
+
+            setIsLoaded(true)
+            return;
+        }
+        console.log(`------------Is Loaded-----------`)
+
         if (!loginData) return;
 
 // als er een status boven de 300 (error) geef error anders navigeren naar home pagina.
+
         if (loginData.status > 300) {
             setErrors({
                 email: "informatie is niet correct.",
                 password: "informatie is niet correct."
             });
         } else {
-            localStorage.setItem("token", loginData.token);
-            console.log('Navigation')
-            navigate("/");
+
+            async function refresh() {
+
+                await refreshToken()
+            }
+
+            refresh()
         }
     }, [loginData]);
+
+    useEffect(() => {
+        if (!token) return;
+        navigate("/");
+    }, [token]);
 
     return (
         <div>
@@ -98,7 +134,7 @@ function Login() {
                 <div className="bg-primary w-full p-4 rounded-lg shadow-md">
                     <Tape variant="big-r"/>
                     <Tape variant="big-l"/>
-                    <h1 className="text-2xl font-headers">Inloggen</h1>
+                    <h1 className="text-3xl font-headers">Inloggen</h1>
                 </div>
             </header>
 
@@ -108,7 +144,7 @@ function Login() {
                         <label htmlFor="email"
                                className="text-left text-xl font-headers mb-2 ">email:</label>
                         <InputCard>
-                            <input className=" bg-white min-w-full"
+                            <input className=" bg-white min-w-full pl-3 py-2"
                                    type="email"
                                    id="email"
                                    name="email"
@@ -126,7 +162,7 @@ function Login() {
                         <label htmlFor="password"
                                className="text-left text-xl font-headers mb-2 ">password:</label>
                         <InputCard>
-                            <input className=" bg-white min-w-full"
+                            <input className=" bg-white min-w-full pl-3 py-2"
                                    type="password"
                                    id="password"
                                    name="password"
@@ -139,10 +175,16 @@ function Login() {
                             <p className="text-red-700 font-bold mt-2 text-sm">{errors.password}</p>}
                     </Card>
                 </div>
+
                 <div className="w-[60%] md:w-[30%] mx-auto">
                     <SubmitButton>
                         Login
                     </SubmitButton>
+                    <div className="text-center content-center w-full pt-2">
+                        <Link to="/register">
+                            Nog geen account?
+                        </Link>
+                    </div>
                 </div>
             </form>
 

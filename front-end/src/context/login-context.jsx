@@ -4,7 +4,8 @@ import {useApi} from "@/context/api-context.jsx";
 const LoginContext = createContext()
 
 export function LoginProvider({children}) {
-    const {apiFetch, setLoginData, loginData} = useApi();
+    const {apiFetch, setLoginData,} = useApi();
+    // const {apiFetch, setLoginData, refreshToken, setToken, loginData} = useApi();
 
     const [users, setUsers] = useState(null)
 
@@ -23,7 +24,8 @@ export function LoginProvider({children}) {
 
             })
             setLoginData(data)
-
+            // await setToken(loginData.token)
+            // await refreshToken()
         } catch (e) {
             console.log(e.message)
         }

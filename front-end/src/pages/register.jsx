@@ -3,12 +3,14 @@ import {Card} from "@/components/ui/cards.jsx";
 import {SubmitButton} from "@/components/ui/buttons.jsx";
 import InputCard from "@/components/ui/input-card.jsx";
 import {useEffect, useState} from "react";
-import {useNavigate} from "react-router";
+import {Link, useNavigate} from "react-router";
 import {useLogin} from "@/context/login-context.jsx";
+import {useApi} from "@/context/api-context.jsx";
 
 
 function Register() {
     const navigate = useNavigate()
+    const [isLoaded, setIsLoaded] = useState(false);
 
     const [formData, setFormData,] = useState({
         user_name: "",
@@ -19,6 +21,7 @@ function Register() {
     })
     const [errors, setErrors] = useState([])
     const {fetchRegister, fetchUsers, users} = useLogin()
+    const {refreshToken, token, loginData} = useApi()
 
     const handleInputChange = (e) => {
         const {name, value} = e.target;
@@ -31,15 +34,24 @@ function Register() {
 
     useEffect(() => {
         document.title = "Board-it | Register";
+        console.log(`------------Register-----------`)
+
+        localStorage.removeItem("token");
+        setErrors({})
         fetchUsers();
     }, []);
 
-    async function handleSubmit(e) {
+
+    const handleSubmit = async (e) => {
         try {
+            console.log(`------------Submit Handler-----------`)
+            if (!isLoaded) return;
+
             e.preventDefault();
-            setErrors([])
+            setErrors({})
             const newErrors = {};
 
+            // vallidatie:
             if (formData.password !== formData.repeatPassword) {
                 newErrors.password = "Wachtwoord is niet hetzelfde.";
                 newErrors.repeatPassword = "Wachtwoord is niet hetzelfde.";
@@ -71,12 +83,9 @@ function Register() {
 
             setErrors(newErrors);
 
-
-            if (Object.keys(errors).length === 0) {
+// als er geen errors zijn zet het in local storage en stuur verder
+            if (Object.keys(newErrors).length === 0) {
                 fetchRegister(formData)
-                localStorage.setItem("token", loginData.token);
-                navigate("/")
-
             }
 
 
@@ -85,13 +94,32 @@ function Register() {
         }
     }
 
+    useEffect(() => {
+        async function refresh() {
+            if (!isLoaded) {
+                setIsLoaded(true)
+                return
+            }
+            await refreshToken()
+        }
+
+        refresh()
+    }, [loginData]);
+
+
+    useEffect(() => {
+
+        if (!token) return;
+        navigate("/");
+    }, [token]);
+
     return (
         <div>
             <header role="banner" className="text-center p-1 mt-2 relative">
                 <div className="bg-primary w-full p-4 rounded-lg shadow-md">
                     <Tape variant="big-r"/>
                     <Tape variant="big-l"/>
-                    <h1 className="text-2xl font-headers">Registreren</h1>
+                    <h1 className="text-3xl font-headers">Registreren</h1>
                 </div>
             </header>
 
@@ -102,7 +130,7 @@ function Register() {
                         <label htmlFor="user_name"
                                className="text-left text-xl font-headers mb-2 ">Gebruikersnaam:</label>
                         <InputCard>
-                            <input className=" bg-white min-w-full"
+                            <input className=" bg-white min-w-full pl-3 py-2"
                                    type="text"
                                    id="user_name"
                                    name="user_name"
@@ -120,7 +148,7 @@ function Register() {
 
                         <label htmlFor="picture" className="text-left text-xl font-headers mb-2">Foto:</label>
                         <InputCard>
-                            <input className="bg-white min-w-full"
+                            <input className="bg-white min-w-full pl-3 py-2"
                                    type="file"
                                    id="picture"
                                    name="picture"
@@ -137,7 +165,7 @@ function Register() {
                     <Card variant="tertiary">
                         <label htmlFor="email" className="text-left text-xl font-headers mb-2">Email:</label>
                         <InputCard>
-                            <input className="bg-white min-w-full"
+                            <input className="bg-white min-w-full pl-3 py-2"
                                    type="email"
                                    id="email"
                                    name="email"
@@ -155,7 +183,7 @@ function Register() {
                     <Card variant="primary">
                         <label htmlFor="password" className="text-left text-xl font-headers mb-2">Wachtwoord:</label>
                         <InputCard>
-                            <input className="bg-white min-w-full"
+                            <input className="bg-white min-w-full pl-3 py-2"
                                    type="password"
                                    id="password"
                                    name="password"
@@ -167,11 +195,11 @@ function Register() {
                         </InputCard>
                         {errors.password &&
                             <p className="text-red-700 font-bold mt-2 text-sm">{errors.password}</p>}
-                 
+
                         <label htmlFor="repeatPassword" className="text-left text-xl font-headers mb-2">Wachtwoord
                             herhalen:</label>
                         <InputCard>
-                            <input className="bg-white min-w-full"
+                            <input className="bg-white min-w-full pl-3 py-2"
                                    type="password"
                                    id="repeatPassword"
                                    name="repeatPassword"
@@ -186,9 +214,16 @@ function Register() {
 
                     </Card>
                 </div>
-                <SubmitButton>
-                    Registreren
-                </SubmitButton>
+                <div className="w-[60%] md:w-[30%] mx-auto">
+                    <SubmitButton>
+                        Registreren
+                    </SubmitButton>
+                </div>
+                <div className="text-center content-center w-full pt-2">
+                    <Link to="/login">
+                        Al een account?
+                    </Link>
+                </div>
             </form>
         </div>
     )
