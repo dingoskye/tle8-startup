@@ -3,9 +3,9 @@ import { Link } from "react-router";
 export function MainButton({ children, link, type = "button", disabled, className, ...props }) {
     // Shared styling for both links and buttons (including your requested chunkier padding)
     const baseStyles = `
-        inline-flex justify-center items-center
+        flex justify-center items-center
         bg-button-purple text-black font-headers text-xl 
-        py-4 px-10 rounded-full border-white border-[6px] shadow-sm 
+        py-2 px-4 rounded-full border-white border-6 shadow-sm w-full
         transition-all hover:scale-105 outline-none 
         focus-visible:ring-4 focus-visible:ring-black/30 
         disabled:pointer-events-none disabled:opacity-50
