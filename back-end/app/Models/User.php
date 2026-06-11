@@ -15,8 +15,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-#[Fillable(['user_name', 'name', 'email', 'password', 'image', 'admin'])]
-#[Hidden(['password', 'remember_token'])]
+#[Fillable(['user_name', 'name', 'email', 'password', 'profile_image', 'is_admin'])]
+#[Hidden(['password', 'remember_token', 'is_admin'])]
 class User extends Authenticatable implements JWTSubject
 {
     use SoftDeletes;

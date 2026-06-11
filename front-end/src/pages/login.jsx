@@ -33,9 +33,12 @@ function Login() {
         document.title = "Board-it | Login";
         console.log(`------------Login-----------`)
         if (localStorage.getItem("token")) {
-            localStorage.removeItem("token");
+            async function removeToken() {
 
+                await localStorage.removeItem("token");
+            }
 
+            removeToken()
         }
         console.log(errors, 'errors')
 
@@ -124,6 +127,12 @@ function Login() {
     }, [loginData]);
 
     useEffect(() => {
+        if (!isLoaded) {
+            console.log(`------------Initial Load-----------`)
+
+            setIsLoaded(true)
+            return;
+        }
         if (!token) return;
         navigate("/");
     }, [token]);
@@ -142,7 +151,7 @@ function Login() {
                 <div className="pb-6 pt-6">
                     <Card variant="quaternary">
                         <label htmlFor="email"
-                               className="text-left text-xl font-headers mb-2 ">email:</label>
+                               className="text-left text-xl font-headers mb-2 ">email: </label>
                         <InputCard>
                             <input className=" bg-white min-w-full pl-3 py-2"
                                    type="email"

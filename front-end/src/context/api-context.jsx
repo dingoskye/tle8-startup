@@ -9,9 +9,11 @@ export function ApiProvider({children}) {
     const [token, setToken] = useState(localStorage.getItem("token"))
 
     async function refreshToken() {
-     
+        console.log(loginData)
         setToken(loginData.token)
+       
         await localStorage.setItem('token', loginData.token)
+        await localStorage.setItem('user', JSON.stringify(loginData.user))
     }
 
     async function apiFetch(endpoint, options = {}) {

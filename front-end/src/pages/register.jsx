@@ -36,7 +36,14 @@ function Register() {
         document.title = "Board-it | Register";
         console.log(`------------Register-----------`)
 
-        localStorage.removeItem("token");
+        if (localStorage.getItem("token")) {
+            async function removeToken() {
+
+                await localStorage.removeItem("token");
+            }
+
+            removeToken()
+        }
         setErrors({})
         fetchUsers();
     }, []);
@@ -108,7 +115,10 @@ function Register() {
 
 
     useEffect(() => {
-
+        if (!isLoaded) {
+            setIsLoaded(true)
+            return
+        }
         if (!token) return;
         navigate("/");
     }, [token]);
