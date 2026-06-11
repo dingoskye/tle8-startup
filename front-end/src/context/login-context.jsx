@@ -1,12 +1,13 @@
 import {createContext, useContext, useState} from "react"
 import {useApi} from "@/context/api-context.jsx";
+import {useNavigate} from "react-router";
 
 const LoginContext = createContext()
 
 export function LoginProvider({children}) {
     const {apiFetch, setLoginData,} = useApi();
     // const {apiFetch, setLoginData, refreshToken, setToken, loginData} = useApi();
-
+    const navigate = useNavigate()
     const [users, setUsers] = useState(null)
 
     async function fetchLogin(formData) {
@@ -66,12 +67,19 @@ export function LoginProvider({children}) {
         }
     }
 
+    async function logout() {
+        await localStorage.clear()
+        navigate('/login')
+
+    }
+
     return (
         <LoginContext.Provider value={{
             fetchLogin,
             fetchRegister,
             fetchUsers,
-            users
+            users,
+            logout
         }}>
             {children}
         </LoginContext.Provider>

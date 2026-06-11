@@ -159,9 +159,11 @@ class UserController extends Controller
         $user->delete();
         return $user;
     }
+
+// ToDo: Logout route aanmaken.
+  
 }
 
 // ToDo: Change password route aanmaken.
 
-// ToDo: Logout route aanmaken.
 
