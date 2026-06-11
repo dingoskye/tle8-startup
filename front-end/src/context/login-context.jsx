@@ -7,7 +7,7 @@ const LoginContext = createContext()
 export function LoginProvider({children}) {
     const {apiFetch, setLoginData,} = useApi();
     // const {apiFetch, setLoginData, refreshToken, setToken, loginData} = useApi();
-    const navigate = useNavigate()
+  
     const [users, setUsers] = useState(null)
 
     async function fetchLogin(formData) {
