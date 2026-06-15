@@ -20,7 +20,7 @@ function Register() {
         repeatPassword: ""
     })
     const [errors, setErrors] = useState([])
-    const {fetchRegister, fetchUsers, users} = useLogin()
+    const {fetchRegister, fetchUsers} = useLogin()
     const {refreshToken, token, loginData} = useApi()
 
     const handleInputChange = (e) => {
@@ -108,7 +108,8 @@ function Register() {
 
         if (loginData.status > 300) {
             setErrors({
-                user_name: "Gebruikersnaam wordt al gebruikt.",
+                user_name: "Gebruikersnaam of email wordt al gebruikt.",
+                email: "Gebruikersnaam of email wordt al gebruikt.",
 
             });
         } else {
@@ -236,7 +237,7 @@ function Register() {
                     <SubmitButton>
                         Registreren
                     </SubmitButton>
-                    <Link to="/login">
+                    <Link to="/login" className="hover:text-blue-700 hover:underline">
                         Al een account?
                     </Link>
                 </div>

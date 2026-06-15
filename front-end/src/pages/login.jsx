@@ -174,7 +174,7 @@ function Login() {
                     <SubmitButton>
                         Login
                     </SubmitButton>
-                    <Link to="/register">
+                    <Link to="/register" className="hover:text-blue-700 hover:underline">
                         Nog geen account?
                     </Link>
 
