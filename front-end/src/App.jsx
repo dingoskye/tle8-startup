@@ -9,6 +9,7 @@ import Welcome from "@/pages/welcome.jsx";
 import {ErrorPage} from "@/pages/Error.jsx";
 import GroupDetails from "@/pages/group-details.jsx";
 import {CreateTask} from "@/pages/create-task.jsx";
+import Profile from "@/pages/profile.jsx";
 
 function App() {
 
@@ -22,8 +23,8 @@ function App() {
                 <Route path="/hoofdtaken" element={<TaskOverview/>}/>
                 <Route path="/hoofdtaken/:id" element={<TaskDetails/>}/>
                 <Route path="/hoofdtaak/aanmaken" element={<CreateTask/>}/>
+                <Route path="/profiel" element={<Profile/>}/>
                 <Route path="*" element={<ErrorPage/>}/>
-
             </Route>
         </Routes>
     )
