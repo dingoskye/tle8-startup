@@ -67,11 +67,11 @@
 .theme-natural {
     --color-background: #dac9aa;
     --color-bg-white: var(--thomas-white);
-    --color-primary: #def2c8;
-    --color-secondary: #c5dac1;
-    --color-tertiary: #bcd0c7;
-    --color-quaternary: #a9b2ac;
-    --color-button-purple: #ccccc1;
+    --color-primary: #eee4e1;
+    --color-secondary: #e7d8c9;
+    --color-tertiary: #e6beae;
+    --color-quaternary: #b2967d;
+    --color-button-purple: #ecf8f8;
 
     --color-text: var(--font-blue);
     --color-deadline-red: #E57472;

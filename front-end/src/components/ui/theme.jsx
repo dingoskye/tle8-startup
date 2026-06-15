@@ -6,7 +6,7 @@ function ThemeColors({theme}) {
             colors = ["7CC1EC", "7EE572FF", "FCF457FF", "FFB6C1FF", "DDAEFEFF"]
             break
         case "natural":
-            colors = ["def2c8", "c5dac1", "bcd0c7", "a9b2ac", "ccccc1"]
+            colors = ["eee4e1", "e7d8c9", "e6beae", "b2967d", "ecf8f8"]
             break
         case "dark":
             colors = ["45040c", "720714", "000000", "12562a", "063a21"]
@@ -16,7 +16,8 @@ function ThemeColors({theme}) {
     return (
         <div className="flex w-[50%]">
             {colors.length > 0 ?
-                colors.map((color) => <div className={`w-10 h-4 border`} style={{backgroundColor: `#${color}`}}/>)
+                colors.map((color, key) =>
+                    <div key={key} className={`w-10 h-4 border border-black`} style={{backgroundColor: `#${color}`}}/>)
                 : null}
         </div>
     )

@@ -7,7 +7,7 @@ import ThemeColors from "@/components/ui/theme.jsx";
 import {MainButton, SubmitButton} from "@/components/ui/buttons.jsx";
 
 function Profile() {
-    const {fetchThemes, knownThemes, fetchSettings} = useTheme()
+    const {fetchThemes, knownThemes, fetchSettings, settings} = useTheme()
     const {loginData, getData} = useApi()
 
     const handleSubmit = (e) => {
@@ -31,34 +31,34 @@ function Profile() {
             </header>
 
             <TapeCard variant="white">
-                <h2 className="text-2xl font-headers">Settings:</h2>
-                <Card variant="secondary">
-                    <h3 className="text-xl font-headers mt-2">Thema:</h3>
-                    <form className="h-full flex gap-3 flex-col" onSubmit={handleSubmit}>
-                        <div className="w-[70%] mx-auto">
-                            <p className="text-xl font-semibold underline pb-2">Kleuren:</p>
-                            {knownThemes !== null && knownThemes.length > 0 ? knownThemes.map((theme) =>
-                                <div className="flex gap-4 w-full justify-between">
-                                    <div className="flex gap-4">
-                                        <input type="radio" id={theme.name} name="theme" value={theme.id}/>
-                                        <label htmlFor={theme.name} className="text-lg">{theme.name}</label>
-                                    </div>
-                                    <ThemeColors theme={theme.name}/>
+                <h2 className="text-2xl font-headers mb-2">Settings:</h2>
+                <form className="h-full flex gap-4 flex-col" onSubmit={handleSubmit}>
+                    <Card variant="secondary">
+                        <h3 className="text-xl font-headers mt-2">Kleuren:</h3>
+                        {knownThemes !== null && knownThemes.length > 0 ? knownThemes.map((theme) =>
+                            <div className="flex gap-4 w-full justify-between">
+                                <div className="flex gap-4">
+                                    <input type="radio" id={theme.name} name="theme"
+                                           value={theme.id}
+                                           checked={settings ? settings.theme.name === theme.name : null}/>
+                                    <label htmlFor={theme.name} className="text-lg">{theme.name}</label>
                                 </div>
-                            ) : null}
-                        </div>
-                        <div>
-                            <p className="text-xl font-semibold underline pb-2">Font:</p>
-                            <div className="flex gap-3 justify-center">
-                                <label htmlFor="written_font">Wil je een geschreven fontje?</label>
-                                <input id="written_font" type="checkbox"/>
+                                <ThemeColors theme={theme.name}/>
                             </div>
+                        ) : null}
+                    </Card>
+                    <Card variant="tertiary">
+                        <h3 className="text-xl font-headers mt-2">Text:</h3>
+                        <div className="flex gap-3 justify-center">
+                            <label htmlFor="written_font" className="text-lg">Wil je een geschreven fontje?</label>
+                            <input id="written_font" type="checkbox"
+                                   checked={settings ? settings.written_font : null}/>
                         </div>
-                        <div className="w-[60%] md:w-[30%] mx-auto">
-                            <SubmitButton>Opslaan</SubmitButton>
-                        </div>
-                    </form>
-                </Card>
+                    </Card>
+                    <div className="w-[60%] md:w-[30%] mx-auto">
+                        <SubmitButton>Opslaan</SubmitButton>
+                    </div>
+                </form>
             </TapeCard>
 
             <div className="w-[60%] md:w-[30%] mx-auto">

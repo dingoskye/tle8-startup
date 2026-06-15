@@ -8,6 +8,7 @@ export function ThemeProvider({children}) {
     const [theme, setTheme] = useState("theme-default")
     const [font, setFont] = useState("font-default")
     const [knownThemes, setKnownThemes] = useState(null)
+    const [settings, setSettings] = useState(null)
 
     async function fetchThemes() {
         try {
@@ -36,9 +37,10 @@ export function ThemeProvider({children}) {
                     "Authorization": `Bearer ${token}`,
                 }
             })
+            setSettings(data[0])
             console.log(data)
-            setTheme(`theme-${data.theme.name}`)
-            setFont(data.written_font ? "font-default" : "font-simple")
+            setTheme(`theme-${data[0].theme.name}`)
+            setFont(data[0].written_font ? "font-default" : "font-simple")
         } catch (e) {
             console.log(e.message)
         }
@@ -53,6 +55,7 @@ export function ThemeProvider({children}) {
             theme,
             font,
             knownThemes,
+            settings,
             fetchThemes,
             fetchSettings
         }}>
