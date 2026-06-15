@@ -1,28 +1,14 @@
 import {Card} from "@/components/ui/cards.jsx";
-import {IoPerson} from "react-icons/io5";
-import {Link} from "react-router";
-import {LuSquare, LuSquareCheckBig} from "react-icons/lu";
+import SubtaskCheck from "@/components/ui/subtask-check.jsx";
 
-function SubTaskCard({sub, variant}) {
-
+function SubTaskCard({sub, variant, onSubtaskUpdated}) {
     return (
         <div className="col-span-1">
             <Card variant={variant}>
-                <div className="w-full h-full py-6">
-                    {!sub.completed ?
-                        <div className="flex gap-4 items-center">
-                            <p className="sr-only">To do item niet af</p>
-                            <LuSquare className="text-2xl bg-white shadow-sm rounded-sm"/>
-                            <p className="font-headers pt-2">{sub.title}</p>
-                        </div> :
-                        <div className="flex gap-4 items-center">
-                            <p className="sr-only">To do item niet af</p>
-                            <LuSquareCheckBig className="text-2xl bg-white shadow-sm rounded-sm"/>
-                            <p className="font-headers pt-2 line-through break-all">{sub.title}</p>
-                        </div>
-                    }
-                    {sub.description ? <p>{sub.description}</p> : null}
-                </div>
+                <SubtaskCheck onUpdated={onSubtaskUpdated} completedNow={sub.completed} id={sub.id}>
+                    <p className={sub.completed ? "line-through font-headers pt-2" : "font-headers pt-2"}>{sub.title}</p>
+                </SubtaskCheck>
+                {sub.description ? <p>{sub.description}</p> : null}
             </Card>
         </div>
     )

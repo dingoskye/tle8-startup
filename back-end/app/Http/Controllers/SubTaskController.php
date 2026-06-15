@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MainTask;
 use App\Models\SubTask;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -75,6 +76,42 @@ class SubTaskController extends Controller
         }
     }
 
+    public function completed(string $id, request $request)
+    {
+        if (!$request->has('completed')) {
+            return response(['error' => 'you are stupid'], 400);
+        }
+
+        $subTask = SubTask::query()->findOrFail($id);
+        $subTask->completed = $request->completed;
+
+        if ($request->completed) {
+            $ts = time();
+            $curDate = date('Y-m-d H:i:s', $ts);
+            $subTask->completed_at = $curDate;
+        } else {
+            $subTask->completed_at = null;
+        }
+        $subTask->save();
+
+        $this->progressUpdate($subTask->main_task_id, "1");
+
+        return $subTask;
+    }
+
+    public function progressUpdate(string $id, string $userId)
+    {
+        $mainTask = MainTask::query()->findOrFail($id);
+
+        $subtasks = SubTask::query()->where('main_task_id', '=', $id)->count();
+        $completedSubtasks = SubTask::query()->where('main_task_id', '=', $id)->where('completed', '=', 1)->count();
+
+        $progress = $completedSubtasks / $subtasks * 100;
+
+        $mainTask->users()->updateExistingPivot($userId, [
+            'progress' => $progress,
+        ]);
+    }
 
     /**
      * Remove the specified resource from storage.
