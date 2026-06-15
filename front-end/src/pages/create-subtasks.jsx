@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
-import { Card, TapeCard } from "@/components/ui/cards.jsx";
+import {useState, useEffect} from 'react';
+import {Card, TapeCard} from "@/components/ui/cards.jsx";
 import Tape from "@/components/ui/tape.jsx";
-import { useApi } from "@/context/api-context.jsx";
-import { Button } from "@/components/ui/button.jsx";
+import {useApi} from "@/context/api-context.jsx";
+import {Button} from "@/components/ui/button.jsx";
 
 const CreateSubtasks = () => {
 
@@ -11,13 +11,13 @@ const CreateSubtasks = () => {
     }, []);
 
     const [subtasks, setSubtasks] = useState([
-        { id: Date.now(), title: '', description: '', deadline: '' }
+        {id: Date.now(), title: '', description: '', deadline: ''}
     ]);
 
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitMessage, setSubmitMessage] = useState(null);
-    const { apiFetch } = useApi();
+    const {apiFetch} = useApi();
     const cardVariants = ["tertiary", "primary", "quaternary", "secondary"];
     const today = new Date().toISOString().split('T')[0];
     const maxDate = new Date();
@@ -27,7 +27,7 @@ const CreateSubtasks = () => {
     const handleAddSubtask = () => {
         setSubtasks([
             ...subtasks,
-            { id: Date.now(), title: '', description: '', deadline: '' }
+            {id: Date.now(), title: '', description: '', deadline: ''}
         ]);
     };
 
@@ -39,7 +39,7 @@ const CreateSubtasks = () => {
     const handleChange = (id, field, value) => {
         const updatedSubtasks = subtasks.map(task => {
             if (task.id === id) {
-                return { ...task, [field]: value };
+                return {...task, [field]: value};
             }
             return task;
         });
@@ -53,7 +53,7 @@ const CreateSubtasks = () => {
         // Filter using 'title' now!
         const validSubtasks = subtasks.filter(task => task.title.trim() !== "");
         if (validSubtasks.length === 0) {
-            setSubmitMessage({ type: 'error', text: 'Vul tenminste één subtaak titel in!' });
+            setSubmitMessage({type: 'error', text: 'Vul tenminste één subtaak titel in!'});
             return;
         }
 
@@ -77,7 +77,7 @@ const CreateSubtasks = () => {
                 formData.append('user_id', 1);      // TODO: Replace with dynamic user_id
 
                 // 3. Return the apiFetch promise for the correct route
-                 return apiFetch('/api/sub/create', {
+                return apiFetch('/sub/create', {
                     method: 'POST',
                     body: formData,
                 });
@@ -87,10 +87,10 @@ const CreateSubtasks = () => {
             const results = await Promise.all(requestPromises);
 
             console.log("All subtasks successfully created:", results);
-            setSubmitMessage({ type: 'success', text: 'Subtaken succesvol opgeslagen!' });
+            setSubmitMessage({type: 'success', text: 'Subtaken succesvol opgeslagen!'});
 
             // Reset the form
-            setSubtasks([{ id: Date.now(), title: '', description: '', deadline: '' }]);
+            setSubtasks([{id: Date.now(), title: '', description: '', deadline: ''}]);
 
         } catch (error) {
             console.error("Error submitting subtasks:", error);
@@ -108,14 +108,14 @@ const CreateSubtasks = () => {
             {/* --- HEADER SECTION (Matches Home.jsx exactly) --- */}
             <header role="banner" className="text-center p-1 mt-10 mb-5 relative w-[90%] md:w-[70%] mx-auto">
                 <div className="bg-primary w-full p-4 rounded-lg shadow-md relative">
-                    <Tape variant="big-r" />
-                    <Tape variant="big-l" />
+                    <Tape variant="big-r"/>
+                    <Tape variant="big-l"/>
                     <h1 className="text-3xl font-bold font-headers">Subtaken Aanmaken</h1>
                 </div>
             </header>
 
             {submitMessage && (
-                <div className="w-[90%] md:w-[70%] mx-auto mb-6">
+                <div className="  mx-auto mb-6">
                     <Card variant={submitMessage.type === 'success' ? "secondary" : "quaternary"}>
                         <div className="text-center font-bold text-lg pt-2">
                             {submitMessage.text}
@@ -138,7 +138,7 @@ const CreateSubtasks = () => {
 
                                 {/* Task Header & Remove Button */}
                                 <div className="flex justify-between items-center mb-4 mt-2">
-                                    <h2 className="text-2xl font-bold font-headers">Subtaak #{index + 1}</h2>
+                                    <h2 className="text-2xl font-headers">Subtaak #{index + 1}</h2>
                                     {subtasks.length > 1 && (
                                         <Button
                                             type="button"
@@ -156,63 +156,66 @@ const CreateSubtasks = () => {
                                     {/* Titel Input */}
                                     <div>
 
-                                        <label htmlFor={`title-${task.id}`} className="block mb-2 font-headings text-lg font-bold">
+                                        <label htmlFor={`title-${task.id}`}
+                                               className="block mb-2 font-headings text-lg font-bold">
                                             Titel <span aria-hidden="true" className="text-red-600">*</span>
                                             <span className="sr-only">(Verplicht)</span>
                                         </label>
 
-                                    <div className="relative">
-                                        <Tape variant="small-r"  />
-                                        <Tape variant="small-l" />
-                                        <input
+                                        <div className="relative">
+                                            <Tape variant="small-r"/>
+                                            <Tape variant="small-l"/>
+                                            <input
 
-                                            id={`title-${task.id}`}
-                                            type="text"
-                                            className="w-full bg-bg-white shadow-xl/15 rounded-[3px] p-3 border border-transparent focus:border-black outline-none"
-                                            placeholder="e.g. Schrijf introductie"
-                                            value={task.title}
-                                            maxLength={500}
-                                            onChange={(e) => handleChange(task.id, 'title', e.target.value)}
-                                            required
-                                        />
+                                                id={`title-${task.id}`}
+                                                type="text"
+                                                className="w-full bg-bg-white shadow-xl/5 rounded-[3px] p-3 border border-transparent focus:border-black outline-none"
+                                                placeholder="e.g. doel van de sub-taak"
+                                                value={task.title}
+                                                maxLength={500}
+                                                onChange={(e) => handleChange(task.id, 'title', e.target.value)}
 
-                                    </div>
+                                            />
+
+                                        </div>
 
                                     </div>
 
                                     {/* Description Input */}
                                     <div>
-                                        <label htmlFor={`description-${task.id}`} className="block mb-2 font-headings text-lg font-bold">Beschrijving</label>
+                                        <label htmlFor={`description-${task.id}`}
+                                               className="block mb-2 font-headings text-lg font-bold">Beschrijving</label>
 
                                         <div className="relative">
-                                            <Tape variant="big-r"  />
-                                            <Tape variant="big-l" />
-                                        <textarea
-                                            id={`description-${task.id}`}
-                                            className="w-full bg-bg-white shadow-xl/15 rounded-[3px] p-3 min-h-[100px] border border-transparent focus:border-black outline-none"
-                                            placeholder="Details over deze taak..."
-                                            value={task.description}
-                                            maxLength={4000}
-                                            onChange={(e) => handleChange(task.id, 'description', e.target.value)}
-                                        />
-                                    </div>
+                                            <Tape variant="big-r"/>
+                                            <Tape variant="big-l"/>
+                                            <textarea
+                                                id={`description-${task.id}`}
+                                                className="w-[100%] bg-bg-white shadow-xl/7 rounded-[2%] p-[5%] min-h-[25%] border border-transparent focus:border-black outline-none"
+                                                placeholder="Details over deze taak..."
+                                                value={task.description}
+                                                maxLength={4000}
+                                                onChange={(e) => handleChange(task.id, 'description', e.target.value)}
+                                            />
+                                        </div>
                                     </div>
 
                                     {/* Deadline Input */}
                                     <div>
-                                        <label htmlFor={`deadline-${task.id}`}  className="block mb-2 font-headings text-lg font-bold">Deadline</label>
+                                        <label htmlFor={`deadline-${task.id}`}
+                                               className="block mb-2 font-headings text-lg font-bold">Deadline</label>
                                         <div className="relative">
-                                            <Tape variant="small-r"  />
-                                            <Tape variant="small-l" />
-                                        <input
-                                            id={`deadline-${task.id}`}
-                                            type="date"
-                                            className="w-full bg-bg-white shadow-xl/15 rounded-[3px] p-3 cursor-pointer border border-transparent focus:border-black outline-none"
-                                            value={task.deadline}
-                                            onChange={(e) => handleChange(task.id, 'deadline', e.target.value)}
-                                            min={today}
-                                            max={maxDateString}
-                                        />
+                                            <Tape variant="small-r"/>
+                                            <Tape variant="small-l"/>
+                                            <input
+                                                id={`deadline-${task.id}`}
+                                                type="date"
+                                                className="w-full bg-bg-white shadow-xl/7 rounded-[3px] p-3 cursor-pointer border border-transparent focus:border-black outline-none"
+                                                value={task.deadline}
+                                                onChange={(e) => handleChange(task.id, 'deadline', e.target.value)}
+                                                min={today}
+                                                max={maxDateString}
+                                            />
                                         </div>
                                     </div>
                                 </div>
