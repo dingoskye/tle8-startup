@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 import {useApi} from "@/context/api-context.jsx";
 import {Card} from "@/components/ui/cards.jsx";
 import {TapeCard} from "@/components/ui/cards.jsx";
+import {useNavigate} from "react-router";
 
 // Nieuwe taak aanmaken.
 
@@ -25,6 +26,7 @@ export function CreateTask() {
 
     const [errors, setErrors] = useState({});
     const [submitting, setSubmitting] = useState(false);
+    const navigate = useNavigate()
 
     //Form validatie.
     const validateForm = () => {
@@ -77,6 +79,7 @@ export function CreateTask() {
             });
 
             setForm(initialForm);
+            navigate("/")
         } catch (err) {
             console.error("Failed to create task:", err);
             setErrors({general: "Er is een fout opgetreden bij het aanmaken van de taak."});
