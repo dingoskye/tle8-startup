@@ -31,12 +31,15 @@ class MainTaskController extends Controller
         if (!$request->title || !$request->deadline || !$request->ai_file) {
             return response(['error' => 'you are stupid'], 404);
         }
+
         try {
+            $aiFile = $request->file('ai_file')->storePublicly('storage', 'public');
+
             $mainTask = new MainTask([
                 'title' => $request->title,
                 'deadline' => $request->deadline,
                 'description' => $request->description,
-                'ai_file' => $request->ai_file,
+                'ai_file' => $aiFile,
                 'group_id' => $request->group_id,
 
             ]);

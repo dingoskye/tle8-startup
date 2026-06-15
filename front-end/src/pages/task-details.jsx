@@ -3,7 +3,7 @@ import {useParams} from "react-router";
 import {useMainTask} from "@/context/task-context.jsx";
 import Tape from "@/components/ui/tape.jsx";
 import SubTaskCard from "@/components/sub-task-card.jsx";
-import {FaPlus} from "react-icons/fa";
+import {FaFilter, FaPlus} from "react-icons/fa";
 import {Card} from "@/components/ui/cards.jsx";
 import {Link} from "react-router";
 import DeadlineCard from "@/components/ui/deadline-card.jsx";
@@ -14,6 +14,7 @@ function TaskDetails() {
     const params = useParams()
     const {fetchTaskDetails} = useMainTask()
     const [task, setTask] = useState(null)
+    const [showCompleted, setShowCompleted] = useState(true)
 
     const variants = [
         "primary",
@@ -59,6 +60,17 @@ function TaskDetails() {
                             </div>
                             <div className="h-7 mt-2">
                                 <Progressbar progress={task.users[0].pivot.progress}/>
+                            </div>
+                            <div className="w-full flex justify-end">
+                                <div className="w-[35%]">
+                                    <button
+                                        className={`flex gap-2 justify-center w-full rounded-full border-white border-3 shadow-sm p-1 mt-2 items-center text-sm ${showCompleted ? "bg-button-purple" : "bg-gray-300"}`}
+                                        onClick={() => setShowCompleted(!showCompleted)}
+                                        aria-label={showCompleted ? "Afgevinkte taken niet tonen" : "Afgevinkte taken wel tonen"}>
+                                        <FaFilter/> {showCompleted ? "Niet tonen" : "Wel tonen"}
+                                    </button>
+                                </div>
+
                             </div>
                         </div>
                     </header>
