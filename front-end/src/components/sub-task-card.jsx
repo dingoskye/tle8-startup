@@ -8,19 +8,21 @@ function SubTaskCard({sub, variant}) {
     return (
         <div className="col-span-1">
             <Card variant={variant}>
-                {!sub.completed ?
-                    <div className="flex gap-4 items-center">
-                        <p className="sr-only">To do item niet af</p>
-                        <LuSquare className="text-2xl bg-white shadow-sm rounded-sm"/>
-                        <p className="font-headers pt-2">{sub.title}</p>
-                    </div> :
-                    <div className="flex gap-4 items-center">
-                        <p className="sr-only">To do item niet af</p>
-                        <LuSquareCheckBig className="text-2xl bg-white shadow-sm rounded-sm"/>
-                        <p className="font-headers pt-2 line-through">{sub.title}</p>
-                    </div>
-                }
-                {sub.description ? <p>{sub.description}</p> : null}
+                <div className="w-full h-full py-6">
+                    {!sub.completed ?
+                        <div className="flex gap-4 items-center">
+                            <p className="sr-only">To do item niet af</p>
+                            <LuSquare className="text-2xl bg-white shadow-sm rounded-sm"/>
+                            <p className="font-headers pt-2">{sub.title}</p>
+                        </div> :
+                        <div className="flex gap-4 items-center">
+                            <p className="sr-only">To do item niet af</p>
+                            <LuSquareCheckBig className="text-2xl bg-white shadow-sm rounded-sm"/>
+                            <p className="font-headers pt-2 line-through break-all">{sub.title}</p>
+                        </div>
+                    }
+                    {sub.description ? <p>{sub.description}</p> : null}
+                </div>
             </Card>
         </div>
     )
