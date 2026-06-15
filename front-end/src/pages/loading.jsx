@@ -1,16 +1,21 @@
+// front-end/src/pages/loading.jsx
 import {Card} from "@/components/ui/cards.jsx";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router";
 
-function Loading({onComplete} = {}) {
-    const [loading, setLoading] = useState(true)
+function Loading() {
+    const [loading, setLoading] = useState(0);
     const navigate = useNavigate();
+
     const loadText = [
         "Bestand inlezen...",
         "Taken aanmaken...",
         "Deadlines aanmaken...",
         "Laatste stuk..."
-    ]
+    ];
+    const loadTimeInterval = 100 / loadText.length;
+    const textIndex = Math.min(loadText.length - 1, Math.floor(loading / loadTimeInterval));
+    const currentLoadText = loadText[textIndex];
 
     // Scherm scrollen uitschakelen tijdens het laden om de navigatie onder aan de pagina te verbergen.
     useEffect(() => {
@@ -23,28 +28,21 @@ function Loading({onComplete} = {}) {
 
     useEffect(() => {
         const id = setInterval(() => {
-            setLoading((p) => {
-                const next = Math.min(100, p + Math.floor(Math.random() * 10) + 5);
-                return next;
-            });
+            setLoading((progress) => Math.min(100, progress + Math.floor(Math.random() * 10) + 5));
         }, 200);
         return () => clearInterval(id);
     }, []);
 
     // Stuur door naar hoofdtaken pagina. Vervang route als nodig is.
+    // Timeout om de balk tijd te geven om te vullen. ClearTimeout om te voorkomen dat er meerdere timeouts gemaakt worden.
     useEffect(() => {
         if (loading >= 100) {
-            const t = setTimeout(() => {
-                if (onComplete) onComplete();
+            const timeout = setTimeout(() => {
                 navigate("/hoofdtaken");
             }, 250);
-            return () => clearTimeout(t);
+            return () => clearTimeout(timeout);
         }
-    }, [loading, onComplete, navigate]);
-
-    const loadTimeInterval = 100 / loadText.length;
-    const textIndex = Math.min(loadText.length - 1, Math.floor(loading / loadTimeInterval));
-    const currentLoadText = loadText[textIndex];
+    }, [loading, navigate]);
 
     return (
         // div om de card in het midden van het scherm te zetten.
@@ -77,5 +75,4 @@ function Loading({onComplete} = {}) {
     );
 }
 
-
-export default Loading
+export default Loading;
