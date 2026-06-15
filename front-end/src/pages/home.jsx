@@ -28,7 +28,7 @@ function Home() {
 
     return (
         <>
-            <header role="banner" className="text-center p-1 mt-2 relative">
+            <header role="banner" className="text-center p-1 mt-1 relative">
                 <div className="bg-primary w-full p-4 rounded-lg shadow-md">
                     <Tape variant="big-r"/>
                     <Tape variant="big-l"/>
@@ -36,7 +36,7 @@ function Home() {
                 </div>
             </header>
 
-            <section aria-label="openstaande taken" className="text-center flex flex-col gap-5">
+            <section aria-label="openstaande taken" className="text-center flex flex-col gap-2">
                 {/*task carousel*/}
                 <Carousel className="px-6 text-left">
                     <CarouselContent className="py-4">
@@ -52,14 +52,14 @@ function Home() {
                     <CarouselNext/>
                 </Carousel>
 
-                <div className="w-[60%] mx-auto">
+                <div className="w-[60%] md:w-[30%] mx-auto">
                     <MainButton link="/hoofdtaken">Taken bekijken</MainButton>
                 </div>
             </section>
 
             <div className="min-h-[25vh]">
                 <TapeCard variant="white">
-                    <h2 className="text-left text-xl font-headers mb-2">Studiegroepen:</h2>
+                    <h2 className="text-left text-xl font-headers">Studiegroepen:</h2>
                     <Carousel className="px-6 text-left">
                         <CarouselContent className="py-4">
                             {groups !== null && groups.length !== 0 ? groups.map((group, index) =>

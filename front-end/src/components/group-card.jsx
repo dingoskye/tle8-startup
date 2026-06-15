@@ -9,10 +9,10 @@ function GroupCard({group, variant}) {
             <Card variant={variant}>
                 {group.picture ?
                     <img
-                        className="flex mt-3 rounded-md w-full h-25 mx-auto border-5 border-white shadow-md overflow-hidden"
+                        className="flex mt-3 rounded-md w-full h-20 mx-auto border-5 border-white shadow-md overflow-hidden"
                         src={group.picture} alt={`Foto van de ${group.name} groep`}/> :
                     <div
-                        className="bg-bg-white text-center items-center flex mt-3 rounded-md w-full h-25 mx-auto border-5 border-white shadow-sm">
+                        className="bg-bg-white text-center items-center flex mt-3 rounded-md w-full h-20 mx-auto border-5 border-white shadow-sm">
                         <IoPerson aria-label="Icoontje van poppetje (geen foto beschikbaar)"
                                   className="text-4xl w-full"/>
                     </div>}

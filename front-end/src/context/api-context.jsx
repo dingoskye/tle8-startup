@@ -2,7 +2,7 @@ import {createContext, useContext} from "react"
 
 const ApiContext = createContext()
 
-const BASE_URL = "http://127.0.0.1:8000"
+const BASE_URL = "/api"
 
 export function ApiProvider({children}) {
     async function apiFetch(endpoint, options = {}) {
@@ -12,9 +12,10 @@ export function ApiProvider({children}) {
             },
             ...options,
         })
-
+        // console.log(res.status)
         if (!res.ok) {
-            throw new Error(`HTTP error! status: ${res.status}`);
+            return {"status": res.status, "message": res.statusText}
+            // throw new Error(`HTTP error! status: ${res.status}`);
         }
 
         const text = await res.text()
