@@ -25,8 +25,7 @@ export function ApiProvider({children}) {
             ...options,
 
         })
-
-        console.log(res.status)
+        // console.log(res.status)
         if (!res.ok) {
             return {"status": res.status, "message": res.statusText}
             // throw new Error(`HTTP error! status: ${res.status}`);

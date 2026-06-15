@@ -9,8 +9,6 @@ export function GroupProvider({children}) {
 
     async function fetchGroups() {
         try {
-
-
             const data = await apiFetch(`/group`, {
                 method: "GET",
                 headers: {
