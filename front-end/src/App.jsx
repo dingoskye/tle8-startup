@@ -6,8 +6,10 @@ import TaskOverview from "@/pages/task-overview.jsx";
 import TaskDetails from "@/pages/task-details.jsx";
 import GroupOverview from "@/pages/group-overview.jsx";
 import Welcome from "@/pages/welcome.jsx";
-import {ErrorPage} from "@/pages/Error.jsx";
+import {ErrorPage} from "@/pages/error.jsx";
 import GroupDetails from "@/pages/group-details.jsx";
+import Register from "@/pages/register.jsx";
+import Login from "@/pages/login.jsx";
 import {CreateTask} from "@/pages/create-task.jsx";
 
 function App() {
@@ -16,6 +18,8 @@ function App() {
         <Routes>
             <Route element={<Layout/>}>
                 <Route path="/" element={<Home/>}/>
+                <Route path="/login" element={<Login/>}/>
+                <Route path="/register" element={<Register/>}/>
                 <Route path="/welkom" element={<Welcome/>}/>
                 <Route path="/studiegroepen" element={<GroupOverview/>}/>
                 <Route path="/studiegroepen/:id" element={<GroupDetails/>}/>
