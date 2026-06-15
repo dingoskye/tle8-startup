@@ -60,7 +60,7 @@ function Register() {
 
             // vallidatie:
             if (!formData.picture.toLowerCase().endsWith(".png") && !formData.picture.toLowerCase().endsWith(".webp") && !formData.picture.toLowerCase().endsWith(".jpeg") && !formData.picture.toLowerCase().endsWith(".jpg") && formData.picture !== "") {
-                newErrors.picture = "Gebruik een correcte foto format.";
+                newErrors.picture = "Gebruik een correcte foto format. (png, webp, jpeg, jpg)";
             }
             if (formData.password !== formData.repeatPassword) {
                 newErrors.password = "Wachtwoord is niet hetzelfde.";
