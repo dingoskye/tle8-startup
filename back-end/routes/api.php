@@ -9,7 +9,7 @@ use App\Http\Controllers\SubtaskAiController;
 
 //AI routes
 Route::get('/main-tasks/{id}/generate-subtasks', [SubtaskAiController::class, 'generate']);
-Route::post('/main-tasks/{id}/generate-subtasks', [SubtaskAiController::class, 'generate']);
+Route::post('/main-tasks/{mainTask}/generate-subtasks', [SubtaskAiController::class, 'generate']);
 
 // User controller routes
 Route::get('/user/{id}', [UserController::class, 'show']);

@@ -86,44 +86,78 @@ function Subtask() {
         return newErrors;
     };
 
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     console.log(formData);
+    //
+    //     const validationErrors = validateForm();
+    //
+    //     if (Object.keys(validationErrors).length > 0) {
+    //         setErrors(validationErrors);
+    //         return;
+    //     }
+    //
+    //     setErrors({});
+    //
+    //     try {
+    //         const res = await apiFetch(`/main-tasks/${id}/generate-subtasks`,
+    //             {
+    //                 method: 'POST',
+    //                 headers: {
+    //                     'Access-Control-Allow-Headers': '*',
+    //                     'Content-Type': 'application/json',
+    //                     'Accept': 'application/json'
+    //                 },
+    //                  body: JSON.stringify({
+    //                     ...formData,
+    //                     main_task_id: id,
+    //                 }),
+    //             });
+    //
+    //         if (!res.ok) {
+    //             throw new Error("Create failed");
+    //         }
+    //
+    //       const created = await res.json();
+    //         console.log("Backend response:", created);
+    //         navigate("/hoofdtaken/:id", { state: { created } });
+    //
+    //         } catch (e) {
+    //             console.error(e);
+    //         }
+    // };
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         console.log(formData);
 
-        const validationErrors = validateForm();
-
-        if (Object.keys(validationErrors).length > 0) {
-            setErrors(validationErrors);
-            return;
-        }
-
-        setErrors({});
-
         try {
-            const res = await apiFetch(`/main-tasks/${id}/generate-subtasks`,
+            const res = await fetch(
+                `http://127.0.0.1:8000/api/main-tasks/${id}/generate-subtasks`,
                 {
-                    method: 'POST',
+                    method: "POST",
                     headers: {
-                        'Access-Control-Allow-Headers': '*',
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
+                        "Content-Type": "application/json",
+                        "Accept": "application/json",
                     },
-                     body: JSON.stringify({
-                        ...formData,
-                        main_task_id: id,
-                    }),
-                });
+                    body: JSON.stringify(formData),
+                }
+            );
+
+            const data = await res.json();
+
+            console.log("Backend response:", data);
 
             if (!res.ok) {
-                throw new Error("Create failed");
+                throw new Error(data.message || "Subtasks genereren mislukt");
             }
 
-            const created = await res.json();
-            navigate("/hoofdtaken/:id", { state: { created } });
+            console.log("Gegenereerde subtaken:", data);
 
-            } catch (e) {
-                console.error(e);
-            }
+            navigate(`/hoofdtaken/${id}`);
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     return (

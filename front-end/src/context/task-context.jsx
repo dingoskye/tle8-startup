@@ -26,7 +26,7 @@ export function MainTaskProvider({children}) {
 
     async function fetchTaskDetails(id) {
         try {
-            const data = await apiFetch(`/api/main/details/${id}`, {
+            const data = await apiFetch(`/main/details/${id}`, {
                 method: "GET",
                 headers: {
                     Accept: "application/json",
