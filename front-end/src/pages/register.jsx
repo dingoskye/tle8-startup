@@ -60,7 +60,7 @@ function Register() {
 
             // vallidatie:
             if (!formData.picture.toLowerCase().endsWith(".png") && !formData.picture.toLowerCase().endsWith(".webp") && !formData.picture.toLowerCase().endsWith(".jpeg") && !formData.picture.toLowerCase().endsWith(".jpg") && formData.picture !== "") {
-                newErrors.picture = "Gebruik een goede foto format.";
+                newErrors.picture = "Gebruik een correcte foto format.";
             }
             if (formData.password !== formData.repeatPassword) {
                 newErrors.password = "Wachtwoord is niet hetzelfde.";
@@ -75,21 +75,13 @@ function Register() {
             }
 
             if (formData.user_name === '') {
-                newErrors.user_name = "Gebruikers naam veld is verplicht.";
+                newErrors.user_name = "Gebruikersnaam veld is verplicht.";
             }
 
             if (formData.repeatPassword === '') {
                 newErrors.repeatPassword = "Herhaal wachtwoord veld is verplicht.";
             }
 
-            for (let user of users) {
-                if (formData.user_name === user.user_name) {
-                    newErrors.user_name = "Gebruikersnaam wordt al gebruikt.";
-                }
-                if (formData.email === user.email) {
-                    newErrors.email = "Email wordt al gebruikt.";
-                }
-            }
 
             setErrors(newErrors);
 
@@ -105,15 +97,29 @@ function Register() {
     }
 
     useEffect(() => {
-        async function refresh() {
-            if (!isLoaded) {
-                setIsLoaded(true)
-                return
-            }
-            await refreshToken()
+        if (!isLoaded) {
+            setIsLoaded(true)
+            return;
         }
 
-        refresh()
+        if (!loginData) return;
+
+// als er een status boven de 300 (error) geef error anders navigeren naar home pagina.
+
+        if (loginData.status > 300) {
+            setErrors({
+                email: "wordt al gebruikt is niet correct.",
+
+            });
+        } else {
+
+            async function refresh() {
+
+                await refreshToken()
+            }
+
+            refresh()
+        }
     }, [loginData]);
 
 
@@ -159,7 +165,7 @@ function Register() {
 
                 <Card variant="secondary">
 
-                    <label htmlFor="picture" className="text-left text-xl font-headers mb-2">Profiel foto:</label>
+                    <label htmlFor="picture" className="text-left text-xl font-headers mb-2">Profielfoto:</label>
                     <InputCard>
                         <input className="bg-white min-w-full pl-3 py-2"
                                type="file"

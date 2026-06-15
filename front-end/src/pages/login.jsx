@@ -70,21 +70,7 @@ function Login() {
 // als er geen errors zijn ga verder
             if (Object.keys(newErrors).length === 0) {
 
-                // alle users bekijken als er een user is met de mail verder.
-                for (let user of users) {
-                    users.indexOf(user)
-                    if (formData.email === user.email) {
-                        // proberen in te loggen.
-                        fetchLogin(formData)
-                        break;
-                    } else if (users.indexOf(user) >= users.length - 1 && formData.email !== user.email) {
-                        setErrors({
-                            email: "Informatie is niet correct.",
-                            password: "Informatie is niet correct."
-                        });
-                    }
-
-                }
+                fetchLogin(formData)
             }
 
 
