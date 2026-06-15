@@ -39,3 +39,7 @@ Route::middleware('jwt')->group(function () {
     Route::patch('/sub/complete/{id}', [SubTaskController::class, 'completed']);
     Route::delete('/sub/delete/{id}', [SubTaskController::class, 'delete']);
 });
+
+// ToDo dit in auth zetten
+Route::patch('/group/link/{id}', [GroupController::class, 'createLink']);
+Route::patch('/group/link', [GroupController::class, 'addUser']);
