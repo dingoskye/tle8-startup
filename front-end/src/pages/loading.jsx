@@ -1,4 +1,3 @@
-// front-end/src/pages/loading.jsx
 import {Card} from "@/components/ui/cards.jsx";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router";
@@ -42,7 +41,7 @@ function Loading() {
             }, 250);
             return () => clearTimeout(timeout);
         }
-    }, [loading, navigate]);
+    }, [loading]);
 
     return (
         // div om de card in het midden van het scherm te zetten.
