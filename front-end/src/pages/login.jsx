@@ -45,7 +45,6 @@ function Login() {
         if (errors) {
             setErrors({})
         }
-        fetchUsers();
 
 
     }, []);
