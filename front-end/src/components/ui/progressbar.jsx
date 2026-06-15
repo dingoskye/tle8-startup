@@ -6,7 +6,7 @@ function Progressbar({progress}) {
     } else if (Number(progress) < 75) {
         color = "bg-orange-400"
     } else {
-        color = "bg-secondary"
+        color = "bg-green-400"
     }
 
     return (

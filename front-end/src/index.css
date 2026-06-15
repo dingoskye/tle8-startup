@@ -39,6 +39,42 @@
     --font-paragraph: var(--paragraph);
 }
 
+@theme inline {
+    --color-background: var(--color-background);
+    --color-primary: var(--color-primary);
+    --color-secondary: var(--color-secondary);
+    --color-tertiary: var(--color-tertiary);
+    --color-quaternary: var(--color-quaternary);
+    --color-button-purple: var(--color-button-purple);
+}
+
+.theme-default {
+    --color-background: var(--background);
+    --color-primary: var(--skye-blue);
+    --color-secondary: var(--jade-green);
+    --color-tertiary: var(--christa-yellow);
+    --color-quaternary: var(--flamingo-pink);
+    --color-button-purple: var(--purple);
+}
+
+.theme-natural {
+    --color-background: #dac9aa;
+    --color-primary: #def2c8;
+    --color-secondary: #c5dac1;
+    --color-tertiary: #bcd0c7;
+    --color-quaternary: #a9b2ac;
+    --color-button-purple: #ccccc1;
+}
+
+.theme-dark {
+    --color-background: #dac9aa;
+    --color-primary: #def2c8;
+    --color-secondary: #c5dac1;
+    --color-tertiary: #bcd0c7;
+    --color-quaternary: #a9b2ac;
+    --color-button-purple: #ccccc1;
+}
+
 /* dit is voor het testen van WCAG 1.4.12 Text Spacing */
 /** {*/
 /*    line-height: 1.5 !important;*/
