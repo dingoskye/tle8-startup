@@ -22,7 +22,7 @@ function App() {
                 <Route path="/hoofdtaken" element={<TaskOverview/>}/>
                 <Route path="/hoofdtaken/:id" element={<TaskDetails/>}/>
                 <Route path="*" element={<ErrorPage/>}/>
-                <Route path="/loading" element={<Loading/>}/>
+                <Route path="/laden" element={<Loading/>}/>
             </Route>
         </Routes>
     )

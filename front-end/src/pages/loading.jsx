@@ -1,14 +1,25 @@
 import {Card} from "@/components/ui/cards.jsx";
 import {useEffect, useState} from "react";
+import {useNavigate} from "react-router";
 
 function Loading({onComplete} = {}) {
     const [loading, setLoading] = useState(true)
+    const navigate = useNavigate();
     const loadText = [
         "Bestand inlezen...",
         "Taken aanmaken...",
         "Deadlines aanmaken...",
-        "Final touches..."
+        "Laatste stuk..."
     ]
+
+    // Scherm scrollen uitschakelen tijdens het laden om de navigatie onder aan de pagina te verbergen.
+    useEffect(() => {
+        const originalOverflow = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+        return () => {
+            document.body.style.overflow = originalOverflow;
+        };
+    }, []);
 
     useEffect(() => {
         const id = setInterval(() => {
@@ -20,24 +31,29 @@ function Loading({onComplete} = {}) {
         return () => clearInterval(id);
     }, []);
 
+    // Stuur door naar hoofdtaken pagina. Vervang route als nodig is.
     useEffect(() => {
         if (loading >= 100) {
-            const t = setTimeout(() => onComplete && onComplete(), 250);
+            const t = setTimeout(() => {
+                if (onComplete) onComplete();
+                navigate("/hoofdtaken");
+            }, 250);
             return () => clearTimeout(t);
         }
-    }, [loading, onComplete]);
+    }, [loading, onComplete, navigate]);
 
     const loadTimeInterval = 100 / loadText.length;
     const textIndex = Math.min(loadText.length - 1, Math.floor(loading / loadTimeInterval));
     const currentLoadText = loadText[textIndex];
 
     return (
+        // div om de card in het midden van het scherm te zetten.
         <div className="flex items-center justify-center min-h-screen p-4">
-            <article className="w-full max-w-xs">
-                <Card variant="tertiary" className="w-full p-6 mx-auto">
-                    <h1 className="text-2xl font-headers text-center mb-4">Loading...</h1>
+            <div className="w-full max-w-xs">
+                <Card variant="tertiary">
+                    <h1 className="text-2xl font-headers text-center mb-4">Laden...</h1>
 
-                    <div className="mb-2 text-sm text-center">{Math.floor(loading)}%</div>
+                    <p className="mb-2 text-sm text-center">{Math.floor(loading)}%</p>
 
                     <div
                         className="w-full h-3 rounded border border-black/20 bg-white overflow-hidden"
@@ -52,11 +68,11 @@ function Loading({onComplete} = {}) {
                         />
                     </div>
 
-                    <div className="mt-4 text-center text-xs text-muted-foreground">
+                    <p className="mt-4 text-center text-xs text-muted-foreground">
                         {currentLoadText}
-                    </div>
+                    </p>
                 </Card>
-            </article>
+            </div>
         </div>
     );
 }
