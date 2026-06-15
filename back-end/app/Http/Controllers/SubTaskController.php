@@ -6,6 +6,7 @@ use App\Models\MainTask;
 use App\Models\SubTask;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class SubTaskController extends Controller
 {
@@ -14,7 +15,8 @@ class SubTaskController extends Controller
      */
     public function index()
     {
-        return SubTask::all();
+        $userId = JWTAuth::parseToken()->authenticate()->id;
+        return SubTask::where('user_id', $userId)->get();
     }
 
     /**
@@ -22,13 +24,16 @@ class SubTaskController extends Controller
      */
     public function create(request $request)
     {
-        if (!$request->title || !$request->main_task_id || !$request->user_id) {
-            return response(['error' => 'you are stupid'], 404);
-        }
         try {
+            if (!$request->title || !$request->main_task_id) {
+                return response(['error' => 'you are stupid'], 404);
+            }
+
+            $userId = JWTAuth::parseToken()->authenticate()->id;
+
             $subTask = new SubTask([
                 'title' => $request->title,
-                'user_id' => $request->user_id,
+                'user_id' => $userId,
                 'description' => $request->description,
                 'main_task_id' => $request->main_task_id,
             ]);
@@ -46,7 +51,12 @@ class SubTaskController extends Controller
      */
     public function show(string $id)
     {
-        return SubTask::query()->findOrFail($id);
+        $userId = JWTAuth::parseToken()->authenticate()->id;
+        if ($userId === $id) {
+            return SubTask::query()->findOrFail($id);
+        } else {
+            return response()->json(['error' => 'you are not authorized'], 403);
+        }
     }
 
     /**
@@ -55,22 +65,25 @@ class SubTaskController extends Controller
     public function edit(string $id, request $request)
     {
         try {
-
-            if (!$request->title || !$request->main_task_id || !$request->user_id) {
+            if (!$request->title || !$request->main_task_id) {
                 return response(['error' => 'you are stupid'], 404);
             }
             $subTask = SubTask::query()->findOrFail($id);
+            $userId = JWTAuth::parseToken()->authenticate()->id;
+            if ($subTask->user_id === $userId) {
+                $subTask->update([
+                    'title' => $request->title ?? $subTask->title,
+                    'user_id' => $userId,
+                    'description' => $request->description ?? $subTask->description,
+                    'main_task_id' => $request->main_task_id ?? $subTask->main_task_id,
+                    'group_id' => $request->group_id ?? $subTask->group_id,
 
-            $subTask->update([
-                'title' => $request->title ?? $subTask->title,
-                'user_id' => $request->user_id ?? $subTask->user_id,
-                'description' => $request->description ?? $subTask->description,
-                'main_task_id' => $request->main_task_id ?? $subTask->main_task_id,
-                'group_id' => $request->group_id ?? $subTask->group_id,
-
-            ]);
-            $subTask->save();
-            return $subTask;
+                ]);
+                $subTask->save();
+                return $subTask;
+            } else {
+                return response()->json(['error' => 'you are not authorized'], 403);
+            }
         } catch (ModelNotFoundException $e) {
             return response(['error' => $e], 500);
         }
@@ -118,8 +131,14 @@ class SubTaskController extends Controller
      */
     public function delete(string $id)
     {
+        $userId = JWTAuth::parseToken()->authenticate()->id;
         $subTask = SubTask::query()->findOrFail($id);
-        $subTask->delete();
-        return $subTask;
+        
+        if ($userId === $subTask->user_id) {
+            $subTask->delete();
+            return $subTask;
+        } else {
+            return response()->json(['error' => 'you are not authorized'], 403);
+        }
     }
 }
