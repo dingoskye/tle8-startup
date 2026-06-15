@@ -18,7 +18,7 @@ function Login() {
     const {fetchLogin, fetchUsers, users} = useLogin()
     const {loginData, token, refreshToken} = useApi()
     const [isLoaded, setIsLoaded] = useState(false);
-    // const [submitted, setSubmitted,] = useState(false)
+
 
     const handleInputChange = (e) => {
         const {name, value} = e.target;
@@ -59,11 +59,11 @@ function Login() {
 
 
             if (formData.password === '') {
-                newErrors.password = "verplichte velden moeten ingevuld zijn.";
+                newErrors.password = "Wachtwoord veld moet ingevuld zijn.";
             }
 
             if (formData.email === '') {
-                newErrors.email = "verplichte velden moeten ingevuld zijn.";
+                newErrors.email = "Email veld moet ingevuld zijn.";
             }
 
             setErrors(newErrors);
@@ -79,8 +79,8 @@ function Login() {
                         break;
                     } else if (users.indexOf(user) >= users.length - 1 && formData.email !== user.email) {
                         setErrors({
-                            email: "informatie is niet correct.",
-                            password: "informatie is niet correct."
+                            email: "Informatie is niet correct.",
+                            password: "Informatie is niet correct."
                         });
                     }
 
@@ -112,8 +112,8 @@ function Login() {
 
         if (loginData.status > 300) {
             setErrors({
-                email: "informatie is niet correct.",
-                password: "informatie is niet correct."
+                email: "Informatie is niet correct.",
+                password: "Informatie is niet correct."
             });
         } else {
 
@@ -147,53 +147,51 @@ function Login() {
                 </div>
             </header>
 
-            <form className=" h-full " onSubmit={handleSubmit}>
-                <div className="pb-6 pt-6">
-                    <Card variant="quaternary">
-                        <label htmlFor="email"
-                               className="text-left text-xl font-headers mb-2 ">email: </label>
-                        <InputCard>
-                            <input className=" bg-white min-w-full pl-3 py-2"
-                                   type="email"
-                                   id="email"
-                                   name="email"
-                                   value={formData.email}
-                                   placeholder="voorbeeld@email.com"
-                                   onChange={handleInputChange}
-                            />
-                        </InputCard>
-                        {errors.email &&
-                            <p className="text-red-700 font-bold mt-2 text-sm">{errors.email}</p>}
-                    </Card>
-                </div>
-                <div className="pb-6">
-                    <Card variant="primary">
-                        <label htmlFor="password"
-                               className="text-left text-xl font-headers mb-2 ">password:</label>
-                        <InputCard>
-                            <input className=" bg-white min-w-full pl-3 py-2"
-                                   type="password"
-                                   id="password"
-                                   name="password"
-                                   value={formData.password}
-                                   placeholder="wachtwoord123"
-                                   onChange={handleInputChange}
-                            />
-                        </InputCard>
-                        {errors.password &&
-                            <p className="text-red-700 font-bold mt-2 text-sm">{errors.password}</p>}
-                    </Card>
-                </div>
+            <form className=" h-full flex gap-6 flex-col pt-6" onSubmit={handleSubmit}>
 
-                <div className="w-[60%] md:w-[30%] mx-auto">
+                <Card variant="quaternary">
+                    <label htmlFor="email"
+                           className="text-left text-xl font-headers mb-2 ">Email: </label>
+                    <InputCard>
+                        <input className=" bg-white min-w-full pl-3 py-2"
+                               type="email"
+                               id="email"
+                               name="email"
+                               value={formData.email}
+                               placeholder="voorbeeld@email.com"
+                               onChange={handleInputChange}
+                        />
+                    </InputCard>
+                    {errors.email &&
+                        <p className="text-red-700 font-bold mt-2 text-sm">{errors.email}</p>}
+                </Card>
+
+                <Card variant="primary">
+                    <label htmlFor="password"
+                           className="text-left text-xl font-headers mb-2 ">Wachtwoord:</label>
+                    <InputCard>
+                        <input className=" bg-white min-w-full pl-3 py-2"
+                               type="password"
+                               id="password"
+                               name="password"
+                               value={formData.password}
+                               placeholder="wachtwoord123"
+                               onChange={handleInputChange}
+                        />
+                    </InputCard>
+                    {errors.password &&
+                        <p className="text-red-700 font-bold mt-2 text-sm">{errors.password}</p>}
+                </Card>
+
+
+                <div className="w-[60%] md:w-[30%] mx-auto flex flex-col gap-2 text-center">
                     <SubmitButton>
                         Login
                     </SubmitButton>
-                    <div className="text-center content-center w-full pt-2">
-                        <Link to="/register">
-                            Nog geen account?
-                        </Link>
-                    </div>
+                    <Link to="/register">
+                        Nog geen account?
+                    </Link>
+
                 </div>
             </form>
 

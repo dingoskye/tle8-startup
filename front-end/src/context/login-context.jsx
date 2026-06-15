@@ -6,8 +6,8 @@ const LoginContext = createContext()
 
 export function LoginProvider({children}) {
     const {apiFetch, setLoginData,} = useApi();
-    // const {apiFetch, setLoginData, refreshToken, setToken, loginData} = useApi();
-  
+
+
     const [users, setUsers] = useState(null)
 
     async function fetchLogin(formData) {
@@ -25,8 +25,6 @@ export function LoginProvider({children}) {
 
             })
             setLoginData(data)
-            // await setToken(loginData.token)
-            // await refreshToken()
         } catch (e) {
             console.log(e.message)
         }

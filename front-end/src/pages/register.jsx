@@ -51,37 +51,40 @@ function Register() {
 
     const handleSubmit = async (e) => {
         try {
+            e.preventDefault();
             console.log(`------------Submit Handler-----------`)
             if (!isLoaded) return;
 
-            e.preventDefault();
             setErrors({})
             const newErrors = {};
 
             // vallidatie:
+            if (!formData.picture.toLowerCase().endsWith(".png") && !formData.picture.toLowerCase().endsWith(".webp") && !formData.picture.toLowerCase().endsWith(".jpeg") && !formData.picture.toLowerCase().endsWith(".jpg") && formData.picture !== "") {
+                newErrors.picture = "Gebruik een goede foto format.";
+            }
             if (formData.password !== formData.repeatPassword) {
                 newErrors.password = "Wachtwoord is niet hetzelfde.";
                 newErrors.repeatPassword = "Wachtwoord is niet hetzelfde.";
             }
             if (formData.password === '') {
-                newErrors.password = "verplichte velden moeten ingevuld zijn.";
+                newErrors.password = "Wachtwoord veld is verplicht.";
             }
 
             if (formData.email === '') {
-                newErrors.email = "verplichte velden moeten ingevuld zijn.";
+                newErrors.email = "Email veld is verplicht.";
             }
 
             if (formData.user_name === '') {
-                newErrors.user_name = "verplichte velden moeten ingevuld zijn.";
+                newErrors.user_name = "Gebruikers naam veld is verplicht.";
             }
 
             if (formData.repeatPassword === '') {
-                newErrors.repeatPassword = "verplichte velden moeten ingevuld zijn.";
+                newErrors.repeatPassword = "Herhaal wachtwoord veld is verplicht.";
             }
 
             for (let user of users) {
                 if (formData.user_name === user.user_name) {
-                    newErrors.user_name = "gebruikers naam wordt al gebruikt.";
+                    newErrors.user_name = "Gebruikersnaam wordt al gebruikt.";
                 }
                 if (formData.email === user.email) {
                     newErrors.email = "Email wordt al gebruikt.";
@@ -134,106 +137,105 @@ function Register() {
             </header>
 
 
-            <form className="h-full" onSubmit={handleSubmit}>
-                <div className="pb-6 pt-6">
-                    <Card variant="quaternary">
-                        <label htmlFor="user_name"
-                               className="text-left text-xl font-headers mb-2 ">Gebruikersnaam:</label>
-                        <InputCard>
-                            <input className=" bg-white min-w-full pl-3 py-2"
-                                   type="text"
-                                   id="user_name"
-                                   name="user_name"
-                                   value={formData.userName}
-                                   placeholder="John Doe"
-                                   onChange={handleInputChange}
-                            />
-                        </InputCard>
-                        {errors.user_name &&
-                            <p className="text-red-700 font-bold mt-2 text-sm">{errors.user_name}</p>}
-                    </Card>
-                </div>
-                <div className="pb-6">
-                    <Card variant="secondary">
+            <form className="h-full flex gap-6 flex-col pt-6" onSubmit={handleSubmit}>
 
-                        <label htmlFor="picture" className="text-left text-xl font-headers mb-2">Foto:</label>
-                        <InputCard>
-                            <input className="bg-white min-w-full pl-3 py-2"
-                                   type="file"
-                                   id="picture"
-                                   name="picture"
-                                   value={formData.picture}
+                <Card variant="quaternary">
+                    <label htmlFor="user_name"
+                           className="text-left text-xl font-headers mb-2 ">Gebruikersnaam:</label>
+                    <InputCard>
+                        <input className=" bg-white min-w-full pl-3 py-2"
+                               type="text"
+                               id="user_name"
+                               name="user_name"
+                               value={formData.userName}
+                               placeholder="John Doe"
+                               onChange={handleInputChange}
+                        />
+                    </InputCard>
+                    {errors.user_name &&
+                        <p className="text-red-700 font-bold mt-2 text-sm">{errors.user_name}</p>}
+                </Card>
 
-                                   onChange={handleInputChange}
 
-                            />
-                        </InputCard>
+                <Card variant="secondary">
 
-                    </Card>
-                </div>
-                <div className="pb-6">
-                    <Card variant="tertiary">
-                        <label htmlFor="email" className="text-left text-xl font-headers mb-2">Email:</label>
-                        <InputCard>
-                            <input className="bg-white min-w-full pl-3 py-2"
-                                   type="email"
-                                   id="email"
-                                   name="email"
-                                   placeholder="voorbeeld@email.com"
-                                   value={formData.email}
+                    <label htmlFor="picture" className="text-left text-xl font-headers mb-2">Profiel foto:</label>
+                    <InputCard>
+                        <input className="bg-white min-w-full pl-3 py-2"
+                               type="file"
+                               id="picture"
+                               name="picture"
+                               value={formData.picture}
 
-                                   onChange={handleInputChange}
-                            />
-                        </InputCard>
-                        {errors.email &&
-                            <p className="text-red-700 font-bold mt-2 text-sm">{errors.email}</p>}
-                    </Card>
-                </div>
-                <div className="pb-6">
-                    <Card variant="primary">
-                        <label htmlFor="password" className="text-left text-xl font-headers mb-2">Wachtwoord:</label>
-                        <InputCard>
-                            <input className="bg-white min-w-full pl-3 py-2"
-                                   type="password"
-                                   id="password"
-                                   name="password"
-                                   placeholder="wachtwoord123"
-                                   value={formData.password}
+                               onChange={handleInputChange}
 
-                                   onChange={handleInputChange}
-                            />
-                        </InputCard>
-                        {errors.password &&
-                            <p className="text-red-700 font-bold mt-2 text-sm">{errors.password}</p>}
+                        />
+                    </InputCard>
+                    {errors.picture &&
+                        <p className="text-red-700 font-bold mt-2 text-sm">{errors.picture}</p>}
+                </Card>
 
-                        <label htmlFor="repeatPassword" className="text-left text-xl font-headers mb-2">Wachtwoord
-                            herhalen:</label>
-                        <InputCard>
-                            <input className="bg-white min-w-full pl-3 py-2"
-                                   type="password"
-                                   id="repeatPassword"
-                                   name="repeatPassword"
-                                   placeholder="wachtwoord123"
-                                   value={formData.repeatPassword}
+                <Card variant="tertiary">
+                    <label htmlFor="email" className="text-left text-xl font-headers mb-2">Email:</label>
+                    <InputCard>
+                        <input className="bg-white min-w-full pl-3 py-2"
+                               type="email"
+                               id="email"
+                               name="email"
+                               placeholder="voorbeeld@email.com"
+                               value={formData.email}
 
-                                   onChange={handleInputChange}
-                            />
-                        </InputCard>
-                        {errors.repeatPassword &&
-                            <p className="text-red-700 font-bold mt-2 text-sm">{errors.repeatPassword}</p>}
+                               onChange={handleInputChange}
+                        />
+                    </InputCard>
+                    {errors.email &&
+                        <p className="text-red-700 font-bold mt-2 text-sm">{errors.email}</p>}
+                </Card>
 
-                    </Card>
-                </div>
-                <div className="w-[60%] md:w-[30%] mx-auto">
+                <Card variant="primary">
+                    <label htmlFor="password" className="text-left text-xl font-headers mb-2">Wachtwoord:</label>
+                    <InputCard>
+                        <input className="bg-white min-w-full pl-3 py-2"
+                               type="password"
+                               id="password"
+                               name="password"
+                               placeholder="wachtwoord123"
+                               value={formData.password}
+
+                               onChange={handleInputChange}
+                        />
+                    </InputCard>
+                    {errors.password &&
+                        <p className="text-red-700 font-bold mt-2 text-sm">{errors.password}</p>}
+
+                    <label htmlFor="repeatPassword" className="text-left text-xl font-headers mb-2">Wachtwoord
+                        herhalen:</label>
+                    <InputCard>
+                        <input className="bg-white min-w-full pl-3 py-2"
+                               type="password"
+                               id="repeatPassword"
+                               name="repeatPassword"
+                               placeholder="wachtwoord123"
+                               value={formData.repeatPassword}
+
+                               onChange={handleInputChange}
+                        />
+                    </InputCard>
+                    {errors.repeatPassword &&
+                        <p className="text-red-700 font-bold mt-2 text-sm">{errors.repeatPassword}</p>}
+
+                </Card>
+
+                <div className="w-[60%] md:w-[30%] mx-auto text-center flex flex-col gap-2">
                     <SubmitButton>
                         Registreren
                     </SubmitButton>
-                </div>
-                <div className="text-center content-center w-full pt-2">
                     <Link to="/login">
                         Al een account?
                     </Link>
                 </div>
+
+
             </form>
         </div>
     )
