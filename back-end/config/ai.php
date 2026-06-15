@@ -13,12 +13,12 @@ return [
     |
     */
 
-    'default' => 'openai',
-    'default_for_images' => 'gemini',
-    'default_for_audio' => 'openai',
-    'default_for_transcription' => 'openai',
-    'default_for_embeddings' => 'openai',
-    'default_for_reranking' => 'cohere',
+    'default' => 'azure',
+    'default_for_images' => 'azure',
+    'default_for_audio' => 'azure',
+    'default_for_transcription' => 'azure',
+    'default_for_embeddings' => 'azure',
+    'default_for_reranking' => 'azure',
 
     /*
     |--------------------------------------------------------------------------

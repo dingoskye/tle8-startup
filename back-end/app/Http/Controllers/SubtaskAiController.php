@@ -12,15 +12,14 @@ class SubtaskAiController extends Controller
 {
     public function generate(Request $request, MainTask $mainTask)
     {
+//        dd(config('ai'));
         $request->validate([
             'niveau' => 'required',
-            'deadline' => 'nullable|date',
-            'context' => 'nullable|string',
+            'context' => 'string',
         ]);
 
         $formData = [
             'niveau' => $request->input('niveau'),
-            'deadline' => $request->input('deadline'),
             'context' => $request->input('context'),
         ];
 

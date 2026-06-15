@@ -20,7 +20,7 @@ function Subtask() {
     const [formData, setFormData] = useState({
         context: '',
         niveau: 1,
-        main_task_id: id,
+        // main_task_id: id,
     });
     const [details, setDetails] = useState(null);
     const [errors, setErrors] = useState({});
@@ -28,10 +28,10 @@ function Subtask() {
     useEffect(() => {
         if (!id) return;
 
-        setFormData((prev) => ({
-            ...prev,
-            main_task_id: id,
-        }));
+        // setFormData((prev) => ({
+        //     ...prev,
+        //     main_task_id: id,
+        // }));
 
         fetchTaskDetails(id);
     }, [id]);
@@ -98,31 +98,32 @@ function Subtask() {
         }
 
         setErrors({});
-        //
-        // try {
-        //     const res = await apiFetch(`/main-tasks/${id}/generate-subtasks`,
-        //         {
-        //             method: 'POST',
-        //             headers: {
-        //                 'Content-Type': 'application/json',
-        //                 'Accept': 'application/json'
-        //             },
-        //              body: JSON.stringify({
-        //                 ...formData,
-        //                 main_task_id: id,
-        //             }),
-        //         });
-        //
-        //     if (!res.ok) {
-        //         throw new Error("Create failed");
-        //     }
-        //
-        //     const created = await res.json();
-        //     navigate("/hoofdtaken/:id", { state: { created } });
-        //
-        //     } catch (e) {
-        //         console.error(e);
-        //     }
+
+        try {
+            const res = await apiFetch(`/main-tasks/${id}/generate-subtasks`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Access-Control-Allow-Headers': '*',
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                     body: JSON.stringify({
+                        ...formData,
+                        main_task_id: id,
+                    }),
+                });
+
+            if (!res.ok) {
+                throw new Error("Create failed");
+            }
+
+            const created = await res.json();
+            navigate("/hoofdtaken/:id", { state: { created } });
+
+            } catch (e) {
+                console.error(e);
+            }
     };
 
     return (
