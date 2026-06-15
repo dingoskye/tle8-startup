@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Models\MainTask;
+use App\Models\SubTask;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use function Laravel\Prompts\error;
@@ -15,9 +16,11 @@ class MainTaskController extends Controller
      */
     public function index(string $id)
     {
-        return MainTask::with(['group', 'users'])->whereHas('users', function ($query) use ($id) {
+        return MainTask::with(['group', 'users', 'subTasks' => function ($query) {
+            $query->orderBy('completed', 'asc')->orderBy('created_at', 'asc');
+        }])->whereHas('users', function ($query) use ($id) {
             $query->where('users.id', $id);
-        })->get();
+        })->orderBy('deadline', 'asc')->get();
     }
 
     /**
@@ -28,12 +31,15 @@ class MainTaskController extends Controller
         if (!$request->title || !$request->deadline || !$request->ai_file) {
             return response(['error' => 'you are stupid'], 404);
         }
+
         try {
+            $aiFile = $request->file('ai_file')->storePublicly('storage', 'public');
+
             $mainTask = new MainTask([
                 'title' => $request->title,
                 'deadline' => $request->deadline,
                 'description' => $request->description,
-                'ai_file' => $request->ai_file,
+                'ai_file' => $aiFile,
                 'group_id' => $request->group_id,
 
             ]);
@@ -57,7 +63,9 @@ class MainTaskController extends Controller
      */
     public function show(string $id)
     {
-        return MainTask::query()->findOrFail($id);
+        return MainTask::with(['group', 'users', 'subTasks' => function ($query) {
+            $query->orderBy('completed', 'asc')->orderBy('created_at', 'asc');
+        }])->findOrFail($id);
     }
 
     /**
