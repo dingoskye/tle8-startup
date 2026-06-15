@@ -33,10 +33,6 @@
     /* Overige kleuren */
     --color-button-purple: var(--purple);
     --color-deadline-red: #E57472;
-    /* Tekst dingen */
-    /*--color-text: var(--font-blue);*/
-    /*--font-headers: var(--headers);*/
-    /*--font-paragraph: var(--paragraph);*/
 }
 
 @theme inline {

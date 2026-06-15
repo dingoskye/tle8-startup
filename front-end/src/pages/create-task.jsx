@@ -7,7 +7,7 @@ import {useNavigate} from "react-router";
 // Nieuwe taak aanmaken.
 
 export function CreateTask() {
-    const {apiFetch} = useApi();
+    const {apiFetch, token} = useApi();
     const initialForm = {
         title: "",
         description: "",
@@ -75,6 +75,7 @@ export function CreateTask() {
         try {
             await apiFetch(`/main/create`, {
                 method: "POST",
+                headers: {"Authorization": `Bearer ${token}`},
                 body: formData,
             });
 

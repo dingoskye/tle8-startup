@@ -11,9 +11,13 @@ export function ApiProvider({children}) {
     async function refreshToken() {
         console.log(loginData)
         setToken(loginData.token)
-       
+
         await localStorage.setItem('token', loginData.token)
         await localStorage.setItem('user', JSON.stringify(loginData.user))
+    }
+
+    async function getData() {
+        setLoginData(JSON.parse(localStorage.getItem('user')))
     }
 
     async function apiFetch(endpoint, options = {}) {
@@ -36,7 +40,7 @@ export function ApiProvider({children}) {
     }
 
     return (
-        <ApiContext.Provider value={{apiFetch, setLoginData, loginData, token, refreshToken}}>
+        <ApiContext.Provider value={{apiFetch, setLoginData, loginData, token, refreshToken, getData}}>
             {children}
         </ApiContext.Provider>
     );

@@ -54,7 +54,7 @@ function TaskDetails() {
                             <div className="grid grid-cols-4 grow gap-4">
                                 <DeadlineCard deadline={task.deadline}/>
                                 <div className="col-span-3 text-left">
-                                    <h1 className="text-2xl font-headers">{task.title}</h1>
+                                    <h1 className="text-3xl font-headers">{task.title}</h1>
                                     <p>{task.description ?? "Geen beschrijving"}</p>
                                 </div>
                             </div>

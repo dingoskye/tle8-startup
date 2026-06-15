@@ -23,7 +23,7 @@ class MainTaskController extends Controller
             $query->orderBy('completed', 'asc')->orderBy('created_at', 'asc');
         }])->whereHas('users', function ($query) use ($userId) {
             $query->where('users.id', $userId);
-           })->orderBy('deadline', 'asc')->get();   
+        })->orderBy('deadline', 'asc')->get();
     }
 
     /**
@@ -31,12 +31,12 @@ class MainTaskController extends Controller
      */
     public function create(request $request)
     {
-            try { 
-                if (!$request->title || !$request->deadline || !$request->ai_file) {
+        try {
+            if (!$request->title || !$request->deadline || !$request->ai_file) {
                 return response(['error' => 'you are stupid'], 404);
             }
-               $aiFile = $request->file('ai_file')->storePublicly('storage', 'public');
-              
+            $aiFile = $request->file('ai_file')->storePublicly('storage', 'public');
+
 // todo aanpassen naar admin ipv user_id
             $userId = JWTAuth::parseToken()->authenticate()->id;
 
@@ -69,13 +69,13 @@ class MainTaskController extends Controller
     public function show(string $id)
     {
         $userId = JWTAuth::parseToken()->authenticate()->id;
-      
-      
-        $mainTask = MainTask::query()->findOrFail($id);
-        if ($mainTask->user_id == $userId) {
-         return MainTask::with(['group', 'users', 'subTasks' => function ($query) {
-            $query->orderBy('completed', 'asc')->orderBy('created_at', 'asc');
-        }])->findOrFail($id);
+
+        $mainTask = MainTask::with('users')->findOrFail($id);
+
+        if ($mainTask->users->contains('id', $userId)) {
+            return MainTask::with(['group', 'users', 'subTasks' => function ($query) {
+                $query->orderBy('completed', 'asc')->orderBy('created_at', 'asc');
+            }])->findOrFail($id);
         } else {
             return response()->json(['error' => 'you are not authorized'], 403);
         }
