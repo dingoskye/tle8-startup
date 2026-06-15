@@ -9,14 +9,14 @@ import {MainButton} from "@/components/ui/buttons.jsx";
 // MOCK DATA: Acting as a temporary database for the frontend prototype.
 
 const mockFriendsList = [
-    {id: '1', username: 'johndoe88'},
+    {id: '5', username: 'johndoe88'},
     {id: '2', username: 'barry_b'},
     {id: '3', username: 'gaz_berry'},
     {id: '4', username: 'pat_star123'}
 ];
 
 // MOCK DATA: Simulating the currently logged-in user
-const currentUser = {id: '0', name: 'Jij', username: 'mijn_account'};
+const currentUser = {id: '1', name: 'Jij', username: 'mijn_account'};
 
 const CreateGroup = () => {
     const navigate = useNavigate();
@@ -79,11 +79,21 @@ const CreateGroup = () => {
         setIsSubmitting(true);
 
         try {
+            // 1. Give the backend the 'role' and 'user_id' it demands to bypass the 404 error!
+            formData.append('role', 'admin');
+            formData.append('user_id', currentUser.id);
+
+            // 2. Rename 'photo' to 'image' so your Laravel controller can find it
+            const photoFile = formData.get('photo');
+            if (photoFile && photoFile.size > 0) {
+                formData.append('image', photoFile);
+                formData.delete('photo'); // Clean up the old name
+            }
+
             formData.append('members', JSON.stringify(selectedMembers.map(m => m.id)));
 
-            // 1. Use apiFetch instead of standard fetch.
-            // 2. Set the endpoint path
-            const data = await apiFetch('/api/group/create', {
+            // Send it to Laravel
+            const data = await apiFetch('/group/create', {
                 method: 'POST',
                 body: formData,
             });
@@ -243,7 +253,7 @@ const CreateGroup = () => {
 
                                     {member.id !== currentUser.id && (
                                         <button
-                                           
+
                                             onClick={() => setSelectedMembers(selectedMembers.filter(m => m.id !== member.id))}
                                             className="z-10 cursor-pointer rounded-full focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-black hover:scale-110 transition-transform"
                                             aria-label={`Verwijder ${member.username}`}

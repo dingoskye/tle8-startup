@@ -25,32 +25,39 @@ class GroupController extends Controller
             if (!$request->name || !$request->role) {
                 return response(['error' => 'you are stupid'], 404);
             }
+
+            //save the uploaded file to the server
+            $imagePath = null;
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('groups', 'public');
+            }
+
             $group = new Group([
                 'name' => $request->name,
                 'description' => $request->description,
-                'image' => $request->image,
+                'image' => $imagePath,
                 'user_id' => $request->user_id
             ]);
             $group->save();
 
-            $group->users()->attach($request->user_id, [
-                'role' => $request->role,
-            ]);
-
+            //Loop through the array of members sent by React
+            if ($request->members) {
+                $memberIds = json_decode($request->members);
+                foreach ($memberIds as $id) {
+                    $group->users()->attach($id, ['role' => $request->role]);
+                }
+            } else {
+                $group->users()->attach($request->user_id, [
+                    'role' => $request->role,
+                ]);
+            }
 
             return $group;
-        } catch (ModelNotFoundException $e) {
-            return response(['error' => $e], 500);
+
+        } catch (\Exception $e) {
+            // This will now catch ALL database errors and send the exact message to React!
+            return response(['error' => $e->getMessage()], 500);
         }
-    }
-
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        return Group::query()->findOrFail($id);
     }
 
     /**
