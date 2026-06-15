@@ -34,45 +34,74 @@
     --color-button-purple: var(--purple);
     --color-deadline-red: #E57472;
     /* Tekst dingen */
-    --color-text: var(--font-blue);
-    --font-headers: var(--headers);
-    --font-paragraph: var(--paragraph);
+    /*--color-text: var(--font-blue);*/
+    /*--font-headers: var(--headers);*/
+    /*--font-paragraph: var(--paragraph);*/
 }
 
 @theme inline {
     --color-background: var(--color-background);
+    --color-bg-white: var(--color-bg-white);
     --color-primary: var(--color-primary);
     --color-secondary: var(--color-secondary);
     --color-tertiary: var(--color-tertiary);
     --color-quaternary: var(--color-quaternary);
     --color-button-purple: var(--color-button-purple);
+
+    --color-text: var(--color-text);
+    --color-deadline-red: var(--color-deadline-red);
+
+    --font-headers: var(--font-headers);
+    --font-paragraph: var(--font-paragraph);
 }
 
 .theme-default {
     --color-background: var(--background);
+    --color-bg-white: var(--thomas-white);
     --color-primary: var(--skye-blue);
     --color-secondary: var(--jade-green);
     --color-tertiary: var(--christa-yellow);
     --color-quaternary: var(--flamingo-pink);
     --color-button-purple: var(--purple);
+
+    --color-text: var(--font-blue);
+    --color-deadline-red: #E57472;
 }
 
 .theme-natural {
     --color-background: #dac9aa;
+    --color-bg-white: var(--thomas-white);
     --color-primary: #def2c8;
     --color-secondary: #c5dac1;
     --color-tertiary: #bcd0c7;
     --color-quaternary: #a9b2ac;
     --color-button-purple: #ccccc1;
+
+    --color-text: var(--font-blue);
+    --color-deadline-red: #E57472;
 }
 
 .theme-dark {
     --color-background: #dac9aa;
-    --color-primary: #def2c8;
-    --color-secondary: #c5dac1;
-    --color-tertiary: #bcd0c7;
-    --color-quaternary: #a9b2ac;
-    --color-button-purple: #ccccc1;
+    --color-bg-white: #686767;
+    --color-primary: #45040c;
+    --color-secondary: #720714;
+    --color-tertiary: #000000;
+    --color-quaternary: #12562a;
+    --color-button-purple: #063a21;
+
+    --color-text: #f6f4f4;
+    --color-deadline-red: #a84747;
+}
+
+.font-default {
+    --font-headers: var(--headers);
+    --font-paragraph: var(--paragraph);
+}
+
+.font-simple {
+    --font-headers: "DynaPuff", sans-serif;
+    --font-paragraph: "Comic Neue", sans-serif;
 }
 
 /* dit is voor het testen van WCAG 1.4.12 Text Spacing */
