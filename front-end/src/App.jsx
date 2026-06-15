@@ -8,6 +8,7 @@ import GroupOverview from "@/pages/group-overview.jsx";
 import Welcome from "@/pages/welcome.jsx";
 import {ErrorPage} from "@/pages/Error.jsx";
 import GroupDetails from "@/pages/group-details.jsx";
+import Loading from "@/pages/loading.jsx";
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
                 <Route path="/hoofdtaken" element={<TaskOverview/>}/>
                 <Route path="/hoofdtaken/:id" element={<TaskDetails/>}/>
                 <Route path="*" element={<ErrorPage/>}/>
+                <Route path="/loading" element={<Loading/>}/>
             </Route>
         </Routes>
     )
