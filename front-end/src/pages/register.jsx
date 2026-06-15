@@ -108,7 +108,7 @@ function Register() {
 
         if (loginData.status > 300) {
             setErrors({
-                email: "wordt al gebruikt is niet correct.",
+                email: "Gebruikersnaam wordt al gebruikt.",
 
             });
         } else {
