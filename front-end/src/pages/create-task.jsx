@@ -26,7 +26,7 @@ export function CreateTask() {
 
     const [errors, setErrors] = useState({});
     const [submitting, setSubmitting] = useState(false);
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     //Form validatie.
     const validateForm = () => {

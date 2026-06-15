@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Models\MainTask;
+use App\Models\SubTask;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use function Laravel\Prompts\error;
