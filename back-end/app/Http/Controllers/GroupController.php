@@ -125,15 +125,15 @@ class GroupController extends Controller
     {
         try {
             // link aanmaken (in backend)
-            $link = bin2hex(random_bytes(16));
+            $code = bin2hex(random_bytes(6));
             // Group id opvangen
             $group = Group::query()->findOrFail($id);
             // link in database zetten
             $group->update([
-                'invite_link' => $link
+                'invite_link' => $code
             ]);
             // link naar front-end sturen
-            return $link;
+            return json_encode($code);
 
         } catch (ModelNotFoundException $e) {
             return response(['error' => $e], 500);
@@ -147,13 +147,17 @@ class GroupController extends Controller
             $userId = JWTAuth::parseToken()->authenticate()->id;
 
             // pak de group van de invite link
-            $group = Group::where('invite_link', $request->link)->firstOrFail();
-
-
+            $group = Group::where('invite_link', $request->code)->first();
+          
+            if (!$group) {
+                return response(['error' => 'Invite link not found'], 404);
+            }
             // als de user al in de groep is stuur de user terug
-            foreach ($group->users as $user) {
-                if ($user->id === $userId) {
-                    return response(['error' => 'Already in the group'], 403);
+            if ($group) {
+                foreach ($group->users as $user) {
+                    if ($user->id === $userId) {
+                        return response(['error' => 'Already in the group'], 401);
+                    }
                 }
             }
 

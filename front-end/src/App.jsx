@@ -11,6 +11,7 @@ import GroupDetails from "@/pages/group-details.jsx";
 import Register from "@/pages/register.jsx";
 import Login from "@/pages/login.jsx";
 import {CreateTask} from "@/pages/create-task.jsx";
+import {InviteCode, AcceptInvite} from "@/components/invite-code.jsx";
 
 function App() {
 
@@ -18,6 +19,8 @@ function App() {
         <Routes>
             <Route element={<Layout/>}>
                 <Route path="/" element={<Home/>}/>
+                <Route path="/code" element={<InviteCode/>}/>
+                <Route path="/accepteren" element={<AcceptInvite/>}/>
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/register" element={<Register/>}/>
                 <Route path="/welkom" element={<Welcome/>}/>
@@ -27,7 +30,6 @@ function App() {
                 <Route path="/hoofdtaken/:id" element={<TaskDetails/>}/>
                 <Route path="/hoofdtaak/aanmaken" element={<CreateTask/>}/>
                 <Route path="*" element={<ErrorPage/>}/>
-
             </Route>
         </Routes>
     )

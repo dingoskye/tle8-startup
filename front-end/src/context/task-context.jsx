@@ -34,7 +34,7 @@ export function MainTaskProvider({children}) {
                 }
             })
             return data
-            // console.log(data)
+
         } catch (e) {
             console.log(e.message)
         }
