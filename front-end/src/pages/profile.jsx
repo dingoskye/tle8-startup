@@ -47,6 +47,7 @@ function Profile() {
     }
 
     useEffect(() => {
+        document.title = "Board-it | Profiel";
         fetchThemes()
         fetchSettings()
         getData()
