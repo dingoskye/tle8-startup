@@ -50,7 +50,16 @@ class GroupController extends Controller
      */
     public function show(string $id)
     {
-        return Group::query()->findOrFail($id);
+//       $userId = JWTAuth::parseToken()->authenticate()->id;
+        //       $group = Group::with('users')->findOrFail($id);
+
+//        if ($group->users->contains('id', $userId)) {
+        return Group::with(['users', 'mainTasks' => function ($query) {
+            $query->orderBy('deadline', 'asc');
+        }])->findOrFail($id);
+//        } else {
+//            return response()->json(['error' => 'you are not authorized'], 403);
+//        }
     }
 
     /**

@@ -25,7 +25,7 @@ class Group extends Model
 
     public function mainTasks(): HasMany
     {
-        return $this->hasMany(MainTask::class, 'main_task_id');
+        return $this->hasMany(MainTask::class);
     }
 }
 

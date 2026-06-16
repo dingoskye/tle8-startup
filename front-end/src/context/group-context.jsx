@@ -23,10 +23,26 @@ export function GroupProvider({children}) {
         }
     }
 
+    async function fetchGroup(id) {
+        try {
+            const data = await apiFetch(`/api/group/${id}`, {
+                method: "GET",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                }
+            })
+            return (data)
+        } catch (e) {
+            console.log(e.message)
+        }
+    }
+
     return (
         <GroupContext.Provider value={{
             groups,
-            fetchGroups
+            fetchGroups,
+            fetchGroup
         }}>
             {children}
         </GroupContext.Provider>
