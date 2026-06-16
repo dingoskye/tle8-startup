@@ -14,7 +14,7 @@ const CreateGroup = () => {
 
     //documenten titels voor WCAG!!
     useEffect(() => {
-        document.title = "Board-it | studiengroep aanmaken";
+        document.title = "Board-it | studiegroep aanmaken";
     }, []);
 
     const [selectedMembers, setSelectedMembers] = useState([currentUser]);
@@ -135,7 +135,7 @@ const CreateGroup = () => {
 
             {/* --- HEADER SECTION --- */}
             <header role="banner" className="text-center p-1 mt-10 mb-10 relative">
-                <div className="bg-primary w-[80%] mx-auto p-4 rounded-lg shadow-md relative">
+                <div className="bg-primary  mx-auto p-4 rounded-lg shadow-md relative">
                     <Tape variant="big-r"/>
                     <Tape variant="big-l"/>
                     <h1 className="text-3xl  font-headers">Groep aanmaken</h1>
@@ -144,7 +144,7 @@ const CreateGroup = () => {
 
             {submitMessage && (
                 <div
-                    className={`mx-auto mb-6 p-4 rounded w-[70%] text-center font-bold ${submitMessage.type === 'success' ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'}`}>
+                    className={`mx-auto mb-6 p-4 rounded  text-center font-bold ${submitMessage.type === 'success' ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'}`}>
                     {submitMessage.text}
                 </div>
             )}
@@ -152,7 +152,7 @@ const CreateGroup = () => {
             <form className="flex flex-col items-center gap-6 w-full" onSubmit={handleCreateGroup}>
 
                 {/* --- NAME SECTION --- */}
-                <div className="w-[80%]">
+                <div className="w-full relative">
                     <Card variant="tertiary">
                         <label htmlFor="name" className="block mb-2 font-headers text-lg">Naam</label>
                         {errors.name &&
@@ -180,7 +180,7 @@ const CreateGroup = () => {
                 </div>
 
                 {/* --- DESCRIPTION SECTION --- */}
-                <div className="w-[80%]">
+                <div className="w-full relative">
                     <Card variant="quaternary">
                         <label htmlFor="description" className="block mb-2 font-headers text-lg">Beschrijving</label>
 
@@ -191,7 +191,7 @@ const CreateGroup = () => {
                                 id="description"
                                 className="w-full bg-bg-white shadow-xl/15 rounded-[3px] pl-5 pr-5 pt-2 pb-20"
                                 name="description"
-                                placeholder="geeft hier context over jou hoofdtaak"
+                                placeholder="geeft hier Beschrijving over jou hoofdtaak"
 
                             />
                         </div>
@@ -199,7 +199,7 @@ const CreateGroup = () => {
                 </div>
 
                 {/* --- PHOTO SECTION --- */}
-                <div className="w-[80%]">
+                <div className="w-full relative">
                     <Card variant="secondary">
 
                         <label htmlFor="photo" className="block mb-2 font-headers text-lg">Foto</label>
@@ -221,7 +221,7 @@ const CreateGroup = () => {
 
 
                 {/* --- MEMBERS SECTION --- */}
-                <div className="w-[80%]">
+                <div className="w-full relative">
                     <Card variant="white">
                         <h2 className="block text-2xl font-headers mb-4">Leden:</h2>
                         {errors.members && <p className="text-red-700 font-bold mb-4 text-sm">{errors.members}</p>}
@@ -342,7 +342,7 @@ const CreateGroup = () => {
                 <div>
                     <div>
                         <MainButton
-                            className="mt-2 mb-2 ml-3 mr-3"
+                            me="w-full"
                             type="submit"
                             disabled={isSubmitting}
                         >
