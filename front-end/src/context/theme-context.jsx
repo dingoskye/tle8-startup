@@ -38,7 +38,7 @@ export function ThemeProvider({children}) {
                 }
             })
             setSettings(data[0])
-            console.log(data)
+            // console.log(data)
             setTheme(`theme-${data[0].theme.name}`)
             setFont(data[0].written_font ? "font-default" : "font-simple")
         } catch (e) {
@@ -58,7 +58,7 @@ export function ThemeProvider({children}) {
                 body: JSON.stringify(formData)
             })
             // console.log(data.status)
-            console.log(data.theme);
+            // console.log(data.theme);
             setSettings(data)
             setTheme(`theme-${data.theme.name}`)
             setFont(data.written_font ? "font-default" : "font-simple")
@@ -69,8 +69,6 @@ export function ThemeProvider({children}) {
     }
 
     useEffect(() => {
-        console.log("Theme:", theme);
-        console.log("Font:", font);
         document.documentElement.classList.remove(
             "theme-default",
             "theme-natural",
@@ -81,6 +79,10 @@ export function ThemeProvider({children}) {
 
         document.documentElement.className = `${theme} ${font}`;
     }, [theme, font]);
+
+    useEffect(() => {
+        fetchSettings()
+    }, [])
 
     return (
         <ThemeContext.Provider value={{
