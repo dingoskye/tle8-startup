@@ -6,17 +6,8 @@ import Punaise from "@/components/ui/punaise.jsx";
 import {useApi} from "@/context/api-context.jsx";
 import {User} from 'lucide-react';
 import {MainButton} from "@/components/ui/buttons.jsx";
-// MOCK DATA: Acting as a temporary database for the frontend prototype.
 
-const mockFriendsList = [
-    {id: '5', username: 'johndoe88'},
-    {id: '2', username: 'barry_b'},
-    {id: '3', username: 'gaz_berry'},
-    {id: '4', username: 'pat_star123'}
-];
-
-// MOCK DATA: Simulating the currently logged-in user
-const currentUser = {id: '1', name: 'Jij', username: 'mijn_account'};
+const currentUser = {id: '1', name: 'Jij', user_name: 'mijn_account'};
 
 const CreateGroup = () => {
     const navigate = useNavigate();
@@ -34,6 +25,27 @@ const CreateGroup = () => {
     const {apiFetch} = useApi();
     const plusButtonRef = useRef(null);
     const [searchQuery, setSearchQuery] = useState('');
+    const [availableUsers, setAvailableUsers] = useState([]);
+
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+
+                const users = await apiFetch('/user');
+
+
+                const filteredUsers = users.filter(user => String(user.id) !== String(currentUser.id));
+
+
+                setAvailableUsers(filteredUsers);
+            } catch (error) {
+                console.error("Error fetching users:", error);
+            }
+        };
+
+        fetchUsers();
+    }, [apiFetch]);
 
     const handleCreateGroup = async (e) => {
         e.preventDefault();
@@ -207,32 +219,6 @@ const CreateGroup = () => {
                     </Card>
                 </div>
 
-                {/* --- LEADERBOARD SECTION --- */}
-                <div className="w-[80%]">
-                    <Card variant="tertiary">
-                        {/* Added gap-4 here so they don't collide */}
-                        <div className="flex items-center justify-between w-full gap-4">
-
-                            {/* Added flex-1 here so the text wraps nicely on mobile */}
-                            <div className="flex-1">
-                                <label htmlFor="leaderboard" className="block font-headers text-lg cursor-pointer">
-                                    Leaderboard Toevoegen?
-                                </label>
-                                <p className="text-sm opacity-80 mt-1">
-                                    Vink dit aan als je een ranglijst wilt bijhouden voor deze groep.
-                                </p>
-                            </div>
-
-                            {/* Added shrink-0 here so the checkbox never gets squished or pushed out */}
-                            <input
-                                id="leaderboard"
-                                name="leaderboard"
-                                type="checkbox"
-                                className="shrink-0 w-8 h-8 cursor-pointer accent-button-purple bg-bg-white border-2 border-black rounded-md shadow-sm transition-transform hover:scale-110"
-                            />
-                        </div>
-                    </Card>
-                </div>
 
                 {/* --- MEMBERS SECTION --- */}
                 <div className="w-[80%]">
@@ -268,7 +254,7 @@ const CreateGroup = () => {
                                         className="w-10 h-10 mb-1 mt-4 text-black  bg-bg-white border-2 border-black rounded-full p-1"/>
 
                                     <p className="text-xs mb-2 whitespace-nowrap overflow-hidden text-ellipsis w-full text-center font-bold">
-                                        @{member.username}
+                                        @{member.user_name}
                                     </p>
                                 </div>
                             ))}
@@ -281,7 +267,7 @@ const CreateGroup = () => {
                                     aria-label="Voeg een lid toe"
                                     onClick={() => {
                                         setIsMenuOpen(!isMenuOpen);
-                                        setSearchQuery(""); // Reset search when opening/closing
+                                        setSearchQuery("");
                                     }}
                                     className="flex items-center justify-center w-12 h-12 rounded-full bg-button-purple border-4 border-white shadow-lg text-2xl font-bold hover:scale-105 transition-transform"
                                 >
@@ -306,10 +292,10 @@ const CreateGroup = () => {
                                         {/* MEMBER LIST */}
                                         <ul className="list-none p-0 m-0 max-h-48 overflow-y-auto">
 
-                                            {/* 1. FILTER AND MAP THE MEMBERS */}
-                                            {mockFriendsList
+                                            {/* 1. FILTER AND MAP THE REAL MEMBERS */}
+                                            {availableUsers
                                                 .filter((friend) => !selectedMembers.some((m) => m.id === friend.id))
-                                                .filter((friend) => friend.username.toLowerCase().includes(searchQuery.toLowerCase()))
+                                                .filter((friend) => friend.user_name?.toLowerCase().includes(searchQuery.toLowerCase()))
                                                 .map((friend) => (
                                                     <li key={friend.id}>
                                                         <button
@@ -329,15 +315,15 @@ const CreateGroup = () => {
                                                                 }, 0);
                                                             }}
                                                         >
-                                                            @{friend.username}
+                                                            @{friend.user_name}
                                                         </button>
                                                     </li>
                                                 ))}
 
-                                            {/* 2. THE EMPTY STATE (Only shows if the filters above leave 0 results) */}
-                                            {mockFriendsList
+                                            {/* 2. THE EMPTY STATE */}
+                                            {availableUsers
                                                 .filter((friend) => !selectedMembers.some((m) => m.id === friend.id))
-                                                .filter((friend) => friend.username.toLowerCase().includes(searchQuery.toLowerCase()))
+                                                .filter((friend) => friend.user_name.toLowerCase().includes(searchQuery.toLowerCase()))
                                                 .length === 0 && (
                                                 <li className="px-4 py-3 text-sm text-gray-500 text-center italic">
                                                     Geen resultaten gevonden.
