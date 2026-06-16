@@ -3,13 +3,13 @@ function ThemeColors({theme}) {
 
     switch (theme) {
         case "default":
-            colors = ["7CC1EC", "7EE572FF", "FCF457FF", "FFB6C1FF", "DDAEFEFF"]
+            colors = ["bg-default-1", "bg-default-2", "bg-default-3", "bg-default-4", "bg-default-5"]
             break
         case "natural":
-            colors = ["eee4e1", "e7d8c9", "e6beae", "b2967d", "ecf8f8"]
+            colors = ["bg-natural-1", "bg-natural-2", "bg-natural-3", "bg-natural-4", "bg-natural-5"]
             break
         case "dark":
-            colors = ["45040c", "720714", "000000", "12562a", "063a21"]
+            colors = ["bg-dark-1", "bg-dark-2", "bg-dark-3", "bg-dark-4", "bg-dark-5"]
             break
     }
 
@@ -17,7 +17,7 @@ function ThemeColors({theme}) {
         <div className="flex w-[50%]">
             {colors.length > 0 ?
                 colors.map((color, key) =>
-                    <div key={key} className={`w-10 h-4 border border-black`} style={{backgroundColor: `#${color}`}}/>)
+                    <div key={key} className={`w-10 h-4 border border-black ${color}`}/>)
                 : null}
         </div>
     )

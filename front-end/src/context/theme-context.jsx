@@ -46,7 +46,39 @@ export function ThemeProvider({children}) {
         }
     }
 
+    async function saveSettings(formData) {
+        try {
+            const data = await apiFetch(`/theme/edit`, {
+                method: "PUT",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
+                },
+                body: JSON.stringify(formData)
+            })
+            // console.log(data.status)
+            console.log(data.theme);
+            setSettings(data)
+            setTheme(`theme-${data.theme.name}`)
+            setFont(data.written_font ? "font-default" : "font-simple")
+            return data
+        } catch (e) {
+            console.log(e.message)
+        }
+    }
+
     useEffect(() => {
+        console.log("Theme:", theme);
+        console.log("Font:", font);
+        document.documentElement.classList.remove(
+            "theme-default",
+            "theme-natural",
+            "theme-dark",
+            "font-default",
+            "font-simple"
+        );
+
         document.documentElement.className = `${theme} ${font}`;
     }, [theme, font]);
 
@@ -57,7 +89,8 @@ export function ThemeProvider({children}) {
             knownThemes,
             settings,
             fetchThemes,
-            fetchSettings
+            fetchSettings,
+            saveSettings
         }}>
             {children}
         </ThemeContext.Provider>

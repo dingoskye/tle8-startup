@@ -33,6 +33,25 @@
     /* Overige kleuren */
     --color-button-purple: var(--purple);
     --color-deadline-red: #E57472;
+
+    /* theme stuff */
+    --color-default-1: var(--skye-blue);
+    --color-default-2: var(--jade-green);
+    --color-default-3: var(--christa-yellow);
+    --color-default-4: var(--flamingo-pink);
+    --color-default-5: var(--purple);
+
+    --color-natural-1: #eee4e1;
+    --color-natural-2: #e7d8c9;
+    --color-natural-3: #e6beae;
+    --color-natural-4: #b2967d;
+    --color-natural-5: #ecf8f8;
+
+    --color-dark-1: #45040c;
+    --color-dark-2: #720714;
+    --color-dark-3: #2e2e2e;
+    --color-dark-4: #12562a;
+    --color-dark-5: #063a21;
 }
 
 @theme inline {
@@ -67,24 +86,24 @@
 .theme-natural {
     --color-background: #dac9aa;
     --color-bg-white: var(--thomas-white);
-    --color-primary: #eee4e1;
-    --color-secondary: #e7d8c9;
-    --color-tertiary: #e6beae;
-    --color-quaternary: #b2967d;
-    --color-button-purple: #ecf8f8;
+    --color-primary: var(--color-natural-1);
+    --color-secondary: var(--color-natural-2);
+    --color-tertiary: var(--color-natural-3);
+    --color-quaternary: var(--color-natural-4);
+    --color-button-purple: var(--color-natural-5);
 
     --color-text: var(--font-blue);
     --color-deadline-red: #E57472;
 }
 
 .theme-dark {
-    --color-background: #dac9aa;
+    --color-background: #c1b295;
     --color-bg-white: #686767;
-    --color-primary: #45040c;
-    --color-secondary: #720714;
-    --color-tertiary: #000000;
-    --color-quaternary: #12562a;
-    --color-button-purple: #063a21;
+    --color-primary: var(--color-dark-1);
+    --color-secondary: var(--color-dark-2);
+    --color-tertiary: var(--color-dark-3);
+    --color-quaternary: var(--color-dark-4);
+    --color-button-purple: var(--color-dark-4);
 
     --color-text: #f6f4f4;
     --color-deadline-red: #a84747;

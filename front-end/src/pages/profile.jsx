@@ -1,17 +1,46 @@
 import Tape from "@/components/ui/tape.jsx";
 import {useTheme} from "@/context/theme-context.jsx";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {Card, TapeCard} from "@/components/ui/cards.jsx";
 import {useApi} from "@/context/api-context.jsx";
 import ThemeColors from "@/components/ui/theme.jsx";
-import {MainButton, SubmitButton} from "@/components/ui/buttons.jsx";
+import {FunctionButton, MainButton, SubmitButton} from "@/components/ui/buttons.jsx";
+import {useNavigate} from "react-router";
+import {useLogin} from "@/context/login-context.jsx";
+import {useMainTask} from "@/context/task-context.jsx";
+import {useGroup} from "@/context/group-context.jsx";
 
 function Profile() {
-    const {fetchThemes, knownThemes, fetchSettings, settings} = useTheme()
+    const {fetchThemes, knownThemes, fetchSettings, settings, saveSettings} = useTheme()
     const {loginData, getData} = useApi()
+    const {logout} = useLogin()
+    const {setMainTasks} = useMainTask()
+    const {setGroups} = useGroup()
+    const [done, setDone] = useState(false)
+    const [error, setError] = useState(null)
+    const [formData, setFormData] = useState({
+        theme_id: 1,
+        written_font: false
+    });
+    const navigate = useNavigate()
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
+
+        const res = await saveSettings(formData)
+        console.log(res)
+        if (res.id) {
+            setDone(true)
+        } else {
+            setError("Er is iets fout gegaan")
+        }
+    }
+
+    const loggingOut = async () => {
+        await logout()
+        setMainTasks(null)
+        setGroups(null)
+        navigate("/welkom")
     }
 
     useEffect(() => {
@@ -19,6 +48,15 @@ function Profile() {
         fetchSettings()
         getData()
     }, []);
+
+    useEffect(() => {
+        if (settings) {
+            setFormData({
+                theme_id: settings.theme.id,
+                written_font: settings.written_font
+            });
+        }
+    }, [settings])
 
     return (
         <>
@@ -32,6 +70,8 @@ function Profile() {
 
             <TapeCard variant="white">
                 <h2 className="text-2xl font-headers mb-2">Settings:</h2>
+                {done ? <p>Settings opgeslagen!</p> : null}
+                {error ? <p>{error}</p> : null}
                 <form className="h-full flex gap-4 flex-col" onSubmit={handleSubmit}>
                     <Card variant="secondary">
                         <h3 className="text-xl font-headers mt-2">Kleuren:</h3>
@@ -40,7 +80,13 @@ function Profile() {
                                 <div className="flex gap-4">
                                     <input type="radio" id={theme.name} name="theme"
                                            value={theme.id}
-                                           checked={settings ? settings.theme.name === theme.name : null}/>
+                                           checked={formData.theme_id === theme.id}
+                                           onChange={(e) =>
+                                               setFormData({
+                                                   ...formData,
+                                                   theme_id: Number(e.target.value)
+                                               })
+                                           }/>
                                     <label htmlFor={theme.name} className="text-lg">{theme.name}</label>
                                 </div>
                                 <ThemeColors theme={theme.name}/>
@@ -52,7 +98,13 @@ function Profile() {
                         <div className="flex gap-3 justify-center">
                             <label htmlFor="written_font" className="text-lg">Wil je een geschreven fontje?</label>
                             <input id="written_font" type="checkbox"
-                                   checked={settings ? settings.written_font : null}/>
+                                   checked={formData.written_font}
+                                   onChange={(e) =>
+                                       setFormData({
+                                           ...formData,
+                                           written_font: e.target.checked
+                                       })
+                                   }/>
                         </div>
                     </Card>
                     <div className="w-[60%] md:w-[30%] mx-auto">
@@ -62,7 +114,7 @@ function Profile() {
             </TapeCard>
 
             <div className="w-[60%] md:w-[30%] mx-auto">
-                <MainButton link={"/logout"}>Uitloggen</MainButton>
+                <FunctionButton f={loggingOut}>Uitloggen</FunctionButton>
             </div>
         </>
     )

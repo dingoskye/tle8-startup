@@ -24,9 +24,11 @@ class ThemeController extends Controller
     {
         $userId = JWTAuth::parseToken()->authenticate()->id;
 
-        $settings = UserSetting::find($userId);
+        $settings = UserSetting::with('theme')->where('user_id', '=', $userId)->first();
         $settings->theme_id = $request->theme_id;
         $settings->written_font = $request->written_font;
         $settings->save();
+
+        return UserSetting::with('theme')->where('user_id', '=', $userId)->first();
     }
 }

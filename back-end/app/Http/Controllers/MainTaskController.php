@@ -35,10 +35,10 @@ class MainTaskController extends Controller
             if (!$request->title || !$request->deadline || !$request->ai_file) {
                 return response(['error' => 'you are stupid'], 404);
             }
-            $aiFile = $request->file('ai_file')->storePublicly('storage', 'public');
-
-// todo aanpassen naar admin ipv user_id
+            // todo aanpassen naar admin ipv user_id
             $userId = JWTAuth::parseToken()->authenticate()->id;
+
+            $aiFile = $request->file('ai_file')->storePublicly('storage', 'public');
 
             $mainTask = new MainTask([
                 'title' => $request->title,
@@ -46,7 +46,6 @@ class MainTaskController extends Controller
                 'description' => $request->description,
                 'ai_file' => $aiFile,
                 'group_id' => $request->group_id,
-
             ]);
             $mainTask->save();
 
