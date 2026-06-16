@@ -20,7 +20,7 @@ export function ThemeProvider({children}) {
                     "Authorization": `Bearer ${token}`,
                 }
             })
-            console.log(data)
+            // console.log(data)
             setKnownThemes(data)
         } catch (e) {
             console.log(e.message)
@@ -80,14 +80,12 @@ export function ThemeProvider({children}) {
         document.documentElement.className = `${theme} ${font}`;
     }, [theme, font]);
 
-    useEffect(() => {
-        fetchSettings()
-    }, [])
-
     return (
         <ThemeContext.Provider value={{
             theme,
+            setTheme,
             font,
+            setFont,
             knownThemes,
             settings,
             fetchThemes,

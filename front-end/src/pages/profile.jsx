@@ -16,6 +16,7 @@ function Profile() {
     const {logout} = useLogin()
     const {setMainTasks} = useMainTask()
     const {setGroups} = useGroup()
+    const {setTheme, setFont} = useTheme()
     const [done, setDone] = useState(false)
     const [error, setError] = useState(null)
     const [formData, setFormData] = useState({
@@ -28,7 +29,7 @@ function Profile() {
         e.preventDefault()
 
         const res = await saveSettings(formData)
-        console.log(res)
+        // console.log(res)
         if (res.id) {
             setDone(true)
         } else {
@@ -40,6 +41,8 @@ function Profile() {
         await logout()
         setMainTasks(null)
         setGroups(null)
+        setTheme("theme-default")
+        setFont("font-default")
         navigate("/welkom")
     }
 

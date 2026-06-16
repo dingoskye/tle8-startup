@@ -8,12 +8,13 @@ import GroupCard from "@/components/group-card.jsx";
 import {useMainTask} from "@/context/task-context.jsx";
 import {useGroup} from "@/context/group-context.jsx";
 import {useApi} from "@/context/api-context.jsx";
-import login from "@/pages/login.jsx";
+import {useTheme} from "@/context/theme-context.jsx";
 
 function Home() {
     const {fetchMainTasks, mainTasks} = useMainTask()
     const {fetchGroups, groups} = useGroup()
     const {loginData, getData} = useApi()
+    const {fetchSettings} = useTheme()
 
     const variants = [
         "secondary",
@@ -28,6 +29,7 @@ function Home() {
         fetchMainTasks()
         fetchGroups()
         getData()
+        fetchSettings()
     }, []);
 
     return (
