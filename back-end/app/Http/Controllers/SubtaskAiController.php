@@ -42,7 +42,40 @@ class SubtaskAiController extends Controller
             ], 422);
         }
 
-        $documentContent = Storage::disk('public')->get($mainTask->ai_file);
+//        $documentContent = Storage::disk('public')->get($mainTask->ai_file);
+
+        // 1. Haal de extensie van het bestand op (bijv. 'txt' of 'pdf')
+        $extension = strtolower(pathinfo($mainTask->ai_file, PATHINFO_EXTENSION));
+
+// 2. Haal de ruwe (binaire) inhoud van de schijf
+        $rawContent = Storage::disk('public')->get($mainTask->ai_file);
+        $documentContent = '';
+
+        if ($extension === 'txt' || $extension === 'md') {
+            // Als het al platte tekst is, kunnen we het direct gebruiken
+            $documentContent = $rawContent;
+        } elseif ($extension === 'pdf') {
+            // Als het een PDF is, zetten we het om naar tekst
+            try {
+                $parser = new \Smalot\PdfParser\Parser();
+                $pdf = $parser->parseContent($rawContent);
+                $documentContent = $pdf->getText();
+
+                // Optioneel: Ruim eventuele overbodige witruimtes op die de parser achterlaat
+                $documentContent = trim(preg_replace('/\s+/', ' ', $documentContent));
+
+            } catch (\Exception $e) {
+                return response()->json([
+                    'message' => 'Er is iets misgegaan tijdens het uitlezen van het PDF-bestand.',
+                    'error' => $e->getMessage(),
+                ], 422);
+            }
+        } else {
+            // Mocht er een ander bestandstype in de database staan
+            return response()->json([
+                'message' => 'Dit bestandstype (' . $extension . ') wordt niet ondersteund. Upload een .txt of .pdf.',
+            ], 422);
+        }
 
         $systemPrompt =  '
         Je bent een ervaren projectplanner en werkvoorbereider.
