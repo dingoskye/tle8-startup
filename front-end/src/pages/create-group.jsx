@@ -214,6 +214,7 @@ const CreateGroup = () => {
                                 id="photo"
                                 name="photo"
                                 accept="image/png, image/jpeg, image/webp"
+
                             />
                         </div>
                     </Card>
