@@ -103,7 +103,7 @@ class SubtaskAiController extends Controller
 
         $endpoint = rtrim(env('AZURE_OPENAI_URL'), '/');
         $deployment = env('AZURE_OPENAI_API_DEPLOYMENT_NAME');
-        $apiVersion = env('AZURE_OPENAI_API_VERSION', '2024-02-15-preview');
+        $apiVersion = env('AZURE_OPENAI_API_VERSION', '2025-03-01-preview');
 
         $response = Http::withHeaders([
             'api-key' => env('AZURE_OPENAI_API_KEY'),
