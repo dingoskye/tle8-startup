@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import {useEffect, useState} from "react";
+import {Link, useNavigate, useParams} from "react-router";
 import {Card} from "@/components/ui/cards.jsx";
 import Tape from "@/components/ui/tape.jsx";
 import {useApi} from "@/context/api-context.jsx";
@@ -36,6 +36,7 @@ function Subtask() {
                 headers: {
                     Accept: "application/json",
                     "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
                 },
             });
 
@@ -47,7 +48,7 @@ function Subtask() {
     }
 
     const handleInputChange = (e) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
 
         setFormData((prev) => ({
             ...prev,
@@ -83,14 +84,14 @@ function Subtask() {
         // Deze console log is een restant van testen, die voor toekomstige problemen ook gebruikt kan worden
         // console.log(formData);
 
-            const validationErrors = validateForm();
+        const validationErrors = validateForm();
 
-            if (Object.keys(validationErrors).length > 0) {
-                setErrors(validationErrors);
-                return;
-            }
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return;
+        }
 
-            setErrors({});
+        setErrors({});
 
         try {
             const res = await fetch(
@@ -123,7 +124,7 @@ function Subtask() {
     };
 
     return (
-      <Card variant={"white"}>
+        <Card variant={"white"}>
 
             <h1 className="text-4xl font-bold font-headers mb-10  flex items-center justify-center">
                 {details?.title}
@@ -188,7 +189,8 @@ function Subtask() {
 
                                         {/* slider dot */}
                                         {Number(formData.niveau) === value && (
-                                            <span className="absolute top-4 z-30 h-5 w-5 rounded-full bg-red-600 [box-shadow:2px_2px_6px_rgba(0,0,0,0.7)] before:absolute before:top-1/2 before:left-1/2 before:block before:size-3.5 before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-full before:bg-red-600 before:[box-shadow:inset_2px_2px_4px_rgba(255,255,255,0.25),2px_2px_6px_rgba(80,80,80,0.5)] before:content-['']" />
+                                            <span
+                                                className="absolute top-4 z-30 h-5 w-5 rounded-full bg-red-600 [box-shadow:2px_2px_6px_rgba(0,0,0,0.7)] before:absolute before:top-1/2 before:left-1/2 before:block before:size-3.5 before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-full before:bg-red-600 before:[box-shadow:inset_2px_2px_4px_rgba(255,255,255,0.25),2px_2px_6px_rgba(80,80,80,0.5)] before:content-['']"/>
                                         )}
                                     </button>
                                 ))}
@@ -208,12 +210,13 @@ function Subtask() {
                         </div>
 
                     </div>
-                    <button type="submit" className="self-center mt-16 px-8 py-2 rounded-full bg-[#ddaefe] text-black border-2 border-white shadow-md font-bold hover:scale-105 transition">
+                    <button type="submit"
+                            className="self-center mt-16 px-8 py-2 rounded-full bg-[#ddaefe] text-black border-2 border-white shadow-md font-bold hover:scale-105 transition">
                         Genereren
                     </button>
                 </form>
             </section>
-      </Card>
+        </Card>
     );
 }
 
