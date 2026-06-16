@@ -15,6 +15,14 @@ class SubTask extends Model
 {
     use SoftDeletes;
 
+    protected $fillable = [
+        'title',
+        'user_id',
+        'description',
+        'main_task_id',
+        'group_id',
+    ];
+
     public function user(): HasOne
     {
         return $this->hasOne(User::class);

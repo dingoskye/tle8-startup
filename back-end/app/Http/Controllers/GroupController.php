@@ -7,6 +7,7 @@ use App\Models\MainTask;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class GroupController extends Controller
 {
@@ -15,7 +16,13 @@ class GroupController extends Controller
      */
     public function index()
     {
-        return Group::all();
+        $userId = JWTAuth::parseToken()->authenticate()->id;
+//        echo JWTAuth::parseToken()->authenticate()->id;
+//        echo $userId;
+
+        return Group::with('users')->whereHas('users', function ($query) use ($userId) {
+            $query->where('users.id', $userId);
+        })->get();
     }
 
 
@@ -25,15 +32,19 @@ class GroupController extends Controller
             if (!$request->name || !$request->role) {
                 return response(['error' => 'you are stupid'], 404);
             }
+            // todo aanpassen naar admin ipv user_id
+
+            $userId = JWTAuth::parseToken()->authenticate()->id;
+
             $group = new Group([
                 'name' => $request->name,
                 'description' => $request->description,
+
                 'image' => $request->image,
-                'user_id' => $request->user_id
             ]);
             $group->save();
 
-            $group->users()->attach($request->user_id, [
+            $group->users()->attach($userId, [
                 'role' => $request->role,
             ]);
 
@@ -50,7 +61,14 @@ class GroupController extends Controller
      */
     public function show(string $id)
     {
-        return Group::query()->findOrFail($id);
+        $userId = JWTAuth::parseToken()->authenticate()->id;
+        $group = Group::query()->findOrFail($id);
+        // todo aanpassen naar admin ipv user_id
+        if ($group->user_id === $userId) {
+            return $group;
+        } else {
+            return response()->json(['error' => 'you are not authorized'], 403);
+        }
     }
 
     /**
@@ -59,22 +77,27 @@ class GroupController extends Controller
     public function edit(string $id, request $request)
     {
         try {
-            echo $request->role;
-            if (!$request->name || !$request->role || !$request->user_id) {
+
+            if (!$request->name || !$request->role) {
                 return response(['error' => 'you are stupid'], 404);
             }
+
             $group = Group::query()->findOrFail($id);
+            $userId = JWTAuth::parseToken()->authenticate()->id;
+            // todo aanpassen naar admin ipv user_id
+            if ($group->user_id = $userId) {
 
-            $group->update([
-                'name' => $request->name ?? $group->name,
-                'description' => $request->description ?? $group->description,
-            ]);
-            $group->users()->updateExistingPivot($request->user_id, [
-                'role' => $request->role ?? $group->role
-            ]);
-
-
-            return $group;
+                $group->update([
+                    'name' => $request->name ?? $group->name,
+                    'description' => $request->description ?? $group->description,
+                ]);
+                $group->users()->updateExistingPivot($userId, [
+                    'role' => $request->role ?? $group->role
+                ]);
+                return $group;
+            } else {
+                return response()->json(['error' => 'you are not authorized'], 403);
+            }
         } catch (ModelNotFoundException $e) {
             return response(['error' => $e], 500);
         }
@@ -86,8 +109,15 @@ class GroupController extends Controller
      */
     public function delete(string $id)
     {
+        $userId = JWTAuth::parseToken()->authenticate()->id;
         $group = Group::query()->findOrFail($id);
-        $group->delete();
-        return $group;
+        // todo aanpassen naar admin ipv user_id
+        if ($group->user_id === $userId) {
+
+            $group->delete();
+            return $group;
+        } else {
+            return response()->json(['error' => 'you are not authorized'], 403);
+        }
     }
 }
