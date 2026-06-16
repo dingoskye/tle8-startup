@@ -7,10 +7,6 @@ use App\Http\Controllers\GroupController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SubtaskAiController;
 
-//AI routes
-Route::get('/main-tasks/{id}/generate-subtasks', [SubtaskAiController::class, 'generate']);
-Route::post('/main-tasks/{mainTask}/generate-subtasks', [SubtaskAiController::class, 'generate']);
-
 // User controller routes
 Route::post('/user/login', [UserController::class, 'login']);
 Route::post('/user/register', [UserController::class, 'register']);
@@ -20,6 +16,10 @@ Route::middleware('jwt')->group(function () {
     Route::get('/user/{id}', [UserController::class, 'show']);
     Route::put('/user/edit/{id}', [UserController::class, 'edit']);
 
+
+    //AI routes
+    Route::get('/main-tasks/{id}/generate-subtasks', [SubtaskAiController::class, 'generate']);
+    Route::post('/main-tasks/{mainTask}/generate-subtasks', [SubtaskAiController::class, 'generate']);
 
 //Group controller routes
     Route::post('/group/create', [GroupController::class, 'create']);

@@ -20,7 +20,7 @@ function App() {
             <Route element={<Layout/>}>
                 <Route path="/" element={<Home/>}/>
                 <Route path="/login" element={<Login/>}/>
-                <Route path="/register" element={<Register/>}/>
+                <Route path="/registreren" element={<Register/>}/>
                 <Route path="/welkom" element={<Welcome/>}/>
                 <Route path="/studiegroepen" element={<GroupOverview/>}/>
                 <Route path="/studiegroepen/:id" element={<GroupDetails/>}/>
@@ -28,8 +28,7 @@ function App() {
                 <Route path="/hoofdtaken/:id" element={<TaskDetails/>}/>
                 <Route path="/hoofdtaak/aanmaken" element={<CreateTask/>}/>
                 <Route path="*" element={<ErrorPage/>}/>
-
-                <Route path="/subtaak-aanmaken/:id" element={<Subtask/>}/>
+                <Route path="/subtaak-genereren/:id" element={<Subtask/>}/>
             </Route>
         </Routes>
     )

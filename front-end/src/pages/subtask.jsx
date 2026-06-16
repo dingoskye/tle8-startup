@@ -5,7 +5,7 @@ import Tape from "@/components/ui/tape.jsx";
 import {useApi} from "@/context/api-context.jsx";
 
 function Subtask() {
-    const {apiFetch} = useApi();
+    const {apiFetch, token} = useApi();
 
 
     const params = useParams();
@@ -20,24 +20,16 @@ function Subtask() {
     const [formData, setFormData] = useState({
         context: '',
         niveau: 1,
-        // main_task_id: id,
     });
     const [details, setDetails] = useState(null);
     const [errors, setErrors] = useState({});
 
     useEffect(() => {
         if (!id) return;
-
-        // setFormData((prev) => ({
-        //     ...prev,
-        //     main_task_id: id,
-        // }));
-
         fetchTaskDetails(id);
     }, [id]);
 
     async function fetchTaskDetails(id) {
-            // console.log("ID IN LOADDETAILS:", id);
         try {
             const data = await apiFetch(`/main/details/${id}`, {
                 method: "GET",
@@ -51,7 +43,6 @@ function Subtask() {
             console.log(data);
         } catch (e) {
             console.log(e.message);
-            // navigate("/");
         }
     }
 
@@ -86,50 +77,20 @@ function Subtask() {
         return newErrors;
     };
 
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //     console.log(formData);
-    //
-    //     const validationErrors = validateForm();
-    //
-    //     if (Object.keys(validationErrors).length > 0) {
-    //         setErrors(validationErrors);
-    //         return;
-    //     }
-    //
-    //     setErrors({});
-    //
-    //     try {
-    //         const res = await apiFetch(`/main-tasks/${id}/generate-subtasks`,
-    //             {
-    //                 method: 'POST',
-    //                 headers: {
-    //                     'Access-Control-Allow-Headers': '*',
-    //                     'Content-Type': 'application/json',
-    //                     'Accept': 'application/json'
-    //                 },
-    //                  body: JSON.stringify({
-    //                     ...formData,
-    //                     main_task_id: id,
-    //                 }),
-    //             });
-    //
-    //         if (!res.ok) {
-    //             throw new Error("Create failed");
-    //         }
-    //
-    //       const created = await res.json();
-    //         console.log("Backend response:", created);
-    //         navigate("/hoofdtaken/:id", { state: { created } });
-    //
-    //         } catch (e) {
-    //             console.error(e);
-    //         }
-    // };
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        console.log(formData);
+        // Deze console log is een restant van testen, die voor toekomstige problemen ook gebruikt kan worden
+        // console.log(formData);
+
+            const validationErrors = validateForm();
+
+            if (Object.keys(validationErrors).length > 0) {
+                setErrors(validationErrors);
+                return;
+            }
+
+            setErrors({});
 
         try {
             const res = await fetch(
@@ -139,6 +100,7 @@ function Subtask() {
                     headers: {
                         "Content-Type": "application/json",
                         "Accept": "application/json",
+                        "Authorization": `Bearer ${token}`
                     },
                     body: JSON.stringify(formData),
                 }
@@ -195,8 +157,6 @@ function Subtask() {
 
                     <div className="relative bg-(--christa-yellow) p-4 shadow-md">
 
-                        {/*<div className="absolute -top-2 -left-2 w-8 h-2 bg-amber-700/60 -rotate-45"></div>*/}
-                        {/*<div className="absolute -top-2 -right-2 w-8 h-2 bg-amber-700/60 rotate-45"></div>*/}
                         <Tape variant="big-r"/>
                         <Tape variant="big-l"/>
 
@@ -228,7 +188,6 @@ function Subtask() {
 
                                         {/* slider dot */}
                                         {Number(formData.niveau) === value && (
-                                            // <span className="absolute top-4 z-30 h-5 w-5 rounded-full border-2 border-red-800 bg-red-600 shadow-md"></span>
                                             <span className="absolute top-4 z-30 h-5 w-5 rounded-full bg-red-600 [box-shadow:2px_2px_6px_rgba(0,0,0,0.7)] before:absolute before:top-1/2 before:left-1/2 before:block before:size-3.5 before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-full before:bg-red-600 before:[box-shadow:inset_2px_2px_4px_rgba(255,255,255,0.25),2px_2px_6px_rgba(80,80,80,0.5)] before:content-['']" />
                                         )}
                                     </button>

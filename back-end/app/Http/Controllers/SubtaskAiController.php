@@ -7,12 +7,14 @@ use App\Models\SubTask;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class SubtaskAiController extends Controller
 {
 
     public function generate(Request $request, MainTask $mainTask)
     {
+        $userId = JWTAuth::parseToken()->authenticate()->id;
 
         $request->validate([
             'niveau' => 'required',
@@ -148,6 +150,7 @@ class SubtaskAiController extends Controller
             ], 422);
         }
 
+
         foreach ($result['subtasks'] as $subtask) {
             if (!isset($subtask['title']) || !isset($subtask['description'])) {
                 return response()->json([
@@ -157,7 +160,7 @@ class SubtaskAiController extends Controller
 
             SubTask::create([
                 'main_task_id' => $mainTask->id,
-                'user_id' => auth()->id(),
+                'user_id' => $userId,
                 'title' => $subtask['title'],
                 'description' => $subtask['description'],
             ]);
