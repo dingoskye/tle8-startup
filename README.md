@@ -12,17 +12,14 @@ with peer pressure and making progression visual.
 
 ## Tech Stack
 
-| Part      | Technologie  |
-|-----------|--------------|
-| Front-end | React        |
-| Front-end | React Router |
-| Front-end | React Icons  |
-| Front-end | Shadcn       |
-| Front-end | Tailwind     |
-| Back-end  | Laravel      |
-| Back-end  | Breeze       |
-| AI        | Laravel AI   |
-| AI        | GPT-4        |
+| Part of application | Technology   | Parts of technology |
+|---------------------|--------------|---------------------|
+| Front-end           | React        | Router, Icons       |
+| Front-end           | Shadcn       | -                   |
+| Front-end           | Tailwind CSS | -                   |
+| Back-end            | Laravel      | Breeze, JWT         |
+| AI                  | Laravel AI   | -                   |
+| AI                  | GPT-4        | -                   |
 
 ## Installation & Setup
 
