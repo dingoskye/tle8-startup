@@ -6,10 +6,15 @@ import TaskOverview from "@/pages/task-overview.jsx";
 import TaskDetails from "@/pages/task-details.jsx";
 import GroupOverview from "@/pages/group-overview.jsx";
 import Welcome from "@/pages/welcome.jsx";
-import {ErrorPage} from "@/pages/Error.jsx";
+import {ErrorPage} from "@/pages/error.jsx";
 import GroupDetails from "@/pages/group-details.jsx";
-import CreateGroup from "@/pages/create-group.jsx";
-import CreateTask from "@/pages/create-task.jsx";
+import CreateSubtasks from "@/pages/create-subtasks.jsx";
+import Subtask from "./pages/subtask.jsx";
+import Loading from "@/pages/loading.jsx";
+import Register from "@/pages/register.jsx";
+import Login from "@/pages/login.jsx";
+import {CreateTask} from "@/pages/create-task.jsx";
+import CreateGroup from "@/pages/create-group.jsx"
 
 function App() {
 
@@ -17,13 +22,18 @@ function App() {
         <Routes>
             <Route element={<Layout/>}>
                 <Route path="/" element={<Home/>}/>
+                <Route path="/login" element={<Login/>}/>
+                <Route path="/registreren" element={<Register/>}/>
                 <Route path="/welkom" element={<Welcome/>}/>
                 <Route path="/studiegroepen" element={<GroupOverview/>}/>
                 <Route path="/studiegroepen/:id" element={<GroupDetails/>}/>
+                <Route path="/studiegroepen/aanmaken" element={<CreateGroup/>}/>
                 <Route path="/hoofdtaken" element={<TaskOverview/>}/>
                 <Route path="/hoofdtaken/:id" element={<TaskDetails/>}/>
-                <Route path="/studiegroepen/aanmaken" element={<CreateGroup/>}/>
                 <Route path="/hoofdtaak/aanmaken" element={<CreateTask/>}/>
+                <Route path="/subtaken/genereren/:id" element={<Subtask/>}/>
+                <Route path="/subtaken/aanmaken/:id" element={<CreateSubtasks/>}/>
+                <Route path="/laden" element={<Loading/>}/>
                 <Route path="*" element={<ErrorPage/>}/>
 
             </Route>
