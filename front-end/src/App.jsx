@@ -11,6 +11,8 @@ import GroupDetails from "@/pages/group-details.jsx";
 import Register from "@/pages/register.jsx";
 import Login from "@/pages/login.jsx";
 import {CreateTask} from "@/pages/create-task.jsx";
+import Loading from "@/pages/loading.jsx";
+import Subtask from "@/pages/subtask.jsx";
 
 function App() {
 
