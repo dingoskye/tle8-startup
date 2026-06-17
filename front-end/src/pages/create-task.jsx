@@ -209,3 +209,5 @@ export function CreateTask() {
         </Card>
     );
 }
+
+export default CreateTask;

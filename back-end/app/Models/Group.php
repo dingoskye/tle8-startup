@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-
 #[fillable(['name', 'description', 'profile_image'])]
 class Group extends Model
 {
@@ -21,7 +20,6 @@ class Group extends Model
         'name',
         'description',
         'image',
-        'user_id',
     ];
 
 //ToDo: Invite link groep, leader board boolean, meerdere personen.
@@ -33,7 +31,7 @@ class Group extends Model
 
     public function mainTasks(): HasMany
     {
-        return $this->hasMany(MainTask::class, 'main_task_id');
+        return $this->hasMany(MainTask::class);
     }
 }
 

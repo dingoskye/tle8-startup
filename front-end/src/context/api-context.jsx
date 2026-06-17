@@ -1,4 +1,4 @@
-import {createContext, useContext, useState} from "react"
+import {createContext, useContext, useEffect, useState} from "react"
 
 const ApiContext = createContext()
 
@@ -11,9 +11,15 @@ export function ApiProvider({children}) {
     async function refreshToken() {
         console.log(loginData)
         setToken(loginData.token)
-       
+
         await localStorage.setItem('token', loginData.token)
         await localStorage.setItem('user', JSON.stringify(loginData.user))
+    }
+
+    async function getData() {
+        const data = await JSON.parse(localStorage.getItem('user'))
+        setLoginData(data)
+        // console.log(data)
     }
 
     async function apiFetch(endpoint, options = {}) {
@@ -35,8 +41,12 @@ export function ApiProvider({children}) {
         return text ? JSON.parse(text) : null
     }
 
+    useEffect(() => {
+        getData()
+    }, [])
+
     return (
-        <ApiContext.Provider value={{apiFetch, setLoginData, loginData, token, refreshToken}}>
+        <ApiContext.Provider value={{apiFetch, setLoginData, loginData, token, refreshToken, getData}}>
             {children}
         </ApiContext.Provider>
     );
