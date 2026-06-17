@@ -6,29 +6,53 @@ import {Button} from "@/components/ui/button.jsx";
 import {FormButton} from "@/components/ui/buttons.jsx";
 import {useParams, useNavigate} from 'react-router';
 
-const currentUser = {id: '1', name: 'Jij', user_name: 'mijn_account'}; //using this until log in is implemented can be deleted later
+const currentUser = {id: '1', name: 'Jij', user_name: 'mijn_account'}; // Using this until login is implemented
+
 const CreateSubtasks = () => {
-
     const {id} = useParams();
-
-
-    useEffect(() => {
-        document.title = "Board-it | Subtaken Aanmaken";
-    }, []);
+    const navigate = useNavigate();
+    const {apiFetch} = useApi();
+    const [mainTask, setMainTask] = useState(null);
+    const [isLoadingTask, setIsLoadingTask] = useState(true);
 
     const [subtasks, setSubtasks] = useState([
         {id: Date.now(), title: '', description: '', deadline: ''}
     ]);
-
-    const navigate = useNavigate();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitMessage, setSubmitMessage] = useState(null);
-    const {apiFetch} = useApi();
+
     const cardVariants = ["tertiary", "primary", "quaternary", "secondary"];
     const today = new Date().toISOString().split('T')[0];
     const maxDate = new Date();
     maxDate.setFullYear(maxDate.getFullYear() + 5);
     const maxDateString = maxDate.toISOString().split('T')[0];
+
+    // --- 2. FIXED: Clean, un-nested useEffect for fetching data ---
+    useEffect(() => {
+        const fetchMainTask = async () => {
+            try {
+                const taskData = await apiFetch(`/main/details/${id}`);
+                setMainTask(taskData);
+                document.title = `Board-it | Subtaken voor: ${taskData.title}`;
+                setIsLoadingTask(false);
+            } catch (error) {
+                console.error("Task not found:", error);
+                // Redirect to a fake route to trigger your 404 page
+                navigate('/404', {replace: true});
+            }
+        };
+
+        fetchMainTask();
+    }, [id, apiFetch, navigate]);
+
+
+    if (isLoadingTask) {
+        return (
+            <div className="w-full flex justify-center mt-20">
+                <p className="text-xl font-bold font-headers">Taak gegevens ophalen...</p>
+            </div>
+        );
+    }
 
     const handleAddSubtask = () => {
         setSubtasks([
@@ -118,12 +142,18 @@ const CreateSubtasks = () => {
     return (
         <>
             <div className="w-full flex flex-col items-center justify-start ">
+
                 {/* --- HEADER SECTION --- */}
-                <header role="banner" className="text-center p-1  relative w-full">
+                <header role="banner" className="text-center p-1 relative w-full mt-10 mb-6">
                     <div className="bg-primary w-full p-4 rounded-lg shadow-md relative">
                         <Tape variant="big-r"/>
                         <Tape variant="big-l"/>
-                        <h1 className="text-3xl  font-headers">Subtaken Aanmaken</h1>
+                        <h1 className="text-3xl font-headers">Subtaken Aanmaken</h1>
+
+                        {/* --- Added the task title here! --- */}
+                        <p className="text-lg font-bold mt-2 border-t border-black/20 pt-2">
+                            Voor taak: <span className="italic">{mainTask.title}</span>
+                        </p>
                     </div>
                 </header>
 
@@ -145,7 +175,7 @@ const CreateSubtasks = () => {
                         const currentVariant = cardVariants[index % cardVariants.length];
 
                         return (
-                            <div key={task.id} className="w-[90%] md:w-[70%]">
+                            <div key={task.id} className=" w-full">
 
                                 <Card variant={currentVariant}>
 
@@ -200,8 +230,8 @@ const CreateSubtasks = () => {
                                                    className="block mb-2 font-headings text-lg font-bold">Beschrijving</label>
 
                                             <div className="relative">
-                                                <Tape variant="big-r"/>
-                                                <Tape variant="big-l"/>
+                                                <Tape variant="small-r"/>
+                                                <Tape variant="small-l"/>
                                                 <textarea
                                                     id={`description-${task.id}`}
                                                     className="w-[100%] bg-bg-white shadow-xl/7 rounded-[2%] p-[5%] min-h-[25%] border border-transparent focus:border-black outline-none"
@@ -239,7 +269,7 @@ const CreateSubtasks = () => {
 
 
                     {/* --- ACTION BUTTONS --- */}
-                    <div className="flex flex-col sm:flex-row gap-4 mt-6 w-[90%] md:w-[70%] justify-between">
+                    <div className="flex flex-col sm:flex-row gap-4 mt-6 justify-center">
 
                         <FormButton
                             type="button"
