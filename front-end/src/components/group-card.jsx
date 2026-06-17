@@ -17,7 +17,7 @@ function GroupCard({group, variant}) {
                                   className="text-4xl w-full"/>
                     </div>}
 
-                <p className="text-xl text-center break-all">{group.name}</p>
+                <p className="text-xl text-center break-all ">{group.name}</p>
             </Card>
         </Link>
     )

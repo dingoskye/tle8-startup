@@ -11,12 +11,18 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-
 #[fillable(['name', 'description', 'profile_image'])]
 class Group extends Model
 {
     use SoftDeletes;
 
+    protected $fillable = [
+        'name',
+        'description',
+        'image',
+    ];
+
+//ToDo: Invite link groep, leader board boolean, meerdere personen.
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'user_group')

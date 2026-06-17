@@ -18,7 +18,6 @@ export function GroupProvider({children}) {
                 }
             })
             setGroups(data)
-            // console.log(data)
         } catch (e) {
             console.log(e.message)
         }
@@ -43,6 +42,7 @@ export function GroupProvider({children}) {
     return (
         <GroupContext.Provider value={{
             groups,
+            setGroups,
             fetchGroups,
             fetchGroup
         }}>

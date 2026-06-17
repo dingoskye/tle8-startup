@@ -9,7 +9,7 @@ use App\Models\Theme;
 class ThemeSeeder extends Seeder
 {
     private array $themes = [
-        'Light', 'Dark', 'Board', 'City', 'Field', 'Vibrant',
+        'default', 'natural', 'dark',
     ];
 
     /**

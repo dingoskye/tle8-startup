@@ -1,12 +1,13 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useApi} from "@/context/api-context.jsx";
 import {Card} from "@/components/ui/cards.jsx";
 import {TapeCard} from "@/components/ui/cards.jsx";
+import {useNavigate} from "react-router";
 
 // Nieuwe taak aanmaken.
 
 export function CreateTask() {
-    const {apiFetch} = useApi();
+    const {apiFetch, token} = useApi();
     const initialForm = {
         title: "",
         description: "",
@@ -25,13 +26,12 @@ export function CreateTask() {
 
     const [errors, setErrors] = useState({});
     const [submitting, setSubmitting] = useState(false);
+    const navigate = useNavigate()
 
     //Form validatie.
-
     const validateForm = () => {
         const newErrors = {};
         if (!form.title.trim()) newErrors.title = "Titel is verplicht.";
-        if (!form.description.trim()) newErrors.description = "Beschrijving is verplicht.";
         if (!form.ai_file) newErrors.file = "Bestand is verplicht.";
         else if (!["image/png", "image/jpeg", "application/pdf"].includes(form.ai_file.type)) {
             newErrors.file = "Alleen afbeeldingen (PNG/JPEG) of PDF's zijn toegestaan.";
@@ -75,10 +75,14 @@ export function CreateTask() {
         try {
             await apiFetch(`/main/create`, {
                 method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                },
                 body: formData,
             });
 
             setForm(initialForm);
+            navigate("/")
         } catch (err) {
             console.error("Failed to create task:", err);
             setErrors({general: "Er is een fout opgetreden bij het aanmaken van de taak."});
@@ -87,122 +91,123 @@ export function CreateTask() {
         }
     };
 
+    //documenten titels voor WCAG!!
+    useEffect(() => {
+        document.title = "Board-it | Hoofdtaak aanmaken";
+    }, [])
+
     return (
-        <div className="flex items-center justify-center">
-            <Card variant="white">
-                <h1 className="text-3xl font-bold mb-8 text-center">Hoofdtaak Maken</h1>
+        <Card variant="white">
+            <h1 className="text-3xl font-headers text-center mt-2">Hoofdtaak maken</h1>
 
-                <form className="flex flex-col gap-6" onSubmit={handleSubmit} noValidate>
-                    <TapeCard variant="quaternary">
-                        <div role="group" aria-labelledby="label-titel" className="flex flex-col">
-                            <label id="label-titel" htmlFor="titel"
-                                   className="font-header font-semibold mb-2">Titel:</label>
-                            <input
-                                type="text"
-                                id="titel"
-                                name="titel"
-                                placeholder="Voer de taak titel in."
-                                title="Taak titel"
-                                aria-labelledby="label-titel"
-                                aria-describedby={errors.title ? "titel-error" : undefined}
-                                aria-invalid={!!errors.title}
-                                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 bg-[var(--thoas-white)]"
-                                value={form.title}
-                                onChange={(e) => {
-                                    setField("title", e.target.value);
-                                    setErrors(prev => ({...prev, title: undefined}));
-                                }}
-                            />
-                            {errors.title && <span id="titel-error" role="alert" aria-live="assertive"
-                                                   className="text-sm mt-1 border-2 rounded-lg flex justify-center bg-[var(--ruas-red)]">{errors.title}</span>}
-                        </div>
-                    </TapeCard>
+            <form className="flex flex-col gap-6" onSubmit={handleSubmit} noValidate>
+                <TapeCard variant="quaternary">
+                    <div role="group" aria-labelledby="label-titel" className="flex flex-col">
+                        <label id="label-titel" htmlFor="titel"
+                               className="font-headers text-left text-lg mb-2">Titel:</label>
+                        <input
+                            type="text"
+                            id="titel"
+                            name="titel"
+                            placeholder="Voer de taak titel in."
+                            title="Taak titel"
+                            aria-labelledby="label-titel"
+                            aria-describedby={errors.title ? "titel-error" : undefined}
+                            aria-invalid={!!errors.title}
+                            className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 bg-bg-white"
+                            value={form.title}
+                            onChange={(e) => {
+                                setField("title", e.target.value);
+                                setErrors(prev => ({...prev, title: undefined}));
+                            }}
+                        />
+                        {errors.title && <span id="titel-error" role="alert" aria-live="assertive"
+                                               className="mt-1 rounded-lg flex justify-center text-(--ruas-red) font-semibold text-lg">{errors.title}</span>}
+                    </div>
+                </TapeCard>
 
-                    <TapeCard variant="primary">
-                        <div role="group" aria-labelledby="label-beschrijving" className="flex flex-col">
-                            <label id="label-beschrijving" htmlFor="beschrijving"
-                                   className="font-header font-semibold mb-2">Beschrijving:</label>
-                            <textarea
-                                id="beschrijving"
-                                name="beschrijving"
-                                rows="5"
-                                title="Taak beschrijving"
-                                placeholder="Beschrijf de taak in detail."
-                                aria-labelledby="label-beschrijving"
-                                aria-describedby={errors.description ? "beschrijving-error" : undefined}
-                                aria-invalid={!!errors.description}
-                                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 resize-none bg-[var(--thoas-white)]"
-                                value={form.description}
-                                onChange={(e) => {
-                                    setField("description", e.target.value);
-                                    setErrors(prev => ({...prev, description: undefined}));
-                                }}
-                            />
-                            {errors.description && <span id="beschrijving-error" role="alert" aria-live="assertive"
-                                                         className="text-sm mt-1 border-2 rounded-lg flex justify-center bg-[var(--ruas-red)]">{errors.description}</span>}
-                        </div>
-                    </TapeCard>
+                <TapeCard variant="primary">
+                    <div role="group" aria-labelledby="label-beschrijving" className="flex flex-col">
+                        <label id="label-beschrijving" htmlFor="beschrijving"
+                               className="font-headers text-left text-lg mb-2">Beschrijving:</label>
+                        <textarea
+                            id="beschrijving"
+                            name="beschrijving"
+                            rows="5"
+                            title="Taak beschrijving"
+                            placeholder="Beschrijf de taak in detail."
+                            aria-labelledby="label-beschrijving"
+                            aria-describedby={errors.description ? "beschrijving-error" : undefined}
+                            aria-invalid={!!errors.description}
+                            className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 resize-none bg-bg-white"
+                            value={form.description}
+                            onChange={(e) => {
+                                setField("description", e.target.value);
+                                setErrors(prev => ({...prev, description: undefined}));
+                            }}
+                        />
+                    </div>
+                </TapeCard>
 
-                    <TapeCard variant="secondary">
-                        <div role="group" aria-labelledby="label-upload" aria-describedby="upload-help"
-                             className="flex flex-col">
-                            <label id="label-upload" htmlFor="upload" className="font-header font-semibold mb-2">Upload
-                                hier document of afbeelding van de rubric (PNG, JPEG of PDF).</label>
-                            <span id="upload-help"
-                                  className="sr-only">Toegestane bestandstypen: PNG, JPEG of PDF.</span>
-                            <input
-                                type="file"
-                                id="upload"
-                                name="upload"
-                                accept="image/png,image/jpeg,application/pdf"
-                                title="Upload afbeelding of PDF"
-                                aria-labelledby="label-upload"
-                                aria-describedby={errors.file ? "upload-help upload-error" : "upload-help"}
-                                aria-invalid={!!errors.file}
-                                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 bg-[var(--thoas-white)]"
-                                onChange={(e) => {
-                                    setField("ai_file", e.target?.files[0]);
-                                    setErrors(prev => ({...prev, file: undefined}));
-                                }}
-                            />
-                            {errors.file && <span id="upload-error" role="alert" aria-live="assertive"
-                                                  className="text-sm mt-1 border-2 rounded-lg flex justify-center bg-[var(--ruas-red)]">{errors.file}</span>}
-                        </div>
-                    </TapeCard>
+                <TapeCard variant="secondary">
+                    <div role="group" aria-labelledby="label-upload" aria-describedby="upload-help"
+                         className="flex flex-col">
+                        <label id="label-upload" htmlFor="upload" className="font-headers text-left text-lg mb-2">Rubric
+                            File (PNG, JPEG of PDF): </label>
+                        <input
+                            type="file"
+                            id="upload"
+                            name="upload"
+                            accept="image/png,image/jpeg,application/pdf"
+                            title="Upload afbeelding of PDF"
+                            aria-labelledby="label-upload"
+                            aria-describedby={errors.file ? "upload-help upload-error" : "upload-help"}
+                            aria-invalid={!!errors.file}
+                            className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 bg-bg-white"
+                            onChange={(e) => {
+                                setField("ai_file", e.target?.files[0]);
+                                setErrors(prev => ({...prev, file: undefined}));
+                            }}
+                        />
+                        {errors.file && <span id="upload-error" role="alert" aria-live="assertive"
+                                              className="mt-1 rounded-lg flex justify-center text-(--ruas-red) font-semibold text-lg">{errors.file}</span>}
+                    </div>
+                </TapeCard>
 
-                    <TapeCard variant="tertiary">
-                        <div role="group" aria-labelledby="label-deadline" className="flex flex-col">
-                            <label id="label-deadline" htmlFor="deadline"
-                                   className="font-header font-semibold mb-2">Deadline:</label>
-                            <input
-                                type="date"
-                                id="deadline"
-                                name="deadline"
-                                title="Kies een deadline"
-                                aria-labelledby="label-deadline"
-                                aria-describedby={errors.deadline ? "deadline-error" : undefined}
-                                aria-invalid={!!errors.deadline}
-                                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 bg-[var(--thoas-white)]"
-                                value={form.deadline}
-                                onChange={(e) => {
-                                    setField("deadline", e.target.value);
-                                    setErrors(prev => ({...prev, deadline: undefined}));
-                                }}
-                            />
-                            {errors.deadline && <span id="deadline-error" role="alert" aria-live="assertive"
-                                                      className="text-sm mt-1 border-2 rounded-lg flex justify-center bg-[var(--ruas-red)]">{errors.deadline}</span>}
-                        </div>
-                    </TapeCard>
+                <TapeCard variant="tertiary">
+                    <div role="group" aria-labelledby="label-deadline" className="flex flex-col">
+                        <label id="label-deadline" htmlFor="deadline"
+                               className="font-headers text-left text-lg mb-2">Deadline:</label>
+                        <input
+                            type="date"
+                            id="deadline"
+                            name="deadline"
+                            title="Kies een deadline"
+                            aria-labelledby="label-deadline"
+                            aria-describedby={errors.deadline ? "deadline-error" : undefined}
+                            aria-invalid={!!errors.deadline}
+                            className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 bg-bg-white"
+                            value={form.deadline}
+                            onChange={(e) => {
+                                setField("deadline", e.target.value);
+                                setErrors(prev => ({...prev, deadline: undefined}));
+                            }}
+                        />
+                        {errors.deadline && <span id="deadline-error" role="alert" aria-live="assertive"
+                                                  className="mt-1 rounded-lg flex justify-center text-(--ruas-red) font-semibold text-lg">{errors.deadline}</span>}
+                    </div>
+                </TapeCard>
 
-                    {errors.general && <div role="alert"
-                                            className="text-sm mt-1 border-2 rounded-lg flex justify-center bg-[var(--ruas-red)] text-white">{errors.general}</div>}
+                {errors.general && <div role="alert"
+                                        className="mt-1 rounded-lg flex justify-center text-(--ruas-red) font-semibold text-lg">{errors.general}</div>}
 
-                    <button type="submit" disabled={submitting}
-                            className="mt-4 px-12 py-2 font-semibold rounded-full self-center hover:opacity-90 transition-opacity bg-[var(--purple)] text-white border-2 border-white shadow-md">
-                        {submitting ? "Versturen..." : "Start"}
-                    </button>
-                </form>
-            </Card>
-        </div>
+                <button type="submit" disabled={submitting}
+                        className="w-[60%] md:w-[30%] py-2 px-4 font-headers rounded-full self-center text-xl hover:opacity-90 transition-opacity bg-button-purple border-6 border-white shadow-md">
+                    {submitting ? "Versturen..." : "Maak aan"}
+                </button>
+            </form>
+        </Card>
     );
 }
+
+export default CreateTask;

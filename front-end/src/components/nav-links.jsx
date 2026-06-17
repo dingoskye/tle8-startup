@@ -1,4 +1,3 @@
-import {LuInbox} from "react-icons/lu";
 import {Link} from "react-router";
 
 function NavLinks({variant, link, children}) {
