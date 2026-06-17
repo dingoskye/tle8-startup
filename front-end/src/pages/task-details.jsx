@@ -55,7 +55,7 @@ function TaskDetails() {
         task !== null ?
             task?.status ?
                 <ErrorComponent code={task.status} message="Taak bestaat niet"/> :
-                <div>
+                <>
                     <header role="banner" className="text-center p-1 mt-2 relative">
                         <div className="bg-bg-white w-full p-4 rounded-lg shadow-md">
                             <Tape variant="big-r"/>
@@ -63,7 +63,7 @@ function TaskDetails() {
                             <div className="grid grid-cols-4 grow gap-4">
                                 <DeadlineCard deadline={task.deadline}/>
                                 <div className="col-span-3 text-left">
-                                    <h1 className="text-2xl font-headers">{task.title}</h1>
+                                    <h1 className="text-3xl font-headers">{task.title}</h1>
                                     <p>{task.description ?? "Geen beschrijving"}</p>
                                 </div>
                             </div>
@@ -73,7 +73,7 @@ function TaskDetails() {
                             <div className="w-full flex justify-end">
                                 <div className="w-[35%]">
                                     <button
-                                        className={`flex gap-2 justify-center w-full rounded-full border-white border-3 shadow-sm p-1 mt-2 items-center text-sm ${showCompleted ? "bg-button-purple" : "bg-gray-300"}`}
+                                        className={`flex gap-2 justify-center w-full rounded-full border-white border-3 shadow-sm p-1 mt-2 items-center text-sm ${showCompleted ? "bg-button-purple" : "bg-gray-300 text-black"}`}
                                         onClick={() => setShowCompleted(!showCompleted)}
                                         aria-label={showCompleted ? "Afgevinkte taken niet tonen" : "Afgevinkte taken wel tonen"}>
                                         <FaFilter/> {showCompleted ? "Niet tonen" : "Wel tonen"}

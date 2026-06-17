@@ -29,25 +29,31 @@ class GroupController extends Controller
     public function create(request $request)
     {
         try {
-            if (!$request->name || !$request->role) {
+            if (!$request->name || !$request->role || !$request->members) {
                 return response(['error' => 'you are stupid'], 404);
             }
-            // todo aanpassen naar admin ipv user_id
 
             $userId = JWTAuth::parseToken()->authenticate()->id;
+            //save the uploaded file to the server
+            $imagePath = null;
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('groups', 'public');
+            }
 
             $group = new Group([
                 'name' => $request->name,
                 'description' => $request->description,
-
-                'image' => $request->image,
+                'image' => $imagePath,
             ]);
             $group->save();
 
-            $group->users()->attach($userId, [
-                'role' => $request->role,
-            ]);
+            $group->users()->attach($userId, ['role' => 'admin']);
 
+            //Loop through the array of members sent by React
+            $memberIds = json_decode($request->members);
+            foreach ($memberIds as $id) {
+                $group->users()->attach($id, ['role' => 'gebruiker']);
+            }
 
             return $group;
         } catch (ModelNotFoundException $e) {
@@ -62,10 +68,12 @@ class GroupController extends Controller
     public function show(string $id)
     {
         $userId = JWTAuth::parseToken()->authenticate()->id;
-        $group = Group::query()->findOrFail($id);
-        // todo aanpassen naar admin ipv user_id
-        if ($group->user_id === $userId) {
-            return $group;
+        $group = Group::with('users')->findOrFail($id);
+
+        if ($group->users->contains('id', $userId)) {
+            return Group::with(['users', 'mainTasks' => function ($query) {
+                $query->orderBy('deadline', 'asc');
+            }])->findOrFail($id);
         } else {
             return response()->json(['error' => 'you are not authorized'], 403);
         }
@@ -78,10 +86,9 @@ class GroupController extends Controller
     {
         try {
 
-            if (!$request->name || !$request->role) {
+            if (!$request->name || !$request->user_id) {
                 return response(['error' => 'you are stupid'], 404);
             }
-
             $group = Group::query()->findOrFail($id);
             $userId = JWTAuth::parseToken()->authenticate()->id;
             // todo aanpassen naar admin ipv user_id
