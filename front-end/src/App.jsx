@@ -15,6 +15,7 @@ import Register from "@/pages/register.jsx";
 import Login from "@/pages/login.jsx";
 import {CreateTask} from "@/pages/create-task.jsx";
 import CreateGroup from "@/pages/create-group.jsx"
+import Profile from "@/pages/profile.jsx";
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/registreren" element={<Register/>}/>
                 <Route path="/welkom" element={<Welcome/>}/>
+                <Route path="/profiel" element={<Profile/>}/>
                 <Route path="/studiegroepen" element={<GroupOverview/>}/>
                 <Route path="/studiegroepen/:id" element={<GroupDetails/>}/>
                 <Route path="/studiegroepen/aanmaken" element={<CreateGroup/>}/>
@@ -35,7 +37,6 @@ function App() {
                 <Route path="/subtaken/aanmaken/:id" element={<CreateSubtasks/>}/>
                 <Route path="/laden" element={<Loading/>}/>
                 <Route path="*" element={<ErrorPage/>}/>
-
             </Route>
         </Routes>
     )

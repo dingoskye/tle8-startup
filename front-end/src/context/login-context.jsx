@@ -65,6 +65,7 @@ export function LoginProvider({children}) {
 
     async function logout() {
         await localStorage.clear()
+        setLoginData(null)
     }
 
     return (

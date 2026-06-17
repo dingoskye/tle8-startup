@@ -26,6 +26,7 @@ export function GroupProvider({children}) {
     return (
         <GroupContext.Provider value={{
             groups,
+            setGroups,
             fetchGroups
         }}>
             {children}

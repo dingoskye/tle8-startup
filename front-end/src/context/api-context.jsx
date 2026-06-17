@@ -16,6 +16,10 @@ export function ApiProvider({children}) {
         await localStorage.setItem('user', JSON.stringify(loginData.user))
     }
 
+    async function getData() {
+        setLoginData(JSON.parse(localStorage.getItem('user')))
+    }
+
     async function apiFetch(endpoint, options = {}) {
         const res = await fetch(BASE_URL + endpoint, {
 
@@ -36,7 +40,7 @@ export function ApiProvider({children}) {
     }
 
     return (
-        <ApiContext.Provider value={{apiFetch, setLoginData, loginData, token, refreshToken}}>
+        <ApiContext.Provider value={{apiFetch, setLoginData, loginData, token, refreshToken, getData}}>
             {children}
         </ApiContext.Provider>
     );

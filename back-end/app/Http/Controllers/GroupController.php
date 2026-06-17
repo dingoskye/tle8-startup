@@ -68,10 +68,12 @@ class GroupController extends Controller
     public function show(string $id)
     {
         $userId = JWTAuth::parseToken()->authenticate()->id;
-        $group = Group::query()->findOrFail($id);
-        // todo aanpassen naar admin ipv user_id
-        if ($group->user_id === $userId) {
-            return $group;
+        $group = Group::with('users')->findOrFail($id);
+
+        if ($group->users->contains('id', $userId)) {
+            return Group::with(['users', 'mainTasks' => function ($query) {
+                $query->orderBy('deadline', 'asc');
+            }])->findOrFail($id);
         } else {
             return response()->json(['error' => 'you are not authorized'], 403);
         }

@@ -60,3 +60,13 @@ export function SubmitButton({children}) {
         </button>
     )
 }
+
+export function FunctionButton({children, f}) {
+    return (
+        <button
+            className="bg-button-purple rounded-full py-2 px-4 border-white border-6 shadow-sm w-full font-headers text-xl flex justify-center"
+            onClick={f}>
+            {children}
+        </button>
+    )
+}
