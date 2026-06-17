@@ -8,11 +8,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SubtaskAiController;
 
 // User controller routes
-Route::post('/user/login', [UserController::class, 'login']);
-Route::post('/user/register', [UserController::class, 'register']);
-Route::get('/user', [UserController::class, 'index']);
+Route::middleware('throttle:60,1')->group(function () {
+    Route::post('/user/login', [UserController::class, 'login']);
+    Route::post('/user/register', [UserController::class, 'register']);
+});
 
 Route::middleware('jwt')->group(function () {
+    Route::get('/user', [UserController::class, 'index']);
     Route::get('/user/{id}', [UserController::class, 'show']);
     Route::put('/user/edit/{id}', [UserController::class, 'edit']);
 
@@ -43,3 +45,7 @@ Route::middleware('jwt')->group(function () {
     Route::patch('/sub/complete/{id}', [SubTaskController::class, 'completed']);
     Route::delete('/sub/delete/{id}', [SubTaskController::class, 'delete']);
 });
+
+// ToDo dit in auth zetten
+Route::patch('/group/link/{id}', [GroupController::class, 'createLink']);
+Route::patch('/group/link', [GroupController::class, 'addUser']);

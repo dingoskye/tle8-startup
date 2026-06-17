@@ -13,6 +13,7 @@ import Login from "@/pages/login.jsx";
 import {CreateTask} from "@/pages/create-task.jsx";
 import Loading from "@/pages/loading.jsx";
 import Subtask from "@/pages/subtask.jsx";
+import {InviteCode, AcceptInvite} from "@/components/invite-code.jsx";
 
 function App() {
 
@@ -20,6 +21,8 @@ function App() {
         <Routes>
             <Route element={<Layout/>}>
                 <Route path="/" element={<Home/>}/>
+                <Route path="/code" element={<InviteCode/>}/>
+                <Route path="/accepteren" element={<AcceptInvite/>}/>
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/registreren" element={<Register/>}/>
                 <Route path="/welkom" element={<Welcome/>}/>

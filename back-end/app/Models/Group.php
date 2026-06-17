@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 
-#[fillable(['name', 'description', 'profile_image'])]
+#[fillable(['name', 'description', 'profile_image', 'invite_link'])]
 class Group extends Model
 {
     use SoftDeletes;
@@ -22,6 +22,7 @@ class Group extends Model
         'description',
         'image',
         'user_id',
+        'invite_link',
     ];
 
 //ToDo: Invite link groep, leader board boolean, meerdere personen.
@@ -33,7 +34,12 @@ class Group extends Model
 
     public function mainTasks(): HasMany
     {
-        return $this->hasMany(MainTask::class, 'main_task_id');
+        return $this->hasMany(MainTask::class);
+    }
+
+    public function Moments(): HasMany
+    {
+        return $this->hasMany(Moment::class);
     }
 }
 

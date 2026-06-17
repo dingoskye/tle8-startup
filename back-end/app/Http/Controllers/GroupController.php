@@ -16,6 +16,8 @@ class GroupController extends Controller
      */
     public function index()
     {
+
+      
         $userId = JWTAuth::parseToken()->authenticate()->id;
 //        echo JWTAuth::parseToken()->authenticate()->id;
 //        echo $userId;
@@ -118,6 +120,59 @@ class GroupController extends Controller
             return $group;
         } else {
             return response()->json(['error' => 'you are not authorized'], 403);
+        }
+    }
+
+    public function createLink(string $id)
+    {
+        try {
+            // link aanmaken (in backend)
+            $code = bin2hex(random_bytes(6));
+            // Group id opvangen
+            $group = Group::query()->findOrFail($id);
+            // link in database zetten
+            $group->update([
+                'invite_link' => $code
+            ]);
+            // link naar front-end sturen
+            return json_encode($code);
+
+        } catch (ModelNotFoundException $e) {
+            return response(['error' => $e], 500);
+        }
+    }
+
+    public function addUser(request $request)
+    {
+        try {
+            // pak de user als die ingelogd is
+            $userId = JWTAuth::parseToken()->authenticate()->id;
+
+            // pak de group van de invite link
+            $group = Group::where('invite_link', $request->code)->first();
+
+            if (!$group) {
+                return response(['error' => 'Invite link not found'], 404);
+            }
+            // als de user al in de groep is stuur de user terug
+            if ($group) {
+                foreach ($group->users as $user) {
+                    if ($user->id === $userId) {
+                        return response(['error' => 'Already in the group'], 401);
+                    }
+                }
+            }
+
+
+            // voeg de user toe aan de groep met de role user.
+            $group->users()->attach($userId, [
+                'role' => 'user'
+            ]);
+
+            // stuur de groep terug
+            return $group;
+        } catch (ModelNotFoundException $e) {
+            return response(['error' => $e], 500);
         }
     }
 }
