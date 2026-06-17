@@ -11,9 +11,9 @@ function CreateMoment() {
         document.title = "Board-it | Moment aanmaken";
     }, [])
 
-    const { apiFetch } = useApi();
+    const {apiFetch, token} = useApi();
 
-    const { groupId } = useParams();
+    const { id } = useParams();
     const navigate = useNavigate();
 
     // State voor de nieuwe velden: datum, locatie en beschrijving
@@ -65,23 +65,31 @@ function CreateMoment() {
 
         try {
 
-            const data = await apiFetch(`/moment/create`, {
+            const res = await fetch(`http://127.0.0.1:8000/api/moment/create`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     "Accept": "application/json",
+                    "Authorization": `Bearer ${token}`
                 },
-
                 body: JSON.stringify({
                     ...formData,
-                    group_id: 1
+                    group_id: id
                 }),
             });
+
+            const data = await res.json();
+
+            console.log("Backend response:", data);
+
+            if (!res.ok) {
+                throw new Error(data.message || "Moment aanmaken mislukt");
+            }
 
             console.log("Moment succesvol aangemaakt:", data);
 
             // Moet nog aangepast worden, zodra deze bestaat
-            navigate(`/groepen/${groupId}`);
+            navigate(`/studiegroepen/${id}`);
 
         } catch (err) {
             console.error("Fout bij aanmaken moment:", err.message);

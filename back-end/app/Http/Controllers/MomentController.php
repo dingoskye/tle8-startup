@@ -48,8 +48,8 @@ class MomentController extends Controller
 
             return $moment;
 
-        } catch (\Exception $e) {
-            return response(['error' => $e->getMessage()], 500);
+        } catch (ModelNotFoundException $e) {
+            return response(['error' => $e], 500);
         }
     }
 

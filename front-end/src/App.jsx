@@ -35,7 +35,7 @@ function App() {
                 <Route path="/hoofdtaak/aanmaken" element={<CreateTask/>}/>
                 <Route path="*" element={<ErrorPage/>}/>
                 <Route path="/subtaak-genereren/:id" element={<Subtask/>}/>
-                <Route path="/moment-aanmaken" element={<CreateMoment/>}/>
+                <Route path="/moment-aanmaken/:id" element={<CreateMoment/>}/>
                 <Route path="/moment/:id" element={<MomentDetails/>}/>
                 <Route path="/laden" element={<Loading/>}/>
 
