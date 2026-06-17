@@ -20,7 +20,7 @@ function App() {
         <Routes>
             <Route element={<Layout/>}>
                 <Route path="/" element={<Home/>}/>
-                <Route path="/code" element={<InviteCode/>}/>
+                <Route path="/code/:id" element={<InviteCode/>}/>
                 <Route path="/accepteren" element={<AcceptInvite/>}/>
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/register" element={<Register/>}/>

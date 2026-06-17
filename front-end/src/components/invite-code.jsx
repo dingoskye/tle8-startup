@@ -4,16 +4,22 @@ import {useEffect, useState} from "react";
 import {useGroup} from "@/context/group-context.jsx";
 import {SubmitButton} from "@/components/ui/buttons.jsx";
 
-export function InviteCode({group}) {
+import {useLocation, useParams} from "react-router";
+
+export function InviteCode() {
+    const params = useParams()
     // de id van de groep.
     const {fetchCode, code} = useGroup()
-
+    const location = useLocation();
 
     useEffect(() => {
+        const group = params.id
         if (group) {
             fetchCode(group)
+            location('/')
         }
     }, []);
+
 
     return (
         <>
@@ -38,6 +44,7 @@ export function AcceptInvite() {
     })
     const [errors, setErrors] = useState([])
     const newErrors = {};
+    const location = useLocation();
 
     const handleInputChange = (e) => {
         const {name, value} = e.target;
@@ -47,6 +54,7 @@ export function AcceptInvite() {
         });
     }
 
+
     useEffect(() => {
         if (acceptData) {
             if (acceptData.status === 404) {
@@ -55,7 +63,6 @@ export function AcceptInvite() {
                 newErrors.code = "Al in de groep.";
             } else {
                 setErrors({})
-                return
             }
             setErrors(newErrors)
         }
@@ -70,6 +77,7 @@ export function AcceptInvite() {
                 return setErrors(newErrors)
             }
             fetchAccept(formData)
+            location("/")
         } catch ($e) {
             console.log($e)
         }
@@ -108,6 +116,8 @@ export function AcceptInvite() {
                 {errors.code &&
                     <p className="text-red-700 font-bold mt-2 text-sm">{errors.code}</p>}
             </Card>
+
+
         </>
     )
 }
