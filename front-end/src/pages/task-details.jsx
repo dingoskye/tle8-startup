@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {useParams} from "react-router";
+import {useParams, useNavigate} from "react-router";
 import {useMainTask} from "@/context/task-context.jsx";
 import Tape from "@/components/ui/tape.jsx";
 import SubTaskCard from "@/components/sub-task-card.jsx";
@@ -9,12 +9,15 @@ import {Link} from "react-router";
 import DeadlineCard from "@/components/ui/deadline-card.jsx";
 import Progressbar from "@/components/ui/progressbar.jsx";
 import {ErrorComponent} from "@/pages/Error.jsx";
+import PopUp from "@/components/pop-up.jsx";
 
 function TaskDetails() {
     const params = useParams()
+    const navigate = useNavigate();
     const {fetchTaskDetails} = useMainTask()
     const [task, setTask] = useState(null)
     const [showCompleted, setShowCompleted] = useState(true)
+    const [showAiPopup, setShowAiPopup] = useState(false);
 
     const variants = [
         "primary",
@@ -28,6 +31,12 @@ function TaskDetails() {
         const data = await fetchTaskDetails(params.id)
         setTask(data);
     }
+
+    const handleAIChoice = (choice) => {
+        localStorage.setItem("useAI", choice ? "true" : "false");
+        setShowAiPopup(false);
+        navigate("/");
+    };
 
     useEffect(() => {
         console.log(params.id)
@@ -82,7 +91,15 @@ function TaskDetails() {
                                 <SubTaskCard onSubtaskUpdated={reloadTask} key={index} sub={sub}
                                              variant={variants[index % variants.length]}/>)}
                         </section> :
-                        <Link className="w-[50%] mx-auto h-full" to="/">
+                        <Link
+                            className="w-[50%] mx-auto h-full"
+                            to="/"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                setShowAiPopup(true);
+                            }}
+                            aria-label="Create subtask / Use AI"
+                        >
                             <div className="w-[40vw] h-[40vw] md:w-[30vw] md:h-[30vw] m-auto mt-5">
                                 <Card variant="tertiary" kind="s">
                                     <div className="flex justify-center items-center h-full">
@@ -91,6 +108,26 @@ function TaskDetails() {
                                 </Card>
                             </div>
                         </Link>
+                    }
+
+                    {showAiPopup &&
+                        <PopUp link={false} onClose={() => setShowAiPopup(false)}>
+                            <div className="flex flex-col justify-center items-center h-full gap-4 p-4">
+                                <p className="text-center text-lg">Wil je AI gebruiken voor deze subtaken?</p>
+                                <div className="flex gap-3">
+                                    <button
+                                        onClick={() => handleAIChoice(true)}
+                                        className="bg-button-purple text-white px-4 py-2 rounded-full">
+                                        Ja
+                                    </button>
+                                    <button
+                                        onClick={() => handleAIChoice(false)}
+                                        className="bg-gray-300 text-black px-4 py-2 rounded-full">
+                                        Nee
+                                    </button>
+                                </div>
+                            </div>
+                        </PopUp>
                     }
                 </div> : <p>Taak aan het laden</p>
     )
