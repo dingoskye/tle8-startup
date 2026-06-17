@@ -4,7 +4,7 @@ import {useApi} from "@/context/api-context.jsx";
 const GroupContext = createContext()
 
 export function GroupProvider({children}) {
-    const {apiFetch} = useApi();
+    const {apiFetch, token} = useApi();
     const [groups, setGroups] = useState(null)
 
     async function fetchGroups() {
@@ -14,6 +14,7 @@ export function GroupProvider({children}) {
                 headers: {
                     Accept: "application/json",
                     "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
                 }
             })
             setGroups(data)
@@ -30,6 +31,7 @@ export function GroupProvider({children}) {
                 headers: {
                     Accept: "application/json",
                     "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
                 }
             })
             return (data)

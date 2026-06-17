@@ -12,6 +12,10 @@ function Loading({onComplete} = {}) {
         "Laatste stuk..."
     ]
 
+    const loadTimeInterval = 100 / loadText.length;
+    const textIndex = Math.min(loadText.length - 1, Math.floor(loading / loadTimeInterval));
+    const currentLoadText = loadText[textIndex];
+
     // Scherm scrollen uitschakelen tijdens het laden om de navigatie onder aan de pagina te verbergen.
     useEffect(() => {
         const originalOverflow = document.body.style.overflow;
@@ -41,10 +45,6 @@ function Loading({onComplete} = {}) {
             return () => clearTimeout(t);
         }
     }, [loading, onComplete, navigate]);
-
-    const loadTimeInterval = 100 / loadText.length;
-    const textIndex = Math.min(loadText.length - 1, Math.floor(loading / loadTimeInterval));
-    const currentLoadText = loadText[textIndex];
 
     return (
         // div om de card in het midden van het scherm te zetten.
