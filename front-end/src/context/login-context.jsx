@@ -5,7 +5,7 @@ import {useNavigate} from "react-router";
 const LoginContext = createContext()
 
 export function LoginProvider({children}) {
-    const {apiFetch, setLoginData,} = useApi();
+    const {apiFetch, setLoginData, setLoggedOut} = useApi();
 
 
     const [users, setUsers] = useState(null)
@@ -25,6 +25,7 @@ export function LoginProvider({children}) {
 
             })
             setLoginData(data)
+            setLoggedOut(false)
         } catch (e) {
             console.log(e.message)
         }
@@ -43,7 +44,7 @@ export function LoginProvider({children}) {
                 body: JSON.stringify(formData)
             })
             setLoginData(data)
-
+            setLoggedOut(false)
         } catch (e) {
             console.log(e.message)
         }
@@ -65,8 +66,9 @@ export function LoginProvider({children}) {
         }
     }
 
-    async function logout() {
-        await localStorage.clear()
+    function logout() {
+        localStorage.clear()
+        setLoggedOut(true)
     }
 
     return (

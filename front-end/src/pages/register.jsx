@@ -21,7 +21,7 @@ function Register() {
     })
     const [errors, setErrors] = useState([])
     const {fetchRegister, fetchUsers} = useLogin()
-    const {refreshToken, token, loginData} = useApi()
+    const {refreshToken, token, loginData, setFirst} = useApi()
 
     const handleInputChange = (e) => {
         const {name, value} = e.target;
@@ -33,7 +33,8 @@ function Register() {
     };
 
     useEffect(() => {
-        document.title = "Board-it | Register";
+        setFirst(false)
+        document.title = "Board-it | Registeren";
         console.log(`------------Register-----------`)
 
         if (localStorage.getItem("token")) {
@@ -44,6 +45,7 @@ function Register() {
 
             removeToken()
         }
+        localStorage.setItem("first", JSON.stringify(false))
         setErrors({})
         fetchUsers();
     }, []);
