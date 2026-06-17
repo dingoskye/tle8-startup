@@ -16,6 +16,8 @@ class GroupController extends Controller
      */
     public function index()
     {
+
+      
         $userId = JWTAuth::parseToken()->authenticate()->id;
 //        echo JWTAuth::parseToken()->authenticate()->id;
 //        echo $userId;
@@ -148,7 +150,7 @@ class GroupController extends Controller
 
             // pak de group van de invite link
             $group = Group::where('invite_link', $request->code)->first();
-          
+
             if (!$group) {
                 return response(['error' => 'Invite link not found'], 404);
             }
