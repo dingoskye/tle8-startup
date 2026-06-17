@@ -6,12 +6,14 @@ import {Button} from "@/components/ui/button.jsx";
 import {FormButton} from "@/components/ui/buttons.jsx";
 import {useParams, useNavigate} from 'react-router';
 import {ErrorComponent} from "@/pages/Error.jsx";
+import {useMainTask} from "@/context/task-context.jsx";
 
 const currentUser = {id: '1', name: 'Jij', user_name: 'mijn_account'}; // Using this until login is implemented
 
 const CreateSubtasks = () => {
     const {id} = useParams();
     const navigate = useNavigate();
+    const {fetchTaskDetails} = useMainTask()
     const {apiFetch} = useApi();
     const [mainTask, setMainTask] = useState(null);
     const [isLoadingTask, setIsLoadingTask] = useState(true);
@@ -29,22 +31,22 @@ const CreateSubtasks = () => {
     const maxDateString = maxDate.toISOString().split('T')[0];
 
     // --- 2. FIXED: Clean, un-nested useEffect for fetching data ---
-    useEffect(() => {
-        const fetchMainTask = async () => {
-            try {
-                const taskData = await apiFetch(`/main/details/${id}`);
-                setMainTask(taskData);
-                document.title = `Board-it | Subtaken maken voor ${taskData.title}`;
-                setIsLoadingTask(false);
-            } catch (error) {
-                console.error("Task not found:", error);
-                // Redirect to a fake route to trigger your 404 page
-                // navigate('/404', {replace: true});
-            }
-        };
+    const loadTask = async () => {
+        try {
+            const taskData = await fetchTaskDetails(id)
+            setMainTask(taskData);
+            document.title = `Board-it | Subtaken maken voor ${taskData.title}`;
+            setIsLoadingTask(false);
+        } catch (error) {
+            console.error("Task not found:", error);
+            // Redirect to a fake route to trigger your 404 page
+            // navigate('/404', {replace: true});
+        }
+    };
 
-        fetchMainTask();
-    }, [id, apiFetch, navigate]);
+    useEffect(() => {
+        loadTask();
+    }, [id]);
 
 
     if (isLoadingTask) {

@@ -13,8 +13,7 @@ import {useTheme} from "@/context/theme-context.jsx";
 function Home() {
     const {fetchMainTasks, mainTasks} = useMainTask()
     const {fetchGroups, groups} = useGroup()
-    const {loginData, getData} = useApi()
-    const {fetchSettings} = useTheme()
+    const {loginData} = useApi()
 
     const variants = [
         "secondary",
@@ -28,8 +27,6 @@ function Home() {
         document.title = "Board-it | Home";
         fetchMainTasks()
         fetchGroups()
-        getData()
-        fetchSettings()
     }, []);
 
     return (

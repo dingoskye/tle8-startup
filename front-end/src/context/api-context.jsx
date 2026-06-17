@@ -17,7 +17,9 @@ export function ApiProvider({children}) {
     }
 
     async function getData() {
-        setLoginData(JSON.parse(localStorage.getItem('user')))
+        const data = await JSON.parse(localStorage.getItem('user'))
+        setLoginData(data)
+        // console.log(data)
     }
 
     async function apiFetch(endpoint, options = {}) {
@@ -38,6 +40,10 @@ export function ApiProvider({children}) {
         const text = await res.text()
         return text ? JSON.parse(text) : null
     }
+
+    useEffect(() => {
+        getData()
+    }, [])
 
     return (
         <ApiContext.Provider value={{apiFetch, setLoginData, loginData, token, refreshToken, getData}}>
