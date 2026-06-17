@@ -5,6 +5,7 @@ import {useApi} from "@/context/api-context.jsx";
 import {Button} from "@/components/ui/button.jsx";
 import {FormButton} from "@/components/ui/buttons.jsx";
 import {useParams, useNavigate} from 'react-router';
+import {ErrorComponent} from "@/pages/Error.jsx";
 
 const currentUser = {id: '1', name: 'Jij', user_name: 'mijn_account'}; // Using this until login is implemented
 
@@ -33,12 +34,12 @@ const CreateSubtasks = () => {
             try {
                 const taskData = await apiFetch(`/main/details/${id}`);
                 setMainTask(taskData);
-                document.title = `Board-it | Subtaken voor: ${taskData.title}`;
+                document.title = `Board-it | Subtaken maken voor ${taskData.title}`;
                 setIsLoadingTask(false);
             } catch (error) {
                 console.error("Task not found:", error);
                 // Redirect to a fake route to trigger your 404 page
-                navigate('/404', {replace: true});
+                // navigate('/404', {replace: true});
             }
         };
 
@@ -140,11 +141,10 @@ const CreateSubtasks = () => {
     };
 
     return (
-        <>
-            <div className="w-full flex flex-col items-center justify-start ">
-
+        mainTask?.status ? <ErrorComponent code={mainTask.status} message="Taak is niet beschikbaar"/> :
+            <>
                 {/* --- HEADER SECTION --- */}
-                <header role="banner" className="text-center p-1 relative w-full mt-10 mb-6">
+                <header role="banner" className="text-center p-1 relative w-full">
                     <div className="bg-primary w-full p-4 rounded-lg shadow-md relative">
                         <Tape variant="big-r"/>
                         <Tape variant="big-l"/>
@@ -167,110 +167,96 @@ const CreateSubtasks = () => {
                     </div>
                 )}
 
-                <form onSubmit={handleSubmit} className="flex flex-col items-center mt-10 gap-8 w-full">
+                <form onSubmit={handleSubmit} className="flex flex-col items-center gap-8 w-full">
 
                     {/* --- SUBTASKS LIST --- */}
-                    {subtasks.map((task, index) => {
-                        // Pick the next color in the array based on the index
-                        const currentVariant = cardVariants[index % cardVariants.length];
+                    {subtasks.map((task, index) =>
+                        <Card variant={cardVariants[index % cardVariants.length]}>
 
-                        return (
-                            <div key={task.id} className=" w-full">
-
-                                <Card variant={currentVariant}>
-
-                                    {/* Task Header & Remove Button */}
-                                    <div className="flex justify-between items-center mb-4 mt-2">
-                                        <h2 className="text-2xl font-headers">Subtaak #{index + 1}</h2>
-                                        {subtasks.length > 1 && (
-                                            <Button
-                                                type="button"
-                                                variant="boardit-white"
-                                                size="boardit-sm"
-                                                onClick={() => handleRemoveSubtask(task.id)}
-                                                aria-label={`Verwijder subtaak ${index + 1}`}
-                                            >
-                                                Verwijder
-                                            </Button>
-                                        )}
-                                    </div>
-
-                                    <div className="flex flex-col gap-4 ">
-                                        {/* Titel Input */}
-                                        <div>
-
-                                            <label htmlFor={`title-${task.id}`}
-                                                   className="block mb-2 font-headings text-lg font-bold">
-                                                Titel <span aria-hidden="true" className="text-red-600">*</span>
-                                                <span className="sr-only">(Verplicht)</span>
-                                            </label>
-
-                                            <div className="relative">
-                                                <Tape variant="small-r"/>
-                                                <Tape variant="small-l"/>
-                                                <input
-
-                                                    id={`title-${task.id}`}
-                                                    type="text"
-                                                    className="w-full bg-bg-white shadow-xl/5 rounded-[3px] p-3 border border-transparent focus:border-black outline-none"
-                                                    placeholder="e.g. doel van de sub-taak"
-                                                    value={task.title}
-                                                    maxLength={500}
-                                                    onChange={(e) => handleChange(task.id, 'title', e.target.value)}
-
-                                                />
-
-                                            </div>
-
-                                        </div>
-
-                                        {/* Description Input */}
-                                        <div>
-                                            <label htmlFor={`description-${task.id}`}
-                                                   className="block mb-2 font-headings text-lg font-bold">Beschrijving</label>
-
-                                            <div className="relative">
-                                                <Tape variant="small-r"/>
-                                                <Tape variant="small-l"/>
-                                                <textarea
-                                                    id={`description-${task.id}`}
-                                                    className="w-[100%] bg-bg-white shadow-xl/7 rounded-[2%] p-[5%] min-h-[25%] border border-transparent focus:border-black outline-none"
-                                                    placeholder="Details over deze taak..."
-                                                    value={task.description}
-                                                    maxLength={4000}
-                                                    onChange={(e) => handleChange(task.id, 'description', e.target.value)}
-                                                />
-                                            </div>
-                                        </div>
-
-                                        {/* Deadline Input */}
-                                        <div>
-                                            <label htmlFor={`deadline-${task.id}`}
-                                                   className="block mb-2 font-headings text-lg font-bold">Deadline</label>
-                                            <div className="relative">
-                                                <Tape variant="small-r"/>
-                                                <Tape variant="small-l"/>
-                                                <input
-                                                    id={`deadline-${task.id}`}
-                                                    type="date"
-                                                    className="w-full bg-bg-white shadow-xl/7 rounded-[3px] p-3 cursor-pointer border border-transparent focus:border-black outline-none"
-                                                    value={task.deadline}
-                                                    onChange={(e) => handleChange(task.id, 'deadline', e.target.value)}
-                                                    min={today}
-                                                    max={maxDateString}
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Card>
+                            {/* Task Header & Remove Button */}
+                            <div className="flex justify-between items-center mb-4 mt-2">
+                                <h2 className="text-2xl font-headers">Subtaak #{index + 1}</h2>
+                                {subtasks.length > 1 && (
+                                    <Button
+                                        type="button"
+                                        variant="boardit-white"
+                                        size="boardit-sm"
+                                        onClick={() => handleRemoveSubtask(task.id)}
+                                        aria-label={`Verwijder subtaak ${index + 1}`}
+                                    >
+                                        Verwijder
+                                    </Button>
+                                )}
                             </div>
-                        );
-                    })}
+
+                            <div className="flex flex-col gap-4 ">
+                                {/* Titel Input */}
+                                <div>
+                                    <label htmlFor={`title-${task.id}`}
+                                           className="block mb-2 font-headings text-lg font-bold">
+                                        Titel <span aria-hidden="true" className="text-red-600">*</span>
+                                        <span className="sr-only">(Verplicht)</span>
+                                    </label>
+
+                                    <div className="relative">
+                                        <Tape variant="small-r"/>
+                                        <Tape variant="small-l"/>
+                                        <input
+                                            id={`title-${task.id}`}
+                                            type="text"
+                                            className="w-full bg-bg-white shadow-xl/5 rounded-[3px] p-3 border border-transparent focus:border-black outline-none"
+                                            placeholder="e.g. doel van de sub-taak"
+                                            value={task.title}
+                                            maxLength={500}
+                                            onChange={(e) => handleChange(task.id, 'title', e.target.value)}
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Description Input */}
+                                <div>
+                                    <label htmlFor={`description-${task.id}`}
+                                           className="block mb-2 font-headings text-lg font-bold">Beschrijving</label>
+
+                                    <div className="relative">
+                                        <Tape variant="small-r"/>
+                                        <Tape variant="small-l"/>
+                                        <textarea
+                                            id={`description-${task.id}`}
+                                            className="w-[100%] bg-bg-white shadow-xl/7 rounded-[2%] p-[5%] min-h-[25%] border border-transparent focus:border-black outline-none"
+                                            placeholder="Details over deze taak..."
+                                            value={task.description}
+                                            maxLength={4000}
+                                            onChange={(e) => handleChange(task.id, 'description', e.target.value)}
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Deadline Input */}
+                                <div>
+                                    <label htmlFor={`deadline-${task.id}`}
+                                           className="block mb-2 font-headings text-lg font-bold">Deadline</label>
+                                    <div className="relative">
+                                        <Tape variant="small-r"/>
+                                        <Tape variant="small-l"/>
+                                        <input
+                                            id={`deadline-${task.id}`}
+                                            type="date"
+                                            className="w-full bg-bg-white shadow-xl/7 rounded-[3px] p-3 cursor-pointer border border-transparent focus:border-black outline-none"
+                                            value={task.deadline}
+                                            onChange={(e) => handleChange(task.id, 'deadline', e.target.value)}
+                                            min={today}
+                                            max={maxDateString}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </Card>
+                    )}
 
 
                     {/* --- ACTION BUTTONS --- */}
                     <div className="flex flex-col sm:flex-row gap-4 mt-6 justify-center">
-
                         <FormButton
                             type="button"
                             colorClass="bg-secondary" // Makes it green
@@ -286,11 +272,9 @@ const CreateSubtasks = () => {
                         >
                             {isSubmitting ? 'Bezig met opslaan...' : 'Alles Opslaan'}
                         </FormButton>
-
                     </div>
                 </form>
-            </div>
-        </>
+            </>
     );
 };
 
