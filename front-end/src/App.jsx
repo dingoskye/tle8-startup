@@ -8,7 +8,6 @@ import GroupOverview from "@/pages/group-overview.jsx";
 import Welcome from "@/pages/welcome.jsx";
 import {ErrorPage} from "@/pages/error.jsx";
 import GroupDetails from "@/pages/group-details.jsx";
-import Subtask from "./pages/subtask.jsx";
 import Register from "@/pages/register.jsx";
 import Login from "@/pages/login.jsx";
 import {CreateTask} from "@/pages/create-task.jsx";
@@ -29,6 +28,8 @@ function App() {
                 <Route path="/hoofdtaak/aanmaken" element={<CreateTask/>}/>
                 <Route path="*" element={<ErrorPage/>}/>
                 <Route path="/subtaak-genereren/:id" element={<Subtask/>}/>
+                <Route path="/laden" element={<Loading/>}/>
+
             </Route>
         </Routes>
     )
