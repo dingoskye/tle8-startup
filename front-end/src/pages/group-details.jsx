@@ -4,8 +4,14 @@ import {Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious}
 import {Card, TapeCard} from "@/components/ui/cards.jsx";
 import {MainButton} from "@/components/ui/buttons.jsx";
 import {useGroup} from "@/context/group-context.jsx";
-import {useParams} from "react-router";
+import {Link, useParams} from "react-router";
 import {FaPlus} from "react-icons/fa";
+import {ErrorComponent} from "@/pages/Error.jsx";
+import DeadlineCard from "@/components/ui/deadline-card.jsx";
+import {LuSquare, LuSquareCheckBig} from "react-icons/lu";
+import Progressbar from "@/components/ui/progressbar.jsx";
+import Tape from "@/components/ui/tape.jsx";
+import {IoPerson} from "react-icons/io5";
 
 function GroupDetails() {
     const {fetchGroup} = useGroup();
@@ -21,145 +27,117 @@ function GroupDetails() {
     };
 
     useEffect(() => {
-        document.title = "Board-it | Studiegroepen";
-
         loadGroup();
     }, []);
 
-
-    if (!group) {
-        return (
-            <p className="text-center mt-10">
-                Groep niet gevonden.
-            </p>
-        );
-    }
+    useEffect(() => {
+        document.title = `Board-it | Details ${group?.name ?? ""}`;
+    }, [group]);
 
 
     return (
-        <div>
-            <header role="banner" className="text-center p-1 mt-2 relative">
-                <div className="bg-secondary p-4 rounded-lg shadow-md">
-                    <h1 className="text-2xl font-headers">
-                        Groep Overzicht: {group.id}
-                    </h1>
-                </div>
-            </header>
+        group !== null ?
+            group.status ?
+                <ErrorComponent code={group.status} message="Groep is niet beschikbaar"/> :
+                <>
+                    <header role="banner" className="text-center p-1 mt-1 relative">
+                        <div className="bg-primary w-full p-4 rounded-lg shadow-md">
+                            <Tape variant="big-r"/>
+                            <Tape variant="big-l"/>
+                            <h1 className="text-3xl font-headers">{group.name ?? ""}</h1>
+                        </div>
+                    </header>
 
-
-            <section aria-label="openstaande taken" className="text-center flex flex-col gap-2 mb-8">
-                <Carousel className="px-6 text-left">
-                    <CarouselContent className="py-4">
-
-                        {group.main_tasks?.length > 0 ? (
-                            group.main_tasks.map((task) =>
-                                <CarouselItem
-                                    key={task.id}
-                                    className="flex md:basis-1/2 lg:basis-1/3"
-                                >
-                                    <TaskCard
-                                        task={{
-                                            ...task,
-                                            group: group,
-                                            sub_tasks: task.sub_tasks ?? [],
-                                            users: task.users?.length
-                                                ? task.users
-                                                : [{pivot: {progress: 0}}]
-                                        }}
-                                    />
-                                </CarouselItem>
-                            )
-                        ) : (
-                            <CarouselItem className="flex">
-                                <TaskCard task={""}/>
-                            </CarouselItem>
-                        )}
-
-                    </CarouselContent>
-
-                    <CarouselPrevious/>
-                    <CarouselNext/>
-                </Carousel>
-
-
-                <div className="w-[60%] md:w-[30%] mx-auto mt-4">
-                    <MainButton link="/taak-aanmaken">
-                        <FaPlus/>
-                    </MainButton>
-                </div>
-
-            </section>
-
-
-            <div className="min-h-[25vh]">
-                <TapeCard variant="white">
-
-                    <h2 className="text-left text-xl font-headers">
-                        Leden:
-                    </h2>
-
-
-                    <Carousel className="px-6 text-left mt-4">
-                        <CarouselContent className="py-4">
-
-                            {group.users?.length > 0 ? (
-                                group.users.map((member, index) => (
-
-                                    <CarouselItem
-                                        key={member.id}
-                                        className="flex md:basis-1/2 lg:basis-1/3"
-                                    >
-
-                                        <Card
-                                            variant={variants[index % variants.length]}
-                                        >
-
-                                            {member.profile_image ? (
-                                                <img
-                                                    src={member.profile_image}
-                                                    alt={`${member.user_name} avatar`}
-                                                    className="w-16 h-16 rounded-full object-cover mx-auto"
-                                                />
-                                            ) : (
-                                                <div
-                                                    className="w-16 h-16 rounded-full bg-gray-200 mx-auto flex items-center justify-center text-sm font-semibold"
-                                                >
-                                                    {(member.user_name || '')
-                                                        .split(' ')
-                                                        .map(n => n[0])
-                                                        .slice(0, 2)
-                                                        .join('') || '?'}
+                    <section aria-label="openstaande taken" className="text-center flex flex-col gap-2">
+                        <Carousel className="px-6 text-left">
+                            <CarouselContent className="py-4">
+                                {group.main_tasks !== null && group.main_tasks?.length > 0 ? group.main_tasks.map((task, index) =>
+                                    <CarouselItem key={index} className="flex md:basis-1/2 lg:basis-1/3 min-h-[25vh]">
+                                        <div className="w-[95%] mx-auto h-full"
+                                             onClick={() => navigation(`/hoofdtaken/${task.id ?? 1}`)}>
+                                            <Card variant="white">
+                                                <div className="gap-4 mt-2 grid grid-cols-3 grow">
+                                                    <DeadlineCard deadline={task.deadline}/>
+                                                    <div className="col-span-2">
+                                                        <h2 className="text-xl font-headers text-left">{task.title}</h2>
+                                                    </div>
                                                 </div>
-                                            )}
-
-                                            <p className="text-lg font-semibold mt-2 text-center">
-                                                {member.user_name}
-                                            </p>
-
-                                        </Card>
-
+                                                <Link className="sr-only" to={`/hoofdtaken/${task.id ?? 1}`}/>
+                                                <p>{task.description ?? "Taak heeft geen beschrijving"}</p>
+                                            </Card>
+                                        </div>
                                     </CarouselItem>
+                                ) : <CarouselItem className="flex">
+                                    <TaskCard task={""}/>
+                                </CarouselItem>}
+                            </CarouselContent>
+                            <CarouselPrevious/>
+                            <CarouselNext/>
+                        </Carousel>
 
-                                ))
-                            ) : (
-                                <CarouselItem>
-                                    <Card>
-                                        Geen leden gevonden.
-                                    </Card>
-                                </CarouselItem>
-                            )}
+                        <div className="w-[20%] md:w-[30%] mx-auto mt-4">
+                            <MainButton link="/taak-aanmaken">
+                                <FaPlus/>
+                                <p className="sr-only">Taak aanmaken</p>
+                            </MainButton>
+                        </div>
+                    </section>
 
-                        </CarouselContent>
+                    <div className="min-h-[25vh]">
+                        <TapeCard variant="white">
+                            <h2 className="text-left text-xl font-headers">
+                                Leden:
+                            </h2>
 
-                        <CarouselPrevious/>
-                        <CarouselNext/>
+                            <Carousel className="px-6 text-left mt-4">
+                                <CarouselContent className="py-4">
+                                    {group.users?.length > 0 ? (
+                                        group.users.map((member, index) => (
+                                            <CarouselItem
+                                                key={member.id}
+                                                className="flex basis-1/2 md:basis-1/3 lg:basis-1/5"
+                                            >
+                                                <Card variant={variants[index % variants.length]}>
+                                                    {member.profile_image ? (
+                                                        <img
+                                                            src={member.profile_image}
+                                                            alt={`${member.user_name} avatar`}
+                                                            className="w-16 h-16 rounded-full object-cover mx-auto"
+                                                        />
+                                                    ) : (
+                                                        <div
+                                                            className="bg-bg-white text-center items-center flex mt-3 rounded-md w-full h-20 mx-auto border-5 border-white shadow-sm">
+                                                            <IoPerson
+                                                                aria-label="Icoontje van poppetje (geen foto beschikbaar)"
+                                                                className="text-4xl w-full"/>
+                                                        </div>
+                                                    )}
+                                                    <p className="text-lg font-semibold mt-2 text-center">
+                                                        @{member.user_name}
+                                                    </p>
+                                                </Card>
+                                            </CarouselItem>
 
-                    </Carousel>
+                                        ))
+                                    ) : (
+                                        <CarouselItem>
+                                            <Card>
+                                                Geen leden gevonden.
+                                            </Card>
+                                        </CarouselItem>
+                                    )}
 
-                </TapeCard>
-            </div>
+                                </CarouselContent>
 
-        </div>
+                                <CarouselPrevious/>
+                                <CarouselNext/>
+
+                            </Carousel>
+
+                        </TapeCard>
+                    </div>
+                </> :
+            null
     );
 }
 

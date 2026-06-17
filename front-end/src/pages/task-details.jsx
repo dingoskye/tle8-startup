@@ -46,7 +46,7 @@ function TaskDetails() {
         task !== null ?
             task?.status ?
                 <ErrorComponent code={task.status} message="Taak bestaat niet"/> :
-                <div>
+                <>
                     <header role="banner" className="text-center p-1 mt-2 relative">
                         <div className="bg-bg-white w-full p-4 rounded-lg shadow-md">
                             <Tape variant="big-r"/>
@@ -92,7 +92,7 @@ function TaskDetails() {
                             </div>
                         </Link>
                     }
-                </div> : <p>Taak aan het laden</p>
+                </> : <p>Taak aan het laden</p>
     )
 }
 

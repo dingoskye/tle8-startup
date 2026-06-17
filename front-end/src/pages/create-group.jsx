@@ -153,7 +153,7 @@ const CreateGroup = () => {
     return (
         <>
             {/* --- HEADER SECTION --- */}
-            <header role="banner" className="text-center p-1 mt-10 mb-10 relative">
+            <header role="banner" className="text-center p-1 relative">
                 <div className="bg-primary  mx-auto p-4 rounded-lg shadow-md relative">
                     <Tape variant="big-r"/>
                     <Tape variant="big-l"/>
