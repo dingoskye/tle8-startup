@@ -69,6 +69,10 @@ export function ThemeProvider({children}) {
     }
 
     useEffect(() => {
+        fetchSettings()
+    }, [])
+
+    useEffect(() => {
         document.documentElement.classList.remove(
             "theme-default",
             "theme-natural",
