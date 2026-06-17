@@ -143,3 +143,33 @@ erDiagram
 
 ## Edge Cases
 
+### Authdentication:
+
+- Multiple login attempts what triggers rate limit.
+- Token becomes invalid when logged in.
+- User has no username or email what is required when logged in.
+- Email or username is the same for multiple users.
+
+### Task:
+
+- User has no head-task but has sub-tasks.
+- User has no group but has head-tasks.
+- Head and sub-tasks has no title.
+- Head-task has no deadline.
+- Head-task is deleted but sub-tasks still exist.
+- Group is deleted but head-tasks or sub-tasks still exist.
+
+### AI:
+
+- AI formats response incorrectly (incorrect formating)
+- AI adds not needed tasks (dubble tasks, irrelevant tasks).
+- AI has an internal error.
+- AI tokens are gone, or AI server is down.
+- AI rate limit is exceeded
+- AI security policy stops the AI
+- AI response is cut off due to token limit.
+
+## front-end integration:
+
+- Protected routes require JSON Web Tokens for authentication.
+- Front-end routes have wrong route names, or wrong variable names causing failed requests.
