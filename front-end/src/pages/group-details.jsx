@@ -51,10 +51,9 @@ function GroupDetails() {
                     <section aria-label="openstaande taken" className="text-center flex flex-col gap-2">
                         <Carousel className="px-6 text-left">
                             <CarouselContent className="py-4">
-                                {group.main_tasks !== null && group.main_tasks?.length > 0 ? group.main_tasks.map((task, index) =>
+                                {group.main_tasks !== null && group.main_tasks?.length > 0 ? group.main_tasks.map((task, index) => (
                                     <CarouselItem key={index} className="flex md:basis-1/2 lg:basis-1/3 min-h-[25vh]">
-                                        <div className="w-[95%] mx-auto h-full"
-                                             onClick={() => navigation(`/hoofdtaken/${task.id ?? 1}`)}>
+                                        <Link to={`/hoofdtaken/${task.id ?? 1}`} className="w-[95%] mx-auto h-full">
                                             <Card variant="white">
                                                 <div className="gap-4 mt-2 grid grid-cols-3 grow">
                                                     <DeadlineCard deadline={task.deadline}/>
@@ -62,14 +61,15 @@ function GroupDetails() {
                                                         <h2 className="text-xl font-headers text-left">{task.title}</h2>
                                                     </div>
                                                 </div>
-                                                <Link className="sr-only" to={`/hoofdtaken/${task.id ?? 1}`}/>
                                                 <p>{task.description ?? "Taak heeft geen beschrijving"}</p>
                                             </Card>
-                                        </div>
+                                        </Link>
                                     </CarouselItem>
-                                ) : <CarouselItem className="flex">
-                                    <TaskCard task={""}/>
-                                </CarouselItem>}
+                                )) : (
+                                    <CarouselItem className="flex">
+                                        <TaskCard task={""}/>
+                                    </CarouselItem>
+                                )}
                             </CarouselContent>
                             <CarouselPrevious/>
                             <CarouselNext/>
