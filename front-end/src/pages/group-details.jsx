@@ -19,7 +19,7 @@ function GroupDetails() {
 
     const [group, setGroup] = useState(null);
 
-    const variants = ["secondary", "tertiary", "quaternary", "primary"];
+    const variants = ["primary", "secondary", "tertiary", "quaternary"];
 
     const loadGroup = async () => {
         const data = await fetchGroup(params.id);
@@ -41,7 +41,7 @@ function GroupDetails() {
                 <ErrorComponent code={group.status} message="Groep is niet beschikbaar"/> :
                 <>
                     <header role="banner" className="text-center p-1 mt-1 relative">
-                        <div className="bg-primary w-full p-4 rounded-lg shadow-md">
+                        <div className="bg-secondary w-full p-4 rounded-lg shadow-md">
                             <Tape variant="big-r"/>
                             <Tape variant="big-l"/>
                             <h1 className="text-3xl font-headers">{group.name ?? ""}</h1>
@@ -57,7 +57,9 @@ function GroupDetails() {
                                              onClick={() => navigation(`/hoofdtaken/${task.id ?? 1}`)}>
                                             <Card variant="white">
                                                 <div className="gap-4 mt-2 grid grid-cols-3 grow">
-                                                    <DeadlineCard deadline={task.deadline}/>
+                                                    <div className="h-[50%]">
+                                                        <DeadlineCard deadline={task.deadline}/>
+                                                    </div>
                                                     <div className="col-span-2">
                                                         <h2 className="text-xl font-headers text-left">{task.title}</h2>
                                                     </div>
@@ -89,7 +91,7 @@ function GroupDetails() {
                                 Leden:
                             </h2>
 
-                            <Carousel className="px-6 text-left mt-4">
+                            <Carousel className="px-6 text-left">
                                 <CarouselContent className="py-4">
                                     {group.users?.length > 0 ? (
                                         group.users.map((member, index) => (
@@ -126,12 +128,9 @@ function GroupDetails() {
                                             </Card>
                                         </CarouselItem>
                                     )}
-
                                 </CarouselContent>
-
                                 <CarouselPrevious/>
                                 <CarouselNext/>
-
                             </Carousel>
 
                         </TapeCard>
