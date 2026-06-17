@@ -42,10 +42,16 @@ function Subtask() {
                 },
             });
 
+            if (!data || data.message || !data.title) {
+                setErrors({ fetchError: "Error: De opgevraagde hoofdtaak bestaat niet (meer) in de database." });
+                return;
+            }
+
             setDetails(data);
             console.log(data);
         } catch (e) {
             console.log(e.message);
+            setErrors({ fetchError: "Error: De opgevraagde hoofdtaak bestaat niet (meer) in de database." });
         }
     }
 
@@ -121,174 +127,123 @@ function Subtask() {
             navigate(`/hoofdtaken/${id}`);
         } catch (err) {
             console.error(err);
+            setErrors({general: "Er is een fout opgetreden bij het genereren van de subtaken."});
         }
     };
 
+    //documenten titels voor WCAG!!
+    useEffect(() => {
+        document.title = "Board-it | Subtaken genereren";
+    }, [])
+
     return (
         <Card variant={"white"}>
+            {/* Controleer of er een fetch error is (bijv. taak niet gevonden) */}
+            {errors.fetchError ? (
+                <div className="flex flex-col items-center justify-center py-16 gap-6 text-center">
+                    <h1 className="text-3xl font-headers text-red-600">Oeps!</h1>
+                    <p className="text-lg font-paragraph font-bold">
+                        {errors.fetchError}
+                    </p>
+                    {/* Knop om de gebruiker terug te sturen, pas de link aan naar jouw overzichtspagina indien nodig */}
+                    <button
+                        onClick={() => navigate("/hoofdtaken")}
+                        className="mt-4 px-6 py-2 rounded-full bg-gray-200 text-black border-2 border-white shadow-md font-bold hover:scale-105 transition"
+                    >
+                        Terug naar overzicht
+                    </button>
+                </div>
+            ) : (
+                /* Als er GEEN fetch error is, renderen we het normale formulier */
+                <>
+                    <h1 className="text-3xl font-headers flex items-center justify-center">
+                        {details?.title}
+                    </h1>
 
-            <h1 className="text-3xl font-headers mb-10  flex items-center justify-center">
-                {details?.title}
-            </h1>
+                    <section>
+                        <form onSubmit={handleSubmit} className="flex flex-col gap-10">
+                            <TapeCard variant="quaternary">
+                                <label htmlFor="context" className="block font-headers mb-4">
+                                    Context:
+                                </label>
 
-            <section>
-                <form onSubmit={handleSubmit} className="flex flex-col gap-10">
-                    <TapeCard variant="quaternary">
-                        <label htmlFor="context" className="block font-headers mb-4">
-                            Context:
-                        </label>
+                                <textarea
+                                    id="context"
+                                    name="context"
+                                    value={formData.context}
+                                    onChange={handleInputChange}
+                                    className="w-full min-h-30 bg-white/80 p-3 outline-none resize-none"
+                                />
 
-                        <textarea
-                            id="context"
-                            name="context"
-                            value={formData.context}
-                            onChange={handleInputChange}
-                            className="w-full min-h-30 bg-white/80 p-3 outline-none resize-none"
-                        />
+                                {errors.context && (
+                                    <p className="text-red-600 text-sm mt-1">
+                                        {errors.context}
+                                    </p>
+                                )}
+                            </TapeCard>
 
-                        {errors.context && (
-                            <p className="text-red-600 text-sm mt-1">
-                                {errors.context}
-                            </p>
-                        )}
-                    </TapeCard>
-                    {/*<div className="relative bg-(--flamingo-pink) p-4 shadow-md">*/}
-                    {/*    <Tape variant="big-r"/>*/}
-                    {/*    <Tape variant="big-l"/>*/}
+                            <TapeCard variant="tertiary">
 
-                    {/*    <label htmlFor="context" className="block font-headers mb-4">*/}
-                    {/*        Context:*/}
-                    {/*    </label>*/}
+                                <label htmlFor="niveau" className="block font-headers mb-4">
+                                    Niveau:
+                                </label>
 
-                    {/*    <textarea*/}
-                    {/*        id="context"*/}
-                    {/*        name="context"*/}
-                    {/*        value={formData.context}*/}
-                    {/*        onChange={handleInputChange}*/}
-                    {/*        className="w-full min-h-30 bg-white/80 p-3 outline-none resize-none"*/}
-                    {/*    />*/}
+                                <div className="relative">
+                                    {/* lijn */}
+                                    <div className="absolute left-0 right-0 top-6 h-0.5 bg-black"></div>
 
-                    {/*    {errors.context && (*/}
-                    {/*        <p className="text-red-600 text-sm mt-1">*/}
-                    {/*            {errors.context}*/}
-                    {/*        </p>*/}
-                    {/*    )}*/}
-                    {/*</div>*/}
-                    <TapeCard variant="tertiary">
+                                    {/* slider */}
+                                    <div className="grid grid-cols-4">
+                                        {[1, 2, 3, 4].map((value) => (
+                                            <button
+                                                key={value}
+                                                type="button"
+                                                aria-label={`Niveau ${value}`}
+                                                aria-pressed={Number(formData.niveau) === value}
+                                                onClick={() =>
+                                                    setFormData((prev) => ({
+                                                        ...prev,
+                                                        niveau: value,
+                                                    }))
+                                                }
+                                                className="relative flex h-12 justify-center">
+                                                {/* verticale lijn */}
+                                                <span className="absolute top-0 h-12 w-0.5 bg-black"></span>
 
-                        <label htmlFor="niveau" className="block font-headers mb-4">
-                            Niveau:
-                        </label>
+                                                {/* slider dot */}
+                                                {Number(formData.niveau) === value && (
+                                                    <span
+                                                        className="absolute top-4 z-30 h-5 w-5 rounded-full bg-red-600 [box-shadow:2px_2px_6px_rgba(0,0,0,0.7)] before:absolute before:top-1/2 before:left-1/2 before:block before:size-3.5 before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-full before:bg-red-600 before:[box-shadow:inset_2px_2px_4px_rgba(255,255,255,0.25),2px_2px_6px_rgba(80,80,80,0.5)] before:content-['']"/>
+                                                )}
+                                            </button>
+                                        ))}
+                                    </div>
+                                    <div className="grid grid-cols-4 mt-3 text-[15px] font-paragraph">
+                                        <span className="text-center">Beginner</span>
+                                        <span className="text-center">In ontwikkeling</span>
+                                        <span className="text-center">Gevorderd</span>
+                                        <span className="text-center">Expert</span>
+                                    </div>
 
-                        <div className="relative">
-                            {/* lijn */}
-                            <div className="absolute left-0 right-0 top-6 h-0.5 bg-black"></div>
+                                    {errors.niveau && (
+                                        <p className="text-red-600 text-sm mt-1">
+                                            {errors.niveau}
+                                        </p>
+                                    )}
+                                </div>
+                            </TapeCard>
 
-                            {/* slider */}
-                            <div className="grid grid-cols-4">
-                                {[1, 2, 3, 4].map((value) => (
-                                    <button
-                                        key={value}
-                                        type="button"
-                                        aria-label={`Niveau ${value}`}
-                                        aria-pressed={Number(formData.niveau) === value}
-                                        onClick={() =>
-                                            setFormData((prev) => ({
-                                                ...prev,
-                                                niveau: value,
-                                            }))
-                                        }
-                                        className="relative flex h-12 justify-center">
-                                        {/* verticale lijn */}
-                                        <span className="absolute top-0 h-12 w-0.5 bg-black"></span>
+                            {errors.general && <div role="alert" className="mt-1 rounded-lg flex justify-center text-(--ruas-red) font-semibold text-lg">{errors.general}</div>}
 
-                                        {/* slider dot */}
-                                        {Number(formData.niveau) === value && (
-                                            <span
-                                                className="absolute top-4 z-30 h-5 w-5 rounded-full bg-red-600 [box-shadow:2px_2px_6px_rgba(0,0,0,0.7)] before:absolute before:top-1/2 before:left-1/2 before:block before:size-3.5 before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-full before:bg-red-600 before:[box-shadow:inset_2px_2px_4px_rgba(255,255,255,0.25),2px_2px_6px_rgba(80,80,80,0.5)] before:content-['']"/>
-                                        )}
-                                    </button>
-                                ))}
+                            <div className="w-[45%] md:w-[15%] mx-auto flex flex-col items-center text-center mb-5">
+                                <SubmitButton>
+                                    Genereren
+                                </SubmitButton>
                             </div>
-                            <div className="grid grid-cols-4 mt-3 text-[15px] font-paragraph">
-                                <span className="text-center">Beginner</span>
-                                <span className="text-center">In ontwikkeling</span>
-                                <span className="text-center">Gevorderd</span>
-                                <span className="text-center">Expert</span>
-                            </div>
-
-                            {errors.niveau && (
-                                <p className="text-red-600 text-sm mt-1">
-                                    {errors.niveau}
-                                </p>
-                            )}
-                        </div>
-                    </TapeCard>
-                    {/*<div className="relative bg-(--christa-yellow) p-4 shadow-md">*/}
-
-                    {/*    <Tape variant="big-r"/>*/}
-                    {/*    <Tape variant="big-l"/>*/}
-
-                    {/*    <label htmlFor="niveau" className="block font-headers mb-4">*/}
-                    {/*        Niveau:*/}
-                    {/*    </label>*/}
-
-                    {/*    <div className="relative">*/}
-                    {/*        /!* lijn *!/*/}
-                    {/*        <div className="absolute left-0 right-0 top-6 h-0.5 bg-black"></div>*/}
-
-                    {/*        /!* slider *!/*/}
-                    {/*        <div className="grid grid-cols-4">*/}
-                    {/*            {[1, 2, 3, 4].map((value) => (*/}
-                    {/*                <button*/}
-                    {/*                    key={value}*/}
-                    {/*                    type="button"*/}
-                    {/*                    aria-label={`Niveau ${value}`}*/}
-                    {/*                    aria-pressed={Number(formData.niveau) === value}*/}
-                    {/*                    onClick={() =>*/}
-                    {/*                        setFormData((prev) => ({*/}
-                    {/*                            ...prev,*/}
-                    {/*                            niveau: value,*/}
-                    {/*                        }))*/}
-                    {/*                    }*/}
-                    {/*                    className="relative flex h-12 justify-center">*/}
-                    {/*                    /!* verticale lijn *!/*/}
-                    {/*                    <span className="absolute top-0 h-12 w-0.5 bg-black"></span>*/}
-
-                    {/*                    /!* slider dot *!/*/}
-                    {/*                    {Number(formData.niveau) === value && (*/}
-                    {/*                        <span*/}
-                    {/*                            className="absolute top-4 z-30 h-5 w-5 rounded-full bg-red-600 [box-shadow:2px_2px_6px_rgba(0,0,0,0.7)] before:absolute before:top-1/2 before:left-1/2 before:block before:size-3.5 before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-full before:bg-red-600 before:[box-shadow:inset_2px_2px_4px_rgba(255,255,255,0.25),2px_2px_6px_rgba(80,80,80,0.5)] before:content-['']"/>*/}
-                    {/*                    )}*/}
-                    {/*                </button>*/}
-                    {/*            ))}*/}
-                    {/*        </div>*/}
-                    {/*        <div className="grid grid-cols-4 mt-3 text-[15px] font-paragraph">*/}
-                    {/*            <span className="text-center">Beginner</span>*/}
-                    {/*            <span className="text-center">In ontwikkeling</span>*/}
-                    {/*            <span className="text-center">Gevorderd</span>*/}
-                    {/*            <span className="text-center">Expert</span>*/}
-                    {/*        </div>*/}
-
-                    {/*        {errors.niveau && (*/}
-                    {/*            <p className="text-red-600 text-sm mt-1">*/}
-                    {/*                {errors.niveau}*/}
-                    {/*            </p>*/}
-                    {/*        )}*/}
-                    {/*    </div>*/}
-
-                    {/*</div>*/}
-                    {/*<button type="submit"*/}
-                    {/*        className="self-center mt-16 px-8 py-2 rounded-full bg-[#ddaefe] text-black border-2 border-white shadow-md font-bold hover:scale-105 transition">*/}
-                    {/*    Genereren*/}
-                    {/*</button>*/}
-                    <div className="w-[45%] md:w-[15%] mx-auto flex flex-col items-center text-center mb-5">
-                        <SubmitButton>
-                            Genereren
-                        </SubmitButton>
-                    </div>
-                </form>
-            </section>
+                        </form>
+                    </section>
+                </>
+            )}
         </Card>
     );
 }
