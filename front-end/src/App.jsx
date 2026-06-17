@@ -27,8 +27,8 @@ function App() {
                 <Route path="/hoofdtaken" element={<TaskOverview/>}/>
                 <Route path="/hoofdtaken/:id" element={<TaskDetails/>}/>
                 <Route path="/hoofdtaak/aanmaken" element={<CreateTask/>}/>
+                <Route path="/subtaken/genereren/:id" element={<Subtask/>}/>
                 <Route path="*" element={<ErrorPage/>}/>
-                <Route path="/subtaak-genereren/:id" element={<Subtask/>}/>
             </Route>
         </Routes>
     )
