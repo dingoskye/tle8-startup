@@ -17,6 +17,14 @@ class Group extends Model
 {
     use SoftDeletes;
 
+    protected $fillable = [
+        'name',
+        'description',
+        'image',
+        'user_id',
+    ];
+
+//ToDo: Invite link groep, leader board boolean, meerdere personen.
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'user_group')

@@ -16,6 +16,14 @@ class MainTask extends Model
 {
     use SoftDeletes;
 
+    protected $fillable = [
+        'title',
+        'deadline',
+        'description',
+        'ai_file',
+        'group_id',
+    ];
+
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'user_main_tasks')
@@ -30,6 +38,6 @@ class MainTask extends Model
 
     public function subTasks(): HasMany
     {
-        return $this->hasMany(SubTask::class, 'sub_task_id');
+        return $this->hasMany(SubTask::class);
     }
 }
