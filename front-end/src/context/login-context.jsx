@@ -1,13 +1,11 @@
-import {createContext, useContext, useState} from "react"
+import {createContext, useContext, useEffect, useState} from "react"
 import {useApi} from "@/context/api-context.jsx";
 import {useNavigate} from "react-router";
 
 const LoginContext = createContext()
 
 export function LoginProvider({children}) {
-    const {apiFetch, setLoginData, setLoggedOut} = useApi();
-
-
+    const {apiFetch, setLoginData, token, setLoggedOut} = useApi();
     const [users, setUsers] = useState(null)
 
     async function fetchLogin(formData) {
@@ -18,8 +16,6 @@ export function LoginProvider({children}) {
                 headers: {
                     Accept: "application/json",
                     "Content-Type": "application/json",
-
-
                 },
                 body: JSON.stringify(formData)
 
@@ -57,6 +53,7 @@ export function LoginProvider({children}) {
                 headers: {
                     Accept: "application/json",
                     "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
                 },
             })
             setUsers(data)
@@ -66,8 +63,9 @@ export function LoginProvider({children}) {
         }
     }
 
-    function logout() {
-        localStorage.clear()
+    async function logout() {
+        await localStorage.clear()
+        setLoginData(null)
         setLoggedOut(true)
     }
 

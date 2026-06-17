@@ -20,6 +20,12 @@ export function ApiProvider({children}) {
         await localStorage.setItem('user', JSON.stringify(loginData.user))
     }
 
+    async function getData() {
+        const data = await JSON.parse(localStorage.getItem('user'))
+        setLoginData(data)
+        // console.log(data)
+    }
+
     async function apiFetch(endpoint, options = {}) {
         const res = await fetch(BASE_URL + endpoint, {
 
@@ -43,6 +49,10 @@ export function ApiProvider({children}) {
     }
 
     useEffect(() => {
+        getData()
+    }, [])
+
+    useEffect(() => {
         setFirst(JSON.parse(localStorage.getItem("first")))
     }, []);
 
@@ -53,7 +63,7 @@ export function ApiProvider({children}) {
     }, [loggedOut])
 
     return (
-        <ApiContext.Provider value={{apiFetch, setLoginData, setLoggedOut, loginData, token, refreshToken, setFirst}}>
+        <ApiContext.Provider value={{apiFetch, setLoginData, setLoggedOut, loginData, token, refreshToken, getData, setFirst}}>
             {children}
         </ApiContext.Provider>
     );

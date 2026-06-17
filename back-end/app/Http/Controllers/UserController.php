@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\UserSetting;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -17,7 +18,7 @@ class UserController extends Controller
     public function index()
     {
         // ToDo: alleen email en gebruikersnaam meegeven
-        return User::all();
+        return User::select('id', 'user_name')->get();
     }
 
 
@@ -103,6 +104,8 @@ class UserController extends Controller
                 return response()->json(['error' => 'Could not create token'], 500);
             }
 
+            $this->createSettings($register->id);
+
             // user terug sturen met de token
             return response()->json([
                 'token' => $token,
@@ -111,6 +114,15 @@ class UserController extends Controller
         } catch (ModelNotFoundException $e) {
             return response(['error' => $e], 500);
         }
+    }
+
+    public function createSettings(string $userId)
+    {
+        $settings = new UserSetting();
+        $settings->user_id = $userId;
+        $settings->theme_id = 1;
+        $settings->written_font = 1;
+        $settings->save();
     }
 
     /**
@@ -161,7 +173,7 @@ class UserController extends Controller
     }
 
 // ToDo: Logout route aanmaken.
-  
+
 }
 
 // ToDo: Change password route aanmaken.

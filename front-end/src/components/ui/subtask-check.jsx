@@ -32,14 +32,14 @@ function SubtaskCheck({completedNow, id, children, onUpdated}) {
                 e.stopPropagation(); //dit is zodat in de task-card hij niet de card ook activeert
                 setCompleted(false)
             }} tabIndex={0} aria-label="To do item uitvinken">
-                <LuSquareCheckBig className="text-2xl bg-white shadow-sm rounded-sm"/>
+                <LuSquareCheckBig className="text-2xl bg-bg-white shadow-sm rounded-sm"/>
                 {children}
             </div> :
             <div className="flex gap-2 items-center" onClick={(e) => {
                 e.stopPropagation();
                 setCompleted(true)
             }} tabIndex={0} aria-label="To do item afvinken">
-                <LuSquare className="text-2xl bg-white shadow-sm rounded-sm"/>
+                <LuSquare className="text-2xl bg-bg-white shadow-sm rounded-sm"/>
                 {children}
             </div>
     )
