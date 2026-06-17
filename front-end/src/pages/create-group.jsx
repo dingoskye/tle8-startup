@@ -152,132 +152,139 @@ const CreateGroup = () => {
             <form className="flex flex-col items-center gap-6 w-full" onSubmit={handleCreateGroup}>
 
                 {/* --- NAME SECTION --- */}
-                <div className="w-full relative">
-                    <Card variant="tertiary">
-                        <label htmlFor="name" className="block mb-2 font-headers text-lg">Naam</label>
-                        {errors.name &&
-                            <p className="text-red-700 font-bold  mt-2 text-sm">{errors.name}</p>}
+
+                <Card variant="tertiary">
+                    <label htmlFor="name" className="block mb-2 font-headers text-lg">Naam</label>
+                    {errors.name &&
+                        <p className="text-red-700 font-bold  mt-2 text-sm">{errors.name}</p>}
 
 
-                        <div className="w-full relative">
+                    <div className="w-full relative">
 
-                            <Tape variant="small-r"/>
-                            <Tape variant="small-l"/>
+                        <Tape variant="small-r"/>
+                        <Tape variant="small-l"/>
 
-                            <input
-                                id="name"
-                                className="w-full bg-bg-white shadow-xl/15 rounded-[3px] pl-5 pt-2 pb-3"
-                                type="text"
-                                name="name"
-                                placeholder="e.g. John Doe"
-                            />
-                            <div>
+                        <input
+                            id="name"
+                            className="w-full bg-bg-white shadow-xl/15 rounded-[3px] pl-5 pt-2 pb-3"
+                            type="text"
+                            name="name"
+                            placeholder="e.g. Team 8"
+                        />
+                        <div>
 
 
-                            </div>
                         </div>
-                    </Card>
-                </div>
+                    </div>
+                </Card>
+
 
                 {/* --- DESCRIPTION SECTION --- */}
-                <div className="w-full relative">
-                    <Card variant="quaternary">
-                        <label htmlFor="description" className="block mb-2 font-headers text-lg">Beschrijving</label>
 
-                        <div className="relative">
-                            <Tape variant="big-r"/>
-                            <Tape variant="big-l"/>
-                            <textarea
-                                id="description"
-                                className="w-full bg-bg-white shadow-xl/15 rounded-[3px] pl-5 pr-5 pt-2 pb-20"
-                                name="description"
-                                placeholder="geeft hier Beschrijving over jou hoofdtaak"
+                <Card variant="quaternary">
+                    <label htmlFor="description" className="block mb-2 font-headers text-lg">Beschrijving</label>
 
-                            />
-                        </div>
-                    </Card>
-                </div>
+                    <div className="relative">
+                        <Tape variant="big-r"/>
+                        <Tape variant="big-l"/>
+                        <textarea
+                            id="description"
+                            className="w-full bg-bg-white shadow-xl/15 rounded-[3px] pl-5 pr-5 pt-2 pb-20"
+                            name="description"
+                            placeholder="Geef hier een kort hier Beschrijving over jouw Group"
+
+                        />
+                    </div>
+                </Card>
+
 
                 {/* --- PHOTO SECTION --- */}
-                <div className="w-full relative">
-                    <Card variant="secondary">
 
-                        <label htmlFor="photo" className="block mb-2 font-headers text-lg">Foto</label>
-                        {errors.photo && <p className="text-red-700 font-bold mt-2 text-sm">{errors.photo}</p>}
+                <Card variant="secondary">
 
-                        <div className="relative">
-                            <Tape variant="big-r"/>
-                            <Tape variant="big-l"/>
-                            <input
-                                className="w-full bg-bg-white shadow-xl/15 rounded-[3px] pl-5 pr-5 pt-2 pb-20 cursor-pointer"
-                                type="file"
-                                id="photo"
-                                name="photo"
-                                accept="image/png, image/jpeg, image/webp"
+                    <label htmlFor="photo" className="block mb-2 font-headers text-lg">Foto</label>
+                    {errors.photo && <p className="text-red-700 font-bold mt-2 text-sm">{errors.photo}</p>}
 
-                            />
-                        </div>
-                    </Card>
-                </div>
+                    <div className="relative">
+                        <Tape variant="big-r"/>
+                        <Tape variant="big-l"/>
+                        <input
+                            className="w-full bg-bg-white shadow-xl/15 rounded-[3px] pl-5 pr-5  pb-5 cursor-pointer"
+                            type="file"
+                            id="photo"
+                            name="photo"
+                            accept="image/png, image/jpeg, image/webp"
+
+                        />
+                    </div>
+                </Card>
 
 
                 {/* --- MEMBERS SECTION --- */}
-                <div className="w-full relative">
-                    <Card variant="white">
-                        <h2 className="block text-2xl font-headers mb-4">Leden:</h2>
-                        {errors.members && <p className="text-red-700 font-bold mb-4 text-sm">{errors.members}</p>}
 
-                        <div
-                            className="relative bg-primary w-full p-4 shadow-inner rounded-sm min-h-40 pb-7 flex items-center gap-4 flex-wrap">
+                <Card variant="white">
+                    <label className="block text-2xl font-headers mb-4">Leden:</label>
+                    {errors.members && <p className="text-red-700 font-bold mb-4 text-sm">{errors.members}</p>}
 
-                            <Tape variant="big-r"/>
-                            <Tape variant="big-l"/>
-                            {selectedMembers.map((member) => (
-                                <div key={member.id}
-                                     className="relative mt-4 bg-bg-white p-2 pt-4 rounded-sm shadow-md flex flex-col items-center shrink-0 w-24">
+                    <div
+                        className="relative bg-primary w-full p-4 shadow-inner rounded-sm min-h-40 pb-7 flex items-center gap-4 flex-wrap">
 
-                                    {/* --- THE CLICKABLE PUNAISE --- */}
+                        <Tape variant="big-r"/>
+                        <Tape variant="big-l"/>
+                        {selectedMembers.map((member) => (
+                            <div key={member.id}
+                                 className="relative mt-4 bg-bg-white p-2 pt-4 rounded-sm shadow-md flex flex-col items-center shrink-0 w-24">
 
-                                    {member.id !== currentUser.id && (
-                                        <button
+                                {/* --- THE CLICKABLE PUNAISE --- */}
 
-                                            onClick={() => setSelectedMembers(selectedMembers.filter(m => m.id !== member.id))}
-                                            className="z-10 cursor-pointer rounded-full focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-black hover:scale-110 transition-transform"
-                                            aria-label={`Verwijder ${member.username}`}
-                                            title="Verwijder lid"
-                                        >
-                                            <Punaise/>
-                                        </button>
-                                    )}
+                                {member.id !== currentUser.id && (
+                                    <button
 
-                                    {/* Placeholder Avatar */}
-                                    <User
-                                        className="w-10 h-10 mb-1 mt-4 text-black  bg-bg-white border-2 border-black rounded-full p-1"/>
+                                        onClick={() => setSelectedMembers(selectedMembers.filter(m => m.id !== member.id))}
+                                        className="z-10 cursor-pointer rounded-full focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-black hover:scale-110 transition-transform"
+                                        aria-label={`Verwijder ${member.username}`}
+                                        title="Verwijder lid"
+                                    >
+                                        <Punaise/>
+                                    </button>
+                                )}
 
-                                    <p className="text-xs mb-2 whitespace-nowrap overflow-hidden text-ellipsis w-full text-center font-bold">
-                                        @{member.user_name}
-                                    </p>
-                                </div>
-                            ))}
+                                {/* Placeholder Avatar */}
+                                <User
+                                    className="w-10 h-10 mb-1 mt-4 text-black  bg-bg-white border-2 border-black rounded-full p-1"/>
 
-                            {/* --- DROPDOWN MENU LOGIC --- */}
-                            <div className="relative">
-                                <button
-                                    ref={plusButtonRef}
-                                    type="button"
-                                    aria-label="Voeg een lid toe"
-                                    onClick={() => {
-                                        setIsMenuOpen(!isMenuOpen);
-                                        setSearchQuery("");
-                                    }}
-                                    className="flex items-center justify-center w-12 h-12 rounded-full bg-button-purple border-4 border-white shadow-lg text-2xl font-bold hover:scale-105 transition-transform"
-                                >
-                                    +
-                                </button>
+                                <p className="text-xs mb-2 w-full text-center font-bold line-clamp-2 break-all px-1">
+                                    @{member.user_name}
+                                </p>
+                            </div>
+                        ))}
 
-                                {isMenuOpen && (
+                        {/* --- DROPDOWN MENU LOGIC --- */}
+                        <div className="relative">
+                            <button
+                                ref={plusButtonRef}
+                                type="button"
+                                aria-label="Voeg een lid toe"
+                                onClick={() => {
+                                    setIsMenuOpen(!isMenuOpen);
+                                    setSearchQuery("");
+                                }}
+                                className="flex items-center justify-center w-12 h-12 rounded-full bg-button-purple border-4 border-white shadow-lg text-2xl font-bold hover:scale-105 transition-transform"
+                            >
+                                +
+                            </button>
+
+                            {isMenuOpen && (
+                                <>
+                                    {/* NEW: Invisible mobile backdrop to close the menu by tapping outside */}
                                     <div
-                                        className="absolute top-14 left-0 bg-white shadow-xl rounded-md w-56 z-10 border border-gray-200 overflow-hidden flex flex-col">
+                                        className="fixed inset-0 z-40 sm:hidden"
+                                        onClick={() => setIsMenuOpen(false)}
+                                    />
+
+                                    {/* UPDATED: Mobile popup / Desktop dropdown classes */}
+                                    <div
+                                        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 sm:absolute sm:top-14 sm:left-0 sm:translate-x-0 sm:translate-y-0 bg-white shadow-2xl rounded-md w-[85vw] max-w-sm sm:w-56 z-50 border border-gray-200 overflow-hidden flex flex-col">
 
                                         {/* SEARCH INPUT */}
                                         <div className="p-2 border-b bg-gray-50">
@@ -324,7 +331,7 @@ const CreateGroup = () => {
                                             {/* 2. THE EMPTY STATE */}
                                             {availableUsers
                                                 .filter((friend) => !selectedMembers.some((m) => m.id === friend.id))
-                                                .filter((friend) => friend.user_name.toLowerCase().includes(searchQuery.toLowerCase()))
+                                                .filter((friend) => friend.user_name?.toLowerCase().includes(searchQuery.toLowerCase()))
                                                 .length === 0 && (
                                                 <li className="px-4 py-3 text-sm text-gray-500 text-center italic">
                                                     Geen resultaten gevonden.
@@ -333,11 +340,11 @@ const CreateGroup = () => {
 
                                         </ul>
                                     </div>
-                                )}
-                            </div>
+                                </>
+                            )}
                         </div>
-                    </Card>
-                </div>
+                    </div>
+                </Card>
 
 
                 <div>
