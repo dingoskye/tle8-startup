@@ -1,4 +1,4 @@
-import {createContext, useContext, useState} from "react"
+import {createContext, useContext, useEffect, useState} from "react"
 
 const ApiContext = createContext()
 
@@ -11,7 +11,7 @@ export function ApiProvider({children}) {
     async function refreshToken() {
         console.log(loginData)
         setToken(loginData.token)
-       
+
         await localStorage.setItem('token', loginData.token)
         await localStorage.setItem('user', JSON.stringify(loginData.user))
     }

@@ -17,7 +17,7 @@ class UserController extends Controller
     public function index()
     {
         // ToDo: alleen email en gebruikersnaam meegeven
-        return User::all();
+        return User::select('id', 'user_name')->get();
     }
 
 
@@ -161,7 +161,7 @@ class UserController extends Controller
     }
 
 // ToDo: Logout route aanmaken.
-  
+
 }
 
 // ToDo: Change password route aanmaken.

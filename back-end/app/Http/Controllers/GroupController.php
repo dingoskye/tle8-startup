@@ -29,7 +29,7 @@ class GroupController extends Controller
     public function create(request $request)
     {
         try {
-            if (!$request->name || !$request->role) {
+            if (!$request->name || !$request->role || !$request->members) {
                 return response(['error' => 'you are stupid'], 404);
             }
 
@@ -47,16 +47,12 @@ class GroupController extends Controller
             ]);
             $group->save();
 
+            $group->users()->attach($userId, ['role' => 'admin']);
+
             //Loop through the array of members sent by React
-            if ($request->members) {
-                $memberIds = json_decode($request->members);
-                foreach ($memberIds as $id) {
-                    $group->users()->attach($id, ['role' => $request->role]);
-                }
-            } else {
-                $group->users()->attach($request->user_id, [
-                    'role' => $request->role,
-                ]);
+            $memberIds = json_decode($request->members);
+            foreach ($memberIds as $id) {
+                $group->users()->attach($id, ['role' => 'gebruiker']);
             }
 
             return $group;
