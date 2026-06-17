@@ -4,7 +4,7 @@ import {Card} from "@/components/ui/cards.jsx";
 import {TapeCard} from "@/components/ui/cards.jsx";
 import Tape from "@/components/ui/tape.jsx";
 import {useApi} from "@/context/api-context.jsx";
-import {SubmitButton} from "@/components/ui/buttons.jsx";
+import {MainButton, SubmitButton} from "@/components/ui/buttons.jsx";
 
 function Subtask() {
     const {apiFetch, token} = useApi();
@@ -138,23 +138,19 @@ function Subtask() {
 
     return (
         <Card variant={"white"}>
-            {/* Controleer of er een fetch error is (bijv. taak niet gevonden) */}
             {errors.fetchError ? (
                 <div className="flex flex-col items-center justify-center py-16 gap-6 text-center">
                     <h1 className="text-3xl font-headers text-red-600">Oeps!</h1>
                     <p className="text-lg font-paragraph font-bold">
                         {errors.fetchError}
                     </p>
-                    {/* Knop om de gebruiker terug te sturen, pas de link aan naar jouw overzichtspagina indien nodig */}
-                    <button
-                        onClick={() => navigate("/hoofdtaken")}
-                        className="mt-4 px-6 py-2 rounded-full bg-gray-200 text-black border-2 border-white shadow-md font-bold hover:scale-105 transition"
-                    >
-                        Terug naar overzicht
-                    </button>
+                    <div className="w-[75%] md:w-[25%] mx-auto flex flex-col items-center text-center mb-5">
+                        <MainButton link={"/hoofdtaken"}>
+                            Terug naar overzicht
+                        </MainButton>
+                    </div>
                 </div>
             ) : (
-                /* Als er GEEN fetch error is, renderen we het normale formulier */
                 <>
                     <h1 className="text-3xl font-headers flex items-center justify-center">
                         {details?.title}
