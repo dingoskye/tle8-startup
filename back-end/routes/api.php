@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MomentController;
 use App\Http\Controllers\SubTaskController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MainTaskController;
@@ -23,21 +24,28 @@ Route::middleware('jwt')->group(function () {
     Route::get('/main-tasks/{id}/generate-subtasks', [SubtaskAiController::class, 'generate']);
     Route::post('/main-tasks/{mainTask}/generate-subtasks', [SubtaskAiController::class, 'generate']);
 
-//Group controller routes
+    //Group controller routes
     Route::post('/group/create', [GroupController::class, 'create']);
     Route::get('/group/', [GroupController::class, 'index']);
     Route::get('/group/{id}', [GroupController::class, 'show']);
     Route::put('/group/edit/{id}', [GroupController::class, 'edit']);
     Route::delete('/group/delete/{id}', [GroupController::class, 'delete']);
 
-//Main task controller routes
+    //Main task controller routes
     Route::post('/main/create', [MainTaskController::class, 'create']);
     Route::get('/main/', [MainTaskController::class, 'index']);
     Route::get('/main/details/{id}', [MainTaskController::class, 'show']);
     Route::put('/main/edit/{id}', [MainTaskController::class, 'edit']);
     Route::delete('/main/delete/{id}', [MainTaskController::class, 'delete']);
 
-//Sub task controller routes
+    //Moment controller routes
+    Route::post('/moment/create', [MomentController::class, 'create']);
+    Route::get('/moment/', [MomentController::class, 'index']);
+    Route::get('/moment/details/{id}', [MomentController::class, 'show']);
+    Route::put('/moment/edit/{id}', [MomentController::class, 'edit']);
+    Route::delete('/moment/delete/{id}', [MomentController::class, 'delete']);
+
+    //Subtask controller routes
     Route::post('/sub/create', [SubTaskController::class, 'create']);
     Route::get('/sub/', [SubTaskController::class, 'index']);
     Route::get('/sub/{id}', [SubTaskController::class, 'show']);

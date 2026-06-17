@@ -11,7 +11,7 @@ class Moment extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'datetime',
+        'date',
         'location',
         'description',
         'group_id',

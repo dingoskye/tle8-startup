@@ -13,7 +13,9 @@ import Login from "@/pages/login.jsx";
 import {CreateTask} from "@/pages/create-task.jsx";
 import Loading from "@/pages/loading.jsx";
 import Subtask from "@/pages/subtask.jsx";
+import CreateMoment from "@/pages/create-moment.jsx";
 import {InviteCode, AcceptInvite} from "@/components/invite-code.jsx";
+import MomentDetails from "@/pages/moment-detail.jsx";
 
 function App() {
 
@@ -33,6 +35,8 @@ function App() {
                 <Route path="/hoofdtaak/aanmaken" element={<CreateTask/>}/>
                 <Route path="*" element={<ErrorPage/>}/>
                 <Route path="/subtaak-genereren/:id" element={<Subtask/>}/>
+                <Route path="/moment-aanmaken" element={<CreateMoment/>}/>
+                <Route path="/moment/:id" element={<MomentDetails/>}/>
                 <Route path="/laden" element={<Loading/>}/>
 
             </Route>
