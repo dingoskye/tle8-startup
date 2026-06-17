@@ -11,7 +11,7 @@ function Layout() {
                 className={"w-[90%] md:w-[80%] mx-auto flex flex-col gap-3 my-2 grow font-paragraph justify-between py-2"}>
                 <Outlet/>
             </main>
-            {location.pathname !== '/login' && location.pathname !== '/register' ? <Nav/> : null}
+            {location.pathname !== '/login' && location.pathname !== '/registreren' ? <Nav/> : null}
         </div>
     )
 }

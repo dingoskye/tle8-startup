@@ -16,12 +16,14 @@ import Login from "@/pages/login.jsx";
 import {CreateTask} from "@/pages/create-task.jsx";
 import CreateGroup from "@/pages/create-group.jsx"
 import Profile from "@/pages/profile.jsx";
+import FirstVisitGuard from "@/components/first-visit-guard.jsx";
+import AuthGuard from "@/components/auth-guard.jsx";
 
 function App() {
 
     return (
         <Routes>
-            <Route element={<Layout/>}>
+            <Route element={<AuthGuard><FirstVisitGuard><Layout/></FirstVisitGuard></AuthGuard>}>
                 <Route path="/" element={<Home/>}/>
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/registreren" element={<Register/>}/>
@@ -32,7 +34,7 @@ function App() {
                 <Route path="/studiegroepen/aanmaken" element={<CreateGroup/>}/>
                 <Route path="/hoofdtaken" element={<TaskOverview/>}/>
                 <Route path="/hoofdtaken/:id" element={<TaskDetails/>}/>
-                <Route path="/hoofdtaak/aanmaken" element={<CreateTask/>}/>
+                <Route path="/hoofdtaak/aanmaken/:id" element={<CreateTask/>}/>
                 <Route path="/subtaken/genereren/:id" element={<Subtask/>}/>
                 <Route path="/subtaken/aanmaken/:id" element={<CreateSubtasks/>}/>
                 <Route path="/laden" element={<Loading/>}/>

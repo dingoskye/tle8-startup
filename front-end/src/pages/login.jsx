@@ -31,7 +31,7 @@ function Login() {
 
     useEffect(() => {
         document.title = "Board-it | Login";
-        console.log(`------------Login-----------`)
+
         if (localStorage.getItem("token")) {
             async function removeToken() {
 
@@ -71,8 +71,6 @@ function Login() {
 
                 fetchLogin(formData)
             }
-
-
         } catch (err) {
             console.log(err);
         }
@@ -82,14 +80,10 @@ function Login() {
 
 
     useEffect(() => {
-        console.log(`------------Login Data-----------`)
         if (!isLoaded) {
-            console.log(`------------Initial Load-----------`)
-
             setIsLoaded(true)
             return;
         }
-        console.log(`------------Is Loaded-----------`)
 
         if (!loginData) return;
 
@@ -101,9 +95,7 @@ function Login() {
                 password: "Informatie is niet correct."
             });
         } else {
-
             async function refresh() {
-
                 await refreshToken()
             }
 
@@ -113,8 +105,6 @@ function Login() {
 
     useEffect(() => {
         if (!isLoaded) {
-            console.log(`------------Initial Load-----------`)
-
             setIsLoaded(true)
             return;
         }
@@ -173,7 +163,7 @@ function Login() {
                     <SubmitButton>
                         Login
                     </SubmitButton>
-                    <Link to="/register" className="hover:text-blue-700 hover:underline">
+                    <Link to="/registreren" className="hover:text-blue-700 hover:underline">
                         Nog geen account?
                     </Link>
 

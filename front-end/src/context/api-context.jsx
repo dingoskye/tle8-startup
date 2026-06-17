@@ -6,14 +6,12 @@ const ApiContext = createContext()
 const BASE_URL = "http://127.0.0.1:8000/api"
 
 export function ApiProvider({children}) {
-    const [first, setFirst] = useState(false)
     const [loginData, setLoginData] = useState(null)
     const [token, setToken] = useState(localStorage.getItem("token"))
-    const [loggedOut, setLoggedOut] = useState(true)
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate()
 
     async function refreshToken() {
-        console.log(loginData)
         setToken(loginData.token)
 
         await localStorage.setItem('token', loginData.token)
@@ -23,7 +21,7 @@ export function ApiProvider({children}) {
     async function getData() {
         const data = await JSON.parse(localStorage.getItem('user'))
         setLoginData(data)
-        // console.log(data)
+        setLoading(false)
     }
 
     async function apiFetch(endpoint, options = {}) {
@@ -38,7 +36,9 @@ export function ApiProvider({children}) {
         // console.log(res.status)
         if (!res.ok) {
             if (res.status === 401) {
-                setLoggedOut(true)
+                localStorage.removeItem('token')
+                localStorage.removeItem('user')
+                loginData(null)
             }
             return {"status": res.status, "message": res.statusText}
             // throw new Error(`HTTP error! status: ${res.status}`);
@@ -52,18 +52,9 @@ export function ApiProvider({children}) {
         getData()
     }, [])
 
-    useEffect(() => {
-        setFirst(JSON.parse(localStorage.getItem("first")))
-    }, []);
-
-    useEffect(() => {
-        if (!loggedOut) {
-            navigate("/login")
-        }
-    }, [loggedOut])
-
     return (
-        <ApiContext.Provider value={{apiFetch, setLoginData, setLoggedOut, loginData, token, refreshToken, getData, setFirst}}>
+        <ApiContext.Provider
+            value={{apiFetch, setLoginData, loginData, token, refreshToken, getData, loading}}>
             {children}
         </ApiContext.Provider>
     );
