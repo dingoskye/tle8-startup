@@ -25,7 +25,7 @@ export function GroupProvider({children}) {
 
     async function fetchGroup(id) {
         try {
-            const data = await apiFetch(`/api/group/${id}`, {
+            const data = await apiFetch(`/group/${id}`, {
                 method: "GET",
                 headers: {
                     Accept: "application/json",
