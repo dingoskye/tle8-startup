@@ -3,7 +3,7 @@ import {useNavigate} from "react-router";
 
 const ApiContext = createContext()
 
-const BASE_URL = "/api"
+const BASE_URL = "http://127.0.0.1:8000/api"
 
 export function ApiProvider({children}) {
     const [loginData, setLoginData] = useState(null)

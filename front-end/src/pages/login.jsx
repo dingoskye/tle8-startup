@@ -15,7 +15,7 @@ function Login() {
         password: ""
     })
     const [errors, setErrors] = useState([])
-    const {fetchLogin, fetchUsers, users} = useLogin()
+    const {fetchLogin} = useLogin()
     const {loginData, token, refreshToken} = useApi()
     const [isLoaded, setIsLoaded] = useState(false);
 
