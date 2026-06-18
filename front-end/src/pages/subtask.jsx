@@ -92,9 +92,10 @@ function Subtask() {
                 }
             );
 
-            const data = await res.json();
+            if (res) {
+                navigate(`/hoofdtaken/${id}`);
+            }
 
-            navigate(`/hoofdtaken/${id}`);
         } catch (err) {
             console.error(err);
             setErrors({general: "Er is een fout opgetreden bij het genereren van de subtaken."});

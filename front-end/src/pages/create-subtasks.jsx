@@ -14,7 +14,7 @@ const CreateSubtasks = () => {
     const {id} = useParams();
     const navigate = useNavigate();
     const {fetchTaskDetails} = useMainTask()
-    const {apiFetch} = useApi();
+    const {apiFetch, token} = useApi();
     const [mainTask, setMainTask] = useState(null);
     const [isLoadingTask, setIsLoadingTask] = useState(true);
 
@@ -114,6 +114,9 @@ const CreateSubtasks = () => {
                 return apiFetch('/sub/create', {
                     method: 'POST',
                     body: formData,
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                    }
                 });
             });
 

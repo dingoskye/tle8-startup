@@ -1,6 +1,7 @@
 ## Project Overview
 
-Board-it is a app that helps students with ADHD to get the feeling of urgency to start tasks earlier. This is achieved with peer pressure (working together), deviding tasks and making progression visual.
+Board-it is a app that helps students with ADHD to get the feeling of urgency to start tasks earlier. This is achieved
+with peer pressure (working together), deviding tasks and making progression visual.
 
 ## Key Features
 
@@ -11,20 +12,25 @@ Board-it is a app that helps students with ADHD to get the feeling of urgency to
 
 ## Tech Stack
 
-| Part of application | Technology   | Parts of technology |
-|---------------------|--------------|---------------------|
-| Front-end           | React        | Router, Icons       |
-| Front-end           | Shadcn       | -                   |
-| Front-end           | Tailwind CSS | -                   |
-| Back-end            | Laravel      | Breeze, JWT         |
-| AI                  | Laravel AI   | -                   |
-| AI                  | GPT-4        | -                   |
+| Part of application | Technology     | Parts of technology |
+|---------------------|----------------|---------------------|
+| Front-end           | React          | Router, Icons       |
+| Front-end           | Shadcn         | -                   |
+| Front-end           | Tailwind CSS   | -                   |
+| Back-end            | Laravel        | Breeze, MySQL       |
+| Back-end            | Tymon          | JWT                 |
+| Back-end            | Smalot         | PDF Parcer          |
+| AI                  | Laravel AI SDK | -                   |
+| AI                  | GPT-4          | -                   |
 
 ## Installation & Setup (thomas)
 
 ## Project Structure
-In this repository we have worked with front-end and back-end in the same repository. The structure of our repository looks like this because of it:
 
+In this repository we have worked with front-end and back-end in the same repository. The structure of our repository
+looks like this because of it:
+
+````
 board-it/
 ├── back-end/
     ├── app/
@@ -64,6 +70,7 @@ board-it/
     ├── package-lock.json
     ├── vite.config.js
 ├── README.md
+````
 
 ## ERD (thomas)
 
@@ -137,7 +144,6 @@ erDiagram
     user_main_tasks ||--o{ sub_tasks: has
     groups ||--o{ user_groups: has
 
-
 ```
 
 ## API Endpoints (christa)
@@ -178,9 +184,11 @@ erDiagram
 - `DELETE /sub/delete/{id}` ~ Delete the subtask (Requires AUTH)
 
 ### AI routes
+
 - `POST /main-tasks/{id}/generate-subtasks` ~ Generate subtasks with AI (Requires AUTH)
 
 ### Theme routes
+
 - `GET /theme/` ~ Get the themes that exists (Requires AUTH)
 - `GET /theme/details` ~ Get the theme settings of the user (Requires AUTH)
 - `PUT /theme/edit` ~ Update de theme settings of the user (Requires AUTH)

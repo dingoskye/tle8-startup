@@ -146,26 +146,7 @@ function TaskDetails() {
                                 </div>
                             </div>
                         </PopUp>
-                    }
-
-                    {showAiPopup &&
-                        <PopUp link={false} onClose={() => setShowAiPopup(false)}>
-                            <div className="flex flex-col justify-center items-center h-full gap-4 p-4">
-                                <p className="text-center text-lg">Wil je AI gebruiken voor deze subtaken?</p>
-                                <div className="flex gap-3">
-                                    <button
-                                        onClick={() => handleAIChoice(true)}
-                                        className="bg-button-purple text-white px-4 py-2 rounded-full">
-                                        Ja
-                                    </button>
-                                    <button
-                                        onClick={() => handleAIChoice(false)}
-                                        className="bg-gray-300 text-black px-4 py-2 rounded-full">
-                                        Nee
-                                    </button>
-                                </div>
-                            </div>
-                        </PopUp>
+                    
                     }
                 </div> : <p>Taak aan het laden</p>
     )
