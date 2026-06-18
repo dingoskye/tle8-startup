@@ -48,6 +48,22 @@ function GroupDetails() {
                             <h1 className="text-3xl font-headers">{group.name ?? ""}</h1>
                         </div>
                     </header>
+                    {group.moments !== null && group.moments.length > 0 ?
+                        <Card variant="quaternary">
+                            <div className="flex justify-between">
+                                <p>{new Date(group.moments[0].date).toLocaleString("nl-NL", {
+                                    day: "numeric",
+                                    month: "long",
+                                    year: "numeric",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                })}</p>
+                                <p>Locatie: {group.moments[0].location}</p>
+                            </div>
+                        </Card> : null}
+                    <div className="w-[60%] md:w-[30%] mx-auto">
+                        <MainButton link={`/moment/aanmaken/${group.id}`}>Moment plannen</MainButton>
+                    </div>
 
                     <section aria-label="openstaande taken" className="text-center flex flex-col gap-2">
                         <Carousel className="px-6 text-left">

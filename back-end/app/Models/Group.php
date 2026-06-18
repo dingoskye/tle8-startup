@@ -36,9 +36,9 @@ class Group extends Model
         return $this->hasMany(MainTask::class);
     }
 
-    public function Moments(): HasMany
+    public function moments(): HasMany
     {
-        return $this->hasMany(Moment::class);
+        return $this->HasMany(Moment::class);
     }
 }
 

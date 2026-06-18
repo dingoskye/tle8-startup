@@ -16,8 +16,6 @@ class GroupController extends Controller
      */
     public function index()
     {
-
-      
         $userId = JWTAuth::parseToken()->authenticate()->id;
 //        echo JWTAuth::parseToken()->authenticate()->id;
 //        echo $userId;
@@ -73,7 +71,7 @@ class GroupController extends Controller
         $group = Group::with('users')->findOrFail($id);
 
         if ($group->users->contains('id', $userId)) {
-            return Group::with(['users', 'mainTasks' => function ($query) {
+            return Group::with(['users', 'moments', 'mainTasks' => function ($query) {
                 $query->orderBy('deadline', 'asc');
             }])->findOrFail($id);
         } else {
