@@ -1,6 +1,5 @@
 import {createContext, useContext, useEffect, useState} from "react"
 import {useApi} from "@/context/api-context.jsx";
-import {useLocation} from "react-router";
 
 const ThemeContext = createContext()
 
