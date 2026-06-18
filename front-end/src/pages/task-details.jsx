@@ -10,6 +10,7 @@ import DeadlineCard from "@/components/ui/deadline-card.jsx";
 import Progressbar from "@/components/ui/progressbar.jsx";
 import {ErrorComponent} from "@/pages/Error.jsx";
 import PopUp from "@/components/pop-up.jsx";
+import {FunctionButton} from "@/components/ui/buttons.jsx";
 
 function TaskDetails() {
     const params = useParams()
@@ -126,24 +127,22 @@ function TaskDetails() {
                     {showAiPopup &&
                         <PopUp link={false} onClose={() => setShowAiPopup(false)}>
                             <div className="flex flex-col justify-center items-center h-full gap-4 p-4">
-                                <p className="text-center text-lg">Hoe wilt u de subtaak maken?</p>
-                                <div className="flex flex-col gap-3 w-[35%]">
-                                    <button
-                                        onClick={() => {
+                                <p className="text-center text-2xl">Hoe wilt u de subtaak maken?</p>
+                                <div className="flex flex-col gap-3">
+                                    <FunctionButton
+                                        f={() => {
                                             setShowAiPopup(false);
                                             navigate(`/subtaken/aanmaken/${params.id}`);
-                                        }}
-                                        className="flex gap-2 justify-center w-full rounded-full border-white border-3 shadow-sm p-1 mt-2 items-center text-sm bg-button-purple">
+                                        }}>
                                         Zelf aanmaken
-                                    </button>
-                                    <button
-                                        onClick={() => {
+                                    </FunctionButton>
+                                    <FunctionButton
+                                        f={() => {
                                             setShowAiPopup(false);
                                             navigate(`/subtaken/genereren/${params.id}`);
-                                        }}
-                                        className="flex gap-2 justify-center w-full rounded-full border-white border-3 shadow-sm p-1 mt-2 items-center text-sm bg-button-purple">
+                                        }}>
                                         Laten genereren door AI
-                                    </button>
+                                    </FunctionButton>
                                 </div>
                             </div>
                         </PopUp>
