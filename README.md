@@ -25,6 +25,8 @@ with peer pressure (working together), deviding tasks and making progression vis
 
 ## Installation & Setup
 
+### rerequisites
+
 - Node.js
 - npm
 - composer
