@@ -18,7 +18,7 @@ function TaskOverview() {
                 <div className="bg-primary w-full p-4 rounded-lg shadow-md">
                     <Tape variant="big-r"/>
                     <Tape variant="big-l"/>
-                    <h1 className="text-2xl font-headers">Openstaande taken</h1>
+                    <h1 className="text-3xl font-headers">Openstaande taken</h1>
                 </div>
             </header>
 

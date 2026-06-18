@@ -4,19 +4,19 @@ import {useEffect, useState} from "react";
 import {useGroup} from "@/context/group-context.jsx";
 import {SubmitButton} from "@/components/ui/buttons.jsx";
 
-import {useLocation, useParams} from "react-router";
+import {Link, useNavigate, useParams} from "react-router";
+import Punaise from "@/components/ui/punaise.jsx";
 
 export function InviteCode() {
     const params = useParams()
     // de id van de groep.
     const {fetchCode, code} = useGroup()
-    const location = useLocation();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const group = params.id
         if (group) {
             fetchCode(group)
-            location('/')
         }
     }, []);
 
@@ -29,7 +29,6 @@ export function InviteCode() {
                 </h1>
                 <TapeCard variant="white">
                     {code ? code : 'geen code'}
-
                 </TapeCard>
             </Card>
         </>

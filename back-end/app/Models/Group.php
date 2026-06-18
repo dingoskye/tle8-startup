@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-
 #[fillable(['name', 'description', 'profile_image', 'invite_link'])]
 class Group extends Model
 {
@@ -21,7 +20,6 @@ class Group extends Model
         'name',
         'description',
         'image',
-        'user_id',
         'invite_link',
     ];
 

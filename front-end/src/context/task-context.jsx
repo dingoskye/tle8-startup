@@ -31,6 +31,7 @@ export function MainTaskProvider({children}) {
                 headers: {
                     Accept: "application/json",
                     "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
                 }
             })
             return data
@@ -47,6 +48,7 @@ export function MainTaskProvider({children}) {
                 headers: {
                     Accept: "application/json",
                     "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
                 },
                 body: JSON.stringify({completed: completed})
             })
@@ -62,6 +64,7 @@ export function MainTaskProvider({children}) {
     return (
         <MainTaskContext.Provider value={{
             mainTasks,
+            setMainTasks,
 
             //de functies vinden dat ze niet gebruikt worden, maar dat worden ze wel
             fetchMainTasks,
