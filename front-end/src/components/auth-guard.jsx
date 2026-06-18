@@ -5,7 +5,7 @@ export default function AuthGuard({children}) {
     const {loginData, loading} = useApi();
     const location = useLocation();
 
-    if (!loginData && !loading && location.pathname !== "/login" && location.pathname !== "/registreren") {
+    if (!loginData && !loading && location.pathname !== "/login" && location.pathname !== "/registreren" && location.pathname !== "/welkom") {
         return (
             <Navigate
                 to="/login"
