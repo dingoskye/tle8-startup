@@ -65,7 +65,7 @@ function CreateMoment() {
 
         try {
 
-            const res = await fetch(`http://127.0.0.1:8000/api/moment/create`, {
+            const res = await fetch(`/api/moment/create`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
