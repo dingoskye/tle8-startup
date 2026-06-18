@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\MomentController;
 use App\Http\Controllers\SubTaskController;
+use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MainTaskController;
 use App\Http\Controllers\GroupController;
@@ -30,6 +31,9 @@ Route::middleware('jwt')->group(function () {
     Route::get('/group/{id}', [GroupController::class, 'show']);
     Route::put('/group/edit/{id}', [GroupController::class, 'edit']);
     Route::delete('/group/delete/{id}', [GroupController::class, 'delete']);
+  
+    Route::patch('/group/link/{id}', [GroupController::class, 'createLink']);
+    Route::patch('/group/link', [GroupController::class, 'addUser']);
 
     //Main task controller routes
     Route::post('/main/create', [MainTaskController::class, 'create']);
@@ -52,8 +56,10 @@ Route::middleware('jwt')->group(function () {
     Route::put('/sub/edit/{id}', [SubTaskController::class, 'edit']);
     Route::patch('/sub/complete/{id}', [SubTaskController::class, 'completed']);
     Route::delete('/sub/delete/{id}', [SubTaskController::class, 'delete']);
+
+    //Theme controller routes
+    Route::get('/theme', [ThemeController::class, 'index']);
+    Route::get('/theme/details', [ThemeController::class, 'show']);
+    Route::put('/theme/edit', [ThemeController::class, 'update']);
 });
 
-// ToDo dit in auth zetten
-Route::patch('/group/link/{id}', [GroupController::class, 'createLink']);
-Route::patch('/group/link', [GroupController::class, 'addUser']);

@@ -21,7 +21,6 @@ class Group extends Model
         'name',
         'description',
         'image',
-        'user_id',
         'invite_link',
     ];
 
@@ -35,11 +34,6 @@ class Group extends Model
     public function mainTasks(): HasMany
     {
         return $this->hasMany(MainTask::class);
-    }
-
-    public function Moments(): HasMany
-    {
-        return $this->hasMany(Moment::class);
     }
 }
 

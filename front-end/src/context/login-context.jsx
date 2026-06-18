@@ -1,14 +1,13 @@
-import {createContext, useContext, useState} from "react"
+import {createContext, useContext, useEffect, useState} from "react"
 import {useApi} from "@/context/api-context.jsx";
 import {useNavigate} from "react-router";
 
 const LoginContext = createContext()
 
 export function LoginProvider({children}) {
-    const {apiFetch, setLoginData,} = useApi();
-
-
+    const {apiFetch, setLoginData, token} = useApi();
     const [users, setUsers] = useState(null)
+    const navigate = useNavigate()
 
     async function fetchLogin(formData) {
         try {
@@ -18,8 +17,6 @@ export function LoginProvider({children}) {
                 headers: {
                     Accept: "application/json",
                     "Content-Type": "application/json",
-
-
                 },
                 body: JSON.stringify(formData)
 
@@ -43,7 +40,6 @@ export function LoginProvider({children}) {
                 body: JSON.stringify(formData)
             })
             setLoginData(data)
-
         } catch (e) {
             console.log(e.message)
         }
@@ -56,6 +52,7 @@ export function LoginProvider({children}) {
                 headers: {
                     Accept: "application/json",
                     "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
                 },
             })
             setUsers(data)
@@ -66,7 +63,10 @@ export function LoginProvider({children}) {
     }
 
     async function logout() {
-        await localStorage.clear()
+        localStorage.removeItem('token')
+        localStorage.removeItem('user')
+        setLoginData(null)
+        navigate("/login")
     }
 
     return (

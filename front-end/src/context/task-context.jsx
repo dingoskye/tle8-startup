@@ -1,4 +1,4 @@
-import {createContext, useContext, useState} from "react"
+import {createContext, useContext, useEffect, useState} from "react"
 import {useApi} from "@/context/api-context.jsx";
 
 const MainTaskContext = createContext()
@@ -64,6 +64,7 @@ export function MainTaskProvider({children}) {
     return (
         <MainTaskContext.Provider value={{
             mainTasks,
+            setMainTasks,
 
             //de functies vinden dat ze niet gebruikt worden, maar dat worden ze wel
             fetchMainTasks,

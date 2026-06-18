@@ -45,7 +45,7 @@ function TaskDetails() {
     return (
         task !== null ?
             task?.status ?
-                <ErrorComponent code={task.status} message="Taak bestaat niet"/> :
+                <ErrorComponent code={task.status} message="Taak is niet beschikbaar"/> :
                 <div>
                     <header role="banner" className="text-center p-1 mt-2 relative">
                         <div className="bg-bg-white w-full p-4 rounded-lg shadow-md">
@@ -64,7 +64,7 @@ function TaskDetails() {
                             <div className="w-full flex justify-end">
                                 <div className="w-[35%]">
                                     <button
-                                        className={`flex gap-2 justify-center w-full rounded-full border-white border-3 shadow-sm p-1 mt-2 items-center text-sm ${showCompleted ? "bg-button-purple" : "bg-gray-300"}`}
+                                        className={`flex gap-2 justify-center w-full rounded-full border-white border-3 shadow-sm p-1 mt-2 items-center text-sm ${showCompleted ? "bg-button-purple" : "bg-gray-300 text-black"}`}
                                         onClick={() => setShowCompleted(!showCompleted)}
                                         aria-label={showCompleted ? "Afgevinkte taken niet tonen" : "Afgevinkte taken wel tonen"}>
                                         <FaFilter/> {showCompleted ? "Niet tonen" : "Wel tonen"}
@@ -82,7 +82,7 @@ function TaskDetails() {
                                 <SubTaskCard onSubtaskUpdated={reloadTask} key={index} sub={sub}
                                              variant={variants[index % variants.length]}/>)}
                         </section> :
-                        <Link className="w-[50%] mx-auto h-full" to="/">
+                        <Link className="w-[50%] mx-auto h-full" to={`/subtaken/genereren/${task.id}`}>
                             <div className="w-[40vw] h-[40vw] md:w-[30vw] md:h-[30vw] m-auto mt-5">
                                 <Card variant="tertiary" kind="s">
                                     <div className="flex justify-center items-center h-full">

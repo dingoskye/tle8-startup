@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\Group;
 use App\Models\MainTask;
 use App\Models\SubTask;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -40,21 +41,29 @@ class MainTaskController extends Controller
 // todo aanpassen naar admin ipv user_id
             $userId = JWTAuth::parseToken()->authenticate()->id;
 
+            $aiFile = $request->file('ai_file')->storePublicly('storage', 'public');
+
             $mainTask = new MainTask([
                 'title' => $request->title,
                 'deadline' => $request->deadline,
                 'description' => $request->description,
                 'ai_file' => $aiFile,
                 'group_id' => $request->group_id,
-
             ]);
             $mainTask->save();
 
-            $mainTask->users()->attach($userId, [
-                'level' => $request->level ?? "beginner",
-                'progress' => $request->progress ?? 0,
-                'score' => $request->score ?? null,
-            ]);
+            $users = Group::find($request->group_id)
+                ->users()
+                ->select('users.id')
+                ->get();;
+
+            foreach ($users as $userId) {
+                $mainTask->users()->attach($userId, [
+                    'level' => $request->level ?? "beginner",
+                    'progress' => $request->progress ?? 0,
+                    'score' => $request->score ?? null,
+                ]);
+            }
 
 
             return $mainTask;

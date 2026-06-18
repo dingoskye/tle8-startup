@@ -8,7 +8,7 @@ import DeadlineCard from "@/components/ui/deadline-card.jsx";
 import SubtaskCheck from "@/components/ui/subtask-check.jsx";
 import {useMainTask} from "@/context/task-context.jsx";
 
-function TaskCard({task, kind}) {
+function TaskCard({task, kind, key}) {
     const {fetchMainTasks} = useMainTask()
     const [visibleTasks, setVisibleTasks] = useState(null)
     const navigation = useNavigate()
