@@ -82,11 +82,13 @@ function TaskDetails() {
                     <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-4">
                         {task.sub_tasks && task.sub_tasks.length > 0 ? (
                             <>
-                                {task.sub_tasks.map((sub, index) =>
-                                    // de onSubtaskUpdated geef ik mee zodat als de taak afgevinkt word de taak gereload
-                                    <SubTaskCard onSubtaskUpdated={reloadTask} key={index} sub={sub}
-                                                 variant={variants[index % variants.length]}/>
-                                )}
+                                {showCompleted ? task.sub_tasks.map((sub, index) =>
+                                        // de onSubtaskUpdated geef ik mee zodat als de taak afgevinkt word de taak gereload
+                                        <SubTaskCard onSubtaskUpdated={reloadTask} key={index} sub={sub}
+                                                     variant={variants[index % variants.length]}/>) :
+                                    task.sub_tasks.filter(sub => !sub.completed).map((sub, index) =>
+                                        <SubTaskCard onSubtaskUpdated={reloadTask} key={index} sub={sub}
+                                                     variant={variants[index % variants.length]}/>)}
                                 <Link
                                     className="flex items-center justify-center"
                                     to="/"
@@ -146,7 +148,7 @@ function TaskDetails() {
                                 </div>
                             </div>
                         </PopUp>
-                    
+
                     }
                 </div> : <p>Taak aan het laden</p>
     )

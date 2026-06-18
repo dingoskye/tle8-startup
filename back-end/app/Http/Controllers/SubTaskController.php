@@ -95,7 +95,7 @@ class SubTaskController extends Controller
         if (!$request->has('completed')) {
             return response(['error' => 'you are stupid'], 400);
         }
-
+        $userId = JWTAuth::parseToken()->authenticate()->id;
         $subTask = SubTask::query()->findOrFail($id);
         $subTask->completed = $request->completed;
 
@@ -108,7 +108,7 @@ class SubTaskController extends Controller
         }
         $subTask->save();
 
-        $this->progressUpdate($subTask->main_task_id, "1");
+        $this->progressUpdate($subTask->main_task_id, $userId);
 
         return $subTask;
     }
@@ -134,7 +134,7 @@ class SubTaskController extends Controller
     {
         $userId = JWTAuth::parseToken()->authenticate()->id;
         $subTask = SubTask::query()->findOrFail($id);
-        
+
         if ($userId === $subTask->user_id) {
             $subTask->delete();
             return $subTask;

@@ -65,7 +65,7 @@ function CreateMoment() {
 
         try {
 
-            const res = await fetch(`/api/moment/create`, {
+            const res = await apiFetch(`/moment/create`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -78,15 +78,15 @@ function CreateMoment() {
                 }),
             });
 
-            const data = await res.json();
+            // const data = await res.json();
 
-            console.log("Backend response:", data);
-
-            if (!res.ok) {
-                throw new Error(data.message || "Moment aanmaken mislukt");
-            }
-
-            console.log("Moment succesvol aangemaakt:", data);
+            // console.log("Backend response:", data);
+            //
+            // if (!res.ok) {
+            //     throw new Error(data.message || "Moment aanmaken mislukt");
+            // }
+            //
+            // console.log("Moment succesvol aangemaakt:", data);
 
             // Moet nog aangepast worden, zodra deze bestaat
             navigate(`/studiegroepen/${id}`);
@@ -118,7 +118,7 @@ function CreateMoment() {
                                 name="date"
                                 value={formData.date}
                                 onChange={handleInputChange}
-                                className="w-full bg-white/80 p-3 outline-none"
+                                className="w-full bg-bg-white p-3 outline-none"
                             />
 
                             {errors.date && (
@@ -142,7 +142,7 @@ function CreateMoment() {
                                 placeholder="Bijv. Lokaal WN04.017 of Discord"
                                 value={formData.location}
                                 onChange={handleInputChange}
-                                className="w-full bg-white/80 p-3 outline-none"
+                                className="w-full bg-bg-white p-3 outline-none"
                             />
 
                             {errors.location && (
@@ -165,7 +165,7 @@ function CreateMoment() {
                                 value={formData.description}
                                 onChange={handleInputChange}
                                 placeholder="Wat gaan we doen tijdens dit moment?"
-                                className="w-full min-h-30 bg-white/80 p-3 outline-none resize-none"
+                                className="w-full min-h-30 bg-bg-white p-3 outline-none resize-none"
                             />
 
                             {errors.description && (

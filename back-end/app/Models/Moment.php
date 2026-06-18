@@ -16,6 +16,7 @@ class Moment extends Model
         'description',
         'group_id',
 
+        'date',
     ];
 
     public function Groups(): HasOne
