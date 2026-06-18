@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import TaskCard from "@/components/task-card.jsx";
 import {Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious} from "@/components/ui/carousel.jsx";
 import {Card, TapeCard} from "@/components/ui/cards.jsx";
-import {MainButton} from "@/components/ui/buttons.jsx";
+import {FunctionButton, MainButton} from "@/components/ui/buttons.jsx";
 import {useGroup} from "@/context/group-context.jsx";
 import {Link, useParams} from "react-router";
 import {FaPlus} from "react-icons/fa";
@@ -12,12 +12,14 @@ import {LuSquare, LuSquareCheckBig} from "react-icons/lu";
 import Progressbar from "@/components/ui/progressbar.jsx";
 import Tape from "@/components/ui/tape.jsx";
 import {IoPerson} from "react-icons/io5";
+import {AcceptInvite, InviteCode} from "@/components/invite-code.jsx";
 
 function GroupDetails() {
     const {fetchGroup} = useGroup();
     const params = useParams();
 
     const [group, setGroup] = useState(null);
+    const [showCode, setShowCode] = useState(false)
 
     const variants = ["primary", "secondary", "tertiary", "quaternary"];
 
@@ -33,7 +35,6 @@ function GroupDetails() {
     useEffect(() => {
         document.title = `Board-it | Details ${group?.name ?? ""}`;
     }, [group]);
-
 
     return (
         group !== null ?
@@ -51,34 +52,34 @@ function GroupDetails() {
                     <section aria-label="openstaande taken" className="text-center flex flex-col gap-2">
                         <Carousel className="px-6 text-left">
                             <CarouselContent className="py-4">
-                                {group.main_tasks !== null && group.main_tasks?.length > 0 ? group.main_tasks.map((task, index) =>
-                                    <CarouselItem key={index} className="flex md:basis-1/2 lg:basis-1/3 min-h-[25vh]">
-                                        <div className="w-[95%] mx-auto h-full"
-                                             onClick={() => navigation(`/hoofdtaken/${task.id ?? 1}`)}>
+                                {group.main_tasks !== null && group.main_tasks?.length > 0 ? group.main_tasks.map((task, index) => (
+                                    <CarouselItem key={index} className="flex md:basis-1/2 lg:basis-1/3">
+                                        <Link to={`/hoofdtaken/${task.id ?? 1}`} className="w-[95%] mx-auto h-full">
                                             <Card variant="white">
                                                 <div className="gap-4 mt-2 grid grid-cols-3 grow">
-                                                    <div className="h-[50%]">
+                                                    <div className="h-[70%]">
                                                         <DeadlineCard deadline={task.deadline}/>
                                                     </div>
                                                     <div className="col-span-2">
                                                         <h2 className="text-xl font-headers text-left">{task.title}</h2>
                                                     </div>
                                                 </div>
-                                                <Link className="sr-only" to={`/hoofdtaken/${task.id ?? 1}`}/>
                                                 <p>{task.description ?? "Taak heeft geen beschrijving"}</p>
                                             </Card>
-                                        </div>
+                                        </Link>
                                     </CarouselItem>
-                                ) : <CarouselItem className="flex">
-                                    <TaskCard task={""}/>
-                                </CarouselItem>}
+                                )) : (
+                                    <CarouselItem className="flex">
+                                        <TaskCard task={""}/>
+                                    </CarouselItem>
+                                )}
                             </CarouselContent>
                             <CarouselPrevious/>
                             <CarouselNext/>
                         </Carousel>
 
-                        <div className="w-[20%] md:w-[30%] mx-auto mt-4">
-                            <MainButton link={`/hoofdtaak/aanmaken/${group.id}`}>
+                        <div className="w-[20%] md:w-[30%] mx-auto">
+                            <MainButton link="/hoofdtaak/aanmaken">
                                 <FaPlus/>
                                 <p className="sr-only">Taak aanmaken</p>
                             </MainButton>
@@ -108,7 +109,7 @@ function GroupDetails() {
                                                         />
                                                     ) : (
                                                         <div
-                                                            className="bg-bg-white text-center items-center flex mt-3 rounded-md w-full h-20 mx-auto border-5 border-white shadow-sm">
+                                                            className="bg-bg-white text-center items-center flex mt-3 rounded-md w-full h-16 mx-auto border-5 border-white shadow-sm">
                                                             <IoPerson
                                                                 aria-label="Icoontje van poppetje (geen foto beschikbaar)"
                                                                 className="text-4xl w-full"/>
@@ -135,6 +136,11 @@ function GroupDetails() {
 
                         </TapeCard>
                     </div>
+                    <div className="w-[60%] md:w-[30%] mx-auto">
+                        <FunctionButton f={() => setShowCode(true)}>Code inzien</FunctionButton>
+                    </div>
+                    {showCode ?
+                        <InviteCode f={() => setShowCode(false)}/> : null}
                 </> :
             null
     );

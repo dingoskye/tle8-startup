@@ -2,7 +2,7 @@ import Tape from "@/components/ui/tape.jsx";
 
 function DeadlineCard({deadline}) {
     return (
-        <div className="bg-deadline-red p-1 h-full relative flex items-center col-span-1 rounded-sm shadow-md">
+        <div className="bg-deadline-red p-1 relative flex items-center col-span-1 rounded-sm shadow-md h-full">
             <Tape variant="small-r"/>
             <Tape variant="small-l"/>
             <p className="w-full text-center font-headers text-md lg:break-all">

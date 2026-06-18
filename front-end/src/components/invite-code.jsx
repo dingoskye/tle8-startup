@@ -4,33 +4,36 @@ import {useEffect, useState} from "react";
 import {useGroup} from "@/context/group-context.jsx";
 import {SubmitButton} from "@/components/ui/buttons.jsx";
 
-export function InviteCode({group}) {
+import {Link, useNavigate, useParams} from "react-router";
+import Punaise from "@/components/ui/punaise.jsx";
+import PopUp from "@/components/pop-up.jsx";
+
+export function InviteCode({f}) {
+    const params = useParams()
     // de id van de groep.
     const {fetchCode, code} = useGroup()
 
-
     useEffect(() => {
+        const group = params.id
         if (group) {
             fetchCode(group)
         }
     }, []);
 
-    return (
-        <>
-            <Card variant="tertiary">
-                <h1 className="text-2xl font-headers">
-                    Invite code:
-                </h1>
-                <TapeCard variant="white">
-                    {code ? code : 'geen code'}
 
-                </TapeCard>
-            </Card>
-        </>
+    return (
+        <PopUp link={false} onClose={f}>
+            <h1 className="text-2xl font-headers">
+                Invite code:
+            </h1>
+            <TapeCard variant="tertiary">
+                {code ? code : 'geen code'}
+            </TapeCard>
+        </PopUp>
     )
 }
 
-export function AcceptInvite() {
+export function AcceptInvite({f}) {
     const {fetchAccept, acceptData} = useGroup()
     // code opvangen om door te sturen naar de backend
     const [formData, setFormData,] = useState({
@@ -38,6 +41,7 @@ export function AcceptInvite() {
     })
     const [errors, setErrors] = useState([])
     const newErrors = {};
+    const navigate = useNavigate();
 
     const handleInputChange = (e) => {
         const {name, value} = e.target;
@@ -47,6 +51,7 @@ export function AcceptInvite() {
         });
     }
 
+
     useEffect(() => {
         if (acceptData) {
             if (acceptData.status === 404) {
@@ -55,7 +60,6 @@ export function AcceptInvite() {
                 newErrors.code = "Al in de groep.";
             } else {
                 setErrors({})
-                return
             }
             setErrors(newErrors)
         }
@@ -70,6 +74,7 @@ export function AcceptInvite() {
                 return setErrors(newErrors)
             }
             fetchAccept(formData)
+            navigate("/")
         } catch ($e) {
             console.log($e)
         }
@@ -77,38 +82,34 @@ export function AcceptInvite() {
 
 
     return (
-        <>
-            <Card variant="tertiary">
-                <h1 className="text-2xl font-headers">
-                    Invite accepteren:
-                </h1>
-                <TapeCard variant="white">
-                    <form onSubmit={handleSubmit}>
-                        <label>
-                            invite code:
-                        </label>
-
-                        <input
-                            className=" bg-white min-w-full pl-3 py-2"
-                            type="text"
-                            id="code"
-                            name="code"
-                            value={formData?.code}
-                            placeholder="jf33lj12"
-                            onChange={handleInputChange}
-                        />
-                        <div className="w-[60%] self-center mx-auto pt-5">
-                            <SubmitButton>
-                                Accept
-                            </SubmitButton>
-                        </div>
-                    </form>
-
-                </TapeCard>
+        <PopUp link={false} onClose={f}>
+            <h1 className="text-2xl font-headers">
+                Invite accepteren:
+            </h1>
+            <TapeCard variant="tertiary">
+                <form onSubmit={handleSubmit}>
+                    <label className="font-paragraph text-lg font-semibold" htmlFor="code">Invite
+                        code:</label>
+                    <input
+                        className=" bg-bg-white min-w-full pl-3 py-2 text-text"
+                        type="text"
+                        id="code"
+                        name="code"
+                        value={formData?.code}
+                        placeholder="jf33lj12"
+                        onChange={handleInputChange}
+                    />
+                    <div className="w-[60%] self-center mx-auto pt-5">
+                        <SubmitButton>
+                            Accept
+                        </SubmitButton>
+                    </div>
+                </form>
                 {errors.code &&
                     <p className="text-red-700 font-bold mt-2 text-sm">{errors.code}</p>}
-            </Card>
-        </>
+            </TapeCard>
+
+        </PopUp>
     )
 }
 

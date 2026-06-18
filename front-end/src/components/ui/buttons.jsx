@@ -51,6 +51,7 @@ export function FormButton({children, onClick, type = "button", disabled, colorC
     )
 }
 
+
 export function SubmitButton({children}) {
     return (
         <button className="bg-button-purple rounded-full py-2 px-4 border-white border-6 shadow-sm w-full font-headers

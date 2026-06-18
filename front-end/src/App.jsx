@@ -24,6 +24,7 @@ import Login from "@/pages/login.jsx";
 import {CreateTask} from "@/pages/create-task.jsx";
 import CreateGroup from "@/pages/create-group.jsx"
 import Profile from "@/pages/profile.jsx";
+import {InviteCode, AcceptInvite} from "@/components/invite-code.jsx";
 import FirstVisitGuard from "@/components/first-visit-guard.jsx";
 import AuthGuard from "@/components/auth-guard.jsx";
 
@@ -33,7 +34,7 @@ function App() {
         <Routes>
             <Route element={<AuthGuard><FirstVisitGuard><Layout/></FirstVisitGuard></AuthGuard>}>
                 <Route path="/" element={<Home/>}/>
-                <Route path="/code" element={<InviteCode/>}/>
+                <Route path="/code/:id" element={<InviteCode/>}/>
                 <Route path="/accepteren" element={<AcceptInvite/>}/>
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/registreren" element={<Register/>}/>

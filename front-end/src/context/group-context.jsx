@@ -85,7 +85,9 @@ export function GroupProvider({children}) {
             code,
             fetchCode,
             fetchAccept,
-            acceptData
+            acceptData,
+            setGroups,
+            fetchGroup
         }}>
             {children}
         </GroupContext.Provider>
