@@ -5,7 +5,7 @@ import {useApi} from "@/context/api-context.jsx";
 import {Button} from "@/components/ui/button.jsx";
 import {FormButton} from "@/components/ui/buttons.jsx";
 import {useParams, useNavigate} from 'react-router';
-import {ErrorComponent} from "@/pages/Error.jsx";
+import {ErrorComponent} from "@/pages/error.jsx";
 import {useMainTask} from "@/context/task-context.jsx";
 
 const currentUser = {id: '1', name: 'Jij', user_name: 'mijn_account'}; // Using this until login is implemented
