@@ -10,19 +10,19 @@ import {LoginProvider} from "@/context/login-context.jsx";
 import {ThemeProvider} from "@/context/theme-context.jsx";
 
 createRoot(document.getElementById('root')).render(
-    <ApiProvider>
-        <LoginProvider>
-            <ThemeProvider>
-                <MainTaskProvider>
-                    <GroupProvider>
-                        <StrictMode>
-                            <BrowserRouter>
-                                <App/>
-                            </BrowserRouter>
-                        </StrictMode>
-                    </GroupProvider>
-                </MainTaskProvider>
-            </ThemeProvider>
-        </LoginProvider>
-    </ApiProvider>
+    <StrictMode>
+        <BrowserRouter>
+            <ApiProvider>
+                <LoginProvider>
+                    <ThemeProvider>
+                    <MainTaskProvider>
+                        <GroupProvider>
+                            <App/>
+                        </GroupProvider>
+                    </MainTaskProvider>
+                    </ThemeProvider>
+                </LoginProvider>
+            </ApiProvider>
+        </BrowserRouter>
+    </StrictMode>
 )

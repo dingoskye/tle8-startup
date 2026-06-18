@@ -45,7 +45,7 @@ function TaskDetails() {
     return (
         task !== null ?
             task?.status ?
-                <ErrorComponent code={task.status} message="Taak bestaat niet"/> :
+                <ErrorComponent code={task.status} message="Taak is niet beschikbaar"/> :
                 <div>
                     <header role="banner" className="text-center p-1 mt-2 relative">
                         <div className="bg-bg-white w-full p-4 rounded-lg shadow-md">
@@ -82,7 +82,7 @@ function TaskDetails() {
                                 <SubTaskCard onSubtaskUpdated={reloadTask} key={index} sub={sub}
                                              variant={variants[index % variants.length]}/>)}
                         </section> :
-                        <Link className="w-[50%] mx-auto h-full" to="/">
+                        <Link className="w-[50%] mx-auto h-full" to={`/subtaken/genereren/${task.id}`}>
                             <div className="w-[40vw] h-[40vw] md:w-[30vw] md:h-[30vw] m-auto mt-5">
                                 <Card variant="tertiary" kind="s">
                                     <div className="flex justify-center items-center h-full">

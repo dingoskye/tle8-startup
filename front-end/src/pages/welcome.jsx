@@ -1,13 +1,22 @@
 import Tape from "@/components/ui/tape.jsx";
 import {Card, TapeCard} from "@/components/ui/cards.jsx";
-import {MainButton} from "@/components/ui/buttons.jsx";
+import {FunctionButton, MainButton} from "@/components/ui/buttons.jsx";
 import {useEffect} from "react";
+import {useNavigate} from "react-router";
 
 function Welcome() {
+    const navigate = useNavigate()
+
+    const continueToApp = () => {
+        localStorage.setItem("hasVisited", "true");
+        navigate("/registreren");
+    }
+
     //documenten titels voor WCAG!!
     useEffect(() => {
         document.title = "Board-it | Welkom";
     }, []);
+
 
     return (
         <>
@@ -34,7 +43,7 @@ function Welcome() {
             </Card>
 
             <div className="w-[45%] mx-auto">
-                <MainButton link="/register">Begin nu!</MainButton>
+                <FunctionButton f={continueToApp}>Begin nu!</FunctionButton>
             </div>
         </>
     )

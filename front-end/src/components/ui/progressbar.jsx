@@ -17,8 +17,8 @@ function Progressbar({progress}) {
                 <div className={`h-full ${color}`} style={{width: `${progress}%`}}/>
             </div>
             <GiPlainCircle
-                className="absolute top-1/2 -translate-y-1/2 -translate-x-15/16 text-4xl bg-white border-white border-3 rounded-full text-nav-brown shadow-sm"
-                style={{left: `${progress + 5}%`}}/>
+                className="absolute top-1/2 -translate-y-1/2 -translate-x-14/16 text-4xl bg-white border-white border-3 rounded-full text-nav-brown shadow-sm"
+                style={{left: `${progress}%`}}/>
             <p className="sr-only">Progressiebalk die laat zien dat je progressie ${progress}% is</p>
         </div>
     )

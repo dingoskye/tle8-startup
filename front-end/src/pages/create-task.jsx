@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import {useApi} from "@/context/api-context.jsx";
 import {Card} from "@/components/ui/cards.jsx";
 import {TapeCard} from "@/components/ui/cards.jsx";
-import {useNavigate} from "react-router";
+import {useNavigate, useParams} from "react-router";
 
 // Nieuwe taak aanmaken.
 
@@ -16,6 +16,7 @@ export function CreateTask() {
     };
 
     const [form, setForm] = useState(initialForm);
+    const params = useParams()
 
     const setField = (key, value) => {
         setForm(prev => ({
@@ -33,8 +34,8 @@ export function CreateTask() {
         const newErrors = {};
         if (!form.title.trim()) newErrors.title = "Titel is verplicht.";
         if (!form.ai_file) newErrors.file = "Bestand is verplicht.";
-        else if (!["image/png", "image/jpeg", "application/pdf"].includes(form.ai_file.type)) {
-            newErrors.file = "Alleen afbeeldingen (PNG/JPEG) of PDF's zijn toegestaan.";
+        else if (!["application/txt", "application/pdf"].includes(form.ai_file.type)) {
+            newErrors.file = "Alleen PDF's of TXT bestanden zijn toegestaan.";
         }
         if (!form.deadline) newErrors.deadline = "Deadline is verplicht.";
         return newErrors;
@@ -69,8 +70,7 @@ export function CreateTask() {
                 formData.append(key, sendValue);
             }
         }
-        formData.append("group_id", "1");
-        formData.append("user_id", "1");
+        formData.append("group_id", params.id);
 
         try {
             await apiFetch(`/main/create`, {
@@ -153,7 +153,7 @@ export function CreateTask() {
                     <div role="group" aria-labelledby="label-upload" aria-describedby="upload-help"
                          className="flex flex-col">
                         <label id="label-upload" htmlFor="upload" className="font-headers text-left text-lg mb-2">Rubric
-                            File (PNG, JPEG of PDF): </label>
+                            File (PDF of TXT): </label>
                         <input
                             type="file"
                             id="upload"
