@@ -1,6 +1,7 @@
 import {Card} from "@/components/ui/cards.jsx";
 import {IoPerson} from "react-icons/io5";
 import {Link} from "react-router";
+import {MdPhoto} from "react-icons/md";
 
 function GroupCard({group, variant}) {
 
@@ -13,11 +14,11 @@ function GroupCard({group, variant}) {
                         src={group.picture} alt={`Foto van de ${group.name} groep`}/> :
                     <div
                         className="bg-bg-white text-center items-center flex mt-3 rounded-md w-full h-20 mx-auto border-5 border-white shadow-sm">
-                        <IoPerson aria-label="Icoontje van poppetje (geen foto beschikbaar)"
-                                  className="text-4xl w-full"/>
+                        <MdPhoto aria-label="Icoontje van poppetje (geen foto beschikbaar)"
+                                 className="text-4xl w-full"/>
                     </div>}
 
-                <p className="text-xl text-center break-all">{group.name}</p>
+                <p className="text-xl text-center break-all ">{group.name}</p>
             </Card>
         </Link>
     )

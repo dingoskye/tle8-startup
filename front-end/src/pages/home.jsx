@@ -7,10 +7,13 @@ import {TapeCard} from "@/components/ui/cards.jsx";
 import GroupCard from "@/components/group-card.jsx";
 import {useMainTask} from "@/context/task-context.jsx";
 import {useGroup} from "@/context/group-context.jsx";
+import {useApi} from "@/context/api-context.jsx";
+import {useTheme} from "@/context/theme-context.jsx";
 
 function Home() {
     const {fetchMainTasks, mainTasks} = useMainTask()
     const {fetchGroups, groups} = useGroup()
+    const {loginData} = useApi()
 
     const variants = [
         "secondary",
@@ -32,7 +35,7 @@ function Home() {
                 <div className="bg-primary w-full p-4 rounded-lg shadow-md">
                     <Tape variant="big-r"/>
                     <Tape variant="big-l"/>
-                    <h1 className="text-2xl font-headers">Welkom John Doe</h1>
+                    <h1 className="text-3xl font-headers">Welkom {loginData?.name ?? ""}</h1>
                 </div>
             </header>
 
@@ -40,13 +43,16 @@ function Home() {
                 {/*task carousel*/}
                 <Carousel className="px-6 text-left">
                     <CarouselContent className="py-4">
-                        {mainTasks !== null && mainTasks.length !== 0 ? mainTasks.map((task, index) =>
-                            <CarouselItem key={index} className="flex md:basis-1/2 lg:basis-1/3">
-                                <TaskCard task={task}/>
-                            </CarouselItem>
-                        ) : <CarouselItem className="flex">
-                            <TaskCard task={""}/>
-                        </CarouselItem>}
+                        {
+
+
+                            mainTasks !== null && mainTasks.length !== 0 ? mainTasks.map((task, index) =>
+                                <CarouselItem key={index} className="flex md:basis-1/2 lg:basis-1/3">
+                                    <TaskCard task={task}/>
+                                </CarouselItem>
+                            ) : <CarouselItem className="flex">
+                                <TaskCard task={""}/>
+                            </CarouselItem>}
                     </CarouselContent>
                     <CarouselPrevious/>
                     <CarouselNext/>

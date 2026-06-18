@@ -6,17 +6,23 @@ import {BrowserRouter} from "react-router";
 import {ApiProvider} from "@/context/api-context.jsx";
 import {MainTaskProvider} from "@/context/task-context.jsx";
 import {GroupProvider} from "@/context/group-context.jsx";
+import {LoginProvider} from "@/context/login-context.jsx";
+import {ThemeProvider} from "@/context/theme-context.jsx";
 
 createRoot(document.getElementById('root')).render(
-    <ApiProvider>
-        <MainTaskProvider>
-            <GroupProvider>
-                <StrictMode>
-                    <BrowserRouter>
-                        <App/>
-                    </BrowserRouter>
-                </StrictMode>
-            </GroupProvider>
-        </MainTaskProvider>
-    </ApiProvider>
+    <StrictMode>
+        <BrowserRouter>
+            <ApiProvider>
+                <LoginProvider>
+                    <ThemeProvider>
+                    <MainTaskProvider>
+                        <GroupProvider>
+                            <App/>
+                        </GroupProvider>
+                    </MainTaskProvider>
+                    </ThemeProvider>
+                </LoginProvider>
+            </ApiProvider>
+        </BrowserRouter>
+    </StrictMode>
 )
