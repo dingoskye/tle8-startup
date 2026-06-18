@@ -22,7 +22,48 @@ Board-it is a app that helps students with ADHD to get the feeling of urgency to
 
 ## Installation & Setup (thomas)
 
-## Project Structure (christa)
+## Project Structure
+In this repository we have worked with front-end and back-end in the same repository. The structure of our repository looks like this because of it:
+
+board-it/
+├── back-end/
+    ├── app/
+    ├── bootstrap/
+    ├── config/
+    ├── database/
+    ├── public/
+    ├── resources/
+    ├── routes/
+    ├── storage/
+    ├── stubs/
+    ├── tests/
+    ├── .env
+    ├── .gitignore
+    ├── composer.json
+    ├── composer.lock
+    ├── package.json
+    ├── package-lock.json
+├── front-end/
+    ├── public/
+    ├── src/
+        ├── assets/
+        ├── components/
+        ├── context/
+        ├── lib/
+        ├── pages/
+        ├── app.jsx
+        ├── index.css
+        ├── layout.jsx
+        ├── main.jsx
+    ├── .gitignore
+    ├── components.json
+    ├── eslint.config.js
+    ├── index.html
+    ├── jsconfig.json
+    ├── package.json
+    ├── package-lock.json
+    ├── vite.config.js
+├── README.md
 
 ## ERD (thomas)
 
@@ -116,8 +157,8 @@ erDiagram
 
 - `GET /group/` ~ Get all groups associated to the logged in user (Requires AUTH)
 - `GET /group/{id}` ~ Get group details (Requires AUTH)
-- `POST /group/create` ~ Create a group (Requires AUTH) ~ Required fields: name & role (WIP)
-- `PUT /group/edit/{id}` ~ Edit group details (Requires AUTH) ~ Required fields: name & role (WIP)
+- `POST /group/create` ~ Create a group (Requires AUTH)
+- `PUT /group/edit/{id}` ~ Edit group details (Requires AUTH)
 - `DELETE /group/delete/{id}` ~ Delete the group (Requires AUTH)
 
 ### Maintasks
@@ -140,7 +181,9 @@ erDiagram
 - `POST /main-tasks/{id}/generate-subtasks` ~ Generate subtasks with AI (Requires AUTH)
 
 ### Theme routes
-- `GET /theme/` ~ Get the theme of the user (Requires AUTH)
+- `GET /theme/` ~ Get the themes that exists (Requires AUTH)
+- `GET /theme/details` ~ Get the theme settings of the user (Requires AUTH)
+- `PUT /theme/edit` ~ Update de theme settings of the user (Requires AUTH)
 
 ## Deployment (christa)
 
