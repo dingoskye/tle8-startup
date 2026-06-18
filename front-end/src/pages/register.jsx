@@ -29,14 +29,10 @@ function Register() {
             ...formData,
             [name]: value
         });
-        console.log(formData)
     };
 
     useEffect(() => {
-        setFirst(false)
-        document.title = "Board-it | Registeren";
-        console.log(`------------Register-----------`)
-
+        document.title = "Board-it | Register";
         if (localStorage.getItem("token")) {
             async function removeToken() {
 

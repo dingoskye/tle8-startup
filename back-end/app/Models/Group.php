@@ -11,7 +11,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-#[fillable(['name', 'description', 'profile_image'])]
+
+#[fillable(['name', 'description', 'profile_image', 'invite_link'])]
 class Group extends Model
 {
     use SoftDeletes;
@@ -20,6 +21,7 @@ class Group extends Model
         'name',
         'description',
         'image',
+        'invite_link',
     ];
 
 //ToDo: Invite link groep, leader board boolean, meerdere personen.

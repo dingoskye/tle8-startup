@@ -40,7 +40,7 @@ function Login() {
 
             removeToken()
         }
-        console.log(errors, 'errors')
+
 
         if (errors) {
             setErrors({})
