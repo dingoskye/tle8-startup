@@ -19,7 +19,7 @@ function Layout() {
                     className={"w-[90%] md:w-[80%] mx-auto flex flex-col gap-3 my-2 grow font-paragraph justify-between py-2"}>
                     <Outlet/>
                 </main>
-                {location.pathname !== '/login' && location.pathname !== '/register' ?
+                {location.pathname !== '/login' && location.pathname !== '/registreren' && location.pathname !== '/welkom' ?
                     <Nav f={() => setShowAccept(true)}/> : null}
             </div>
             {showAccept ?
