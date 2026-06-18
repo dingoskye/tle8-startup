@@ -7,6 +7,7 @@ const LoginContext = createContext()
 export function LoginProvider({children}) {
     const {apiFetch, setLoginData, token} = useApi();
     const [users, setUsers] = useState(null)
+    const navigate = useNavigate()
 
     async function fetchLogin(formData) {
         try {
@@ -39,7 +40,6 @@ export function LoginProvider({children}) {
                 body: JSON.stringify(formData)
             })
             setLoginData(data)
-
         } catch (e) {
             console.log(e.message)
         }
@@ -56,15 +56,17 @@ export function LoginProvider({children}) {
                 },
             })
             setUsers(data)
-            console.log(data)
+
         } catch (e) {
             console.log(e.message)
         }
     }
 
     async function logout() {
-        await localStorage.clear()
+        localStorage.removeItem('token')
+        localStorage.removeItem('user')
         setLoginData(null)
+        navigate("/login")
     }
 
     return (

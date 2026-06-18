@@ -34,6 +34,9 @@ Route::middleware('jwt')->group(function () {
     Route::put('/group/edit/{id}', [GroupController::class, 'edit']);
     Route::delete('/group/delete/{id}', [GroupController::class, 'delete']);
 
+    Route::patch('/group/link/{id}', [GroupController::class, 'createLink']);
+    Route::patch('/group/link', [GroupController::class, 'addUser']);
+
     //Main task controller routes
     Route::post('/main/create', [MainTaskController::class, 'create']);
     Route::get('/main/', [MainTaskController::class, 'index']);
@@ -48,7 +51,7 @@ Route::middleware('jwt')->group(function () {
     Route::put('/moment/edit/{id}', [MomentController::class, 'edit']);
     Route::delete('/moment/delete/{id}', [MomentController::class, 'delete']);
 
-    //Sub task controller routes
+    //Subtask controller routes
     Route::post('/sub/create', [SubTaskController::class, 'create']);
     Route::get('/sub/', [SubTaskController::class, 'index']);
     Route::get('/sub/{id}', [SubTaskController::class, 'show']);

@@ -76,7 +76,7 @@ function GroupDetails() {
                         </Carousel>
 
                         <div className="w-[20%] md:w-[30%] mx-auto mt-4">
-                            <MainButton link="/taak-aanmaken">
+                            <MainButton link={`/hoofdtaak/aanmaken/${group.id}`}>
                                 <FaPlus/>
                                 <p className="sr-only">Taak aanmaken</p>
                             </MainButton>

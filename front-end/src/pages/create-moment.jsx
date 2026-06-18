@@ -13,7 +13,7 @@ function CreateMoment() {
 
     const {apiFetch, token} = useApi();
 
-    const { id } = useParams();
+    const {id} = useParams();
     const navigate = useNavigate();
 
     // State voor de nieuwe velden: datum, locatie en beschrijving
@@ -26,7 +26,7 @@ function CreateMoment() {
     const [errors, setErrors] = useState({});
 
     const handleInputChange = (e) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
         setFormData((prev) => ({
             ...prev,
             [name]: value,
@@ -93,85 +93,92 @@ function CreateMoment() {
 
         } catch (err) {
             console.error("Fout bij aanmaken moment:", err.message);
-            setErrors({ general: "Er is een fout opgetreden bij het aanmaken van het moment." });
+            setErrors({general: "Er is een fout opgetreden bij het aanmaken van het moment."});
         }
     };
 
     return (
         <Card variant={"white"}>
-            <h1 className="text-3xl font-headers flex items-center justify-center mb-10">
-                Nieuw Moment Inplannen
+            <h1 className="text-3xl font-headers flex items-center justify-center mt-3 text-center">
+                Nieuw studiemoment aanmaken
             </h1>
 
             <section>
-                <form onSubmit={handleSubmit} className="flex flex-col gap-10">
+                <form onSubmit={handleSubmit} className="flex flex-col gap-6">
 
                     <TapeCard variant="primary">
-                        <label htmlFor="date" className="block font-headers mb-4">
-                            Datum & Tijd:
-                        </label>
+                        <div className="text-left">
+                            <label htmlFor="date" className="text-lg font-headers mb-4">
+                                Datum & Tijd:
+                            </label>
 
-                        <input
-                            type="datetime-local"
-                            id="date"
-                            name="date"
-                            value={formData.date}
-                            onChange={handleInputChange}
-                            className="w-full bg-white/80 p-3 outline-none"
-                        />
+                            <input
+                                type="datetime-local"
+                                id="date"
+                                name="date"
+                                value={formData.date}
+                                onChange={handleInputChange}
+                                className="w-full bg-white/80 p-3 outline-none"
+                            />
 
-                        {errors.date && (
-                            <p className="text-red-600 text-sm mt-1">
-                                {errors.date}
-                            </p>
-                        )}
+                            {errors.date && (
+                                <p className="text-red-600 text-sm mt-1">
+                                    {errors.date}
+                                </p>
+                            )}
+                        </div>
                     </TapeCard>
 
                     <TapeCard variant="secondary">
-                        <label htmlFor="location" className="block font-headers mb-4">
-                            Locatie:
-                        </label>
+                        <div className="text-left">
+                            <label htmlFor="location" className="text-left text-lg font-headers mb-4">
+                                Locatie:
+                            </label>
 
-                        <input
-                            type="text"
-                            id="location"
-                            name="location"
-                            placeholder="Bijv. Lokaal WN04.017 of Discord"
-                            value={formData.location}
-                            onChange={handleInputChange}
-                            className="w-full bg-white/80 p-3 outline-none"
-                        />
+                            <input
+                                type="text"
+                                id="location"
+                                name="location"
+                                placeholder="Bijv. Lokaal WN04.017 of Discord"
+                                value={formData.location}
+                                onChange={handleInputChange}
+                                className="w-full bg-white/80 p-3 outline-none"
+                            />
 
-                        {errors.location && (
-                            <p className="text-red-600 text-sm mt-1">
-                                {errors.location}
-                            </p>
-                        )}
+                            {errors.location && (
+                                <p className="text-red-600 text-sm mt-1">
+                                    {errors.location}
+                                </p>
+                            )}
+                        </div>
                     </TapeCard>
 
                     <TapeCard variant="quaternary">
-                        <label htmlFor="description" className="block font-headers mb-4">
-                            Beschrijving:
-                        </label>
+                        <div className="text-left">
+                            <label htmlFor="description" className="text-left text-lg font-headers mb-4">
+                                Beschrijving:
+                            </label>
 
-                        <textarea
-                            id="description"
-                            name="description"
-                            value={formData.description}
-                            onChange={handleInputChange}
-                            placeholder="Wat gaan we doen tijdens dit moment?"
-                            className="w-full min-h-30 bg-white/80 p-3 outline-none resize-none"
-                        />
+                            <textarea
+                                id="description"
+                                name="description"
+                                value={formData.description}
+                                onChange={handleInputChange}
+                                placeholder="Wat gaan we doen tijdens dit moment?"
+                                className="w-full min-h-30 bg-white/80 p-3 outline-none resize-none"
+                            />
 
-                        {errors.description && (
-                            <p className="text-red-600 text-sm mt-1">
-                                {errors.description}
-                            </p>
-                        )}
+                            {errors.description && (
+                                <p className="text-red-600 text-sm mt-1">
+                                    {errors.description}
+                                </p>
+                            )}
+                        </div>
                     </TapeCard>
 
                     {errors.general && (
-                        <div role="alert" className="mt-1 rounded-lg flex justify-center text-(--ruas-red) font-semibold text-lg">
+                        <div role="alert"
+                             className="mt-1 rounded-lg flex justify-center text-(--ruas-red) font-semibold text-lg">
                             {errors.general}
                         </div>
                     )}

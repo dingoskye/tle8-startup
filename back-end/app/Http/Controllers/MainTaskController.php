@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\Group;
 use App\Models\MainTask;
 use App\Models\SubTask;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -51,11 +52,18 @@ class MainTaskController extends Controller
             ]);
             $mainTask->save();
 
-            $mainTask->users()->attach($userId, [
-                'level' => $request->level ?? "beginner",
-                'progress' => $request->progress ?? 0,
-                'score' => $request->score ?? null,
-            ]);
+            $users = Group::find($request->group_id)
+                ->users()
+                ->select('users.id')
+                ->get();;
+
+            foreach ($users as $userId) {
+                $mainTask->users()->attach($userId, [
+                    'level' => $request->level ?? "beginner",
+                    'progress' => $request->progress ?? 0,
+                    'score' => $request->score ?? null,
+                ]);
+            }
 
 
             return $mainTask;
