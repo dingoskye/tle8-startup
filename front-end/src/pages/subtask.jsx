@@ -25,6 +25,7 @@ function Subtask() {
     });
     const [details, setDetails] = useState(null);
     const [errors, setErrors] = useState({});
+    const [submitting, setSubmitting] = useState(false)
 
     useEffect(() => {
         if (!id) return;
@@ -43,7 +44,7 @@ function Subtask() {
             });
 
             if (!data || data.message || !data.title) {
-                setErrors({ fetchError: "Error: De opgevraagde hoofdtaak bestaat niet (meer) in de database." });
+                setErrors({fetchError: "Error: De opgevraagde hoofdtaak bestaat niet (meer) in de database."});
                 return;
             }
 
@@ -51,7 +52,7 @@ function Subtask() {
             console.log(data);
         } catch (e) {
             console.log(e.message);
-            setErrors({ fetchError: "Error: De opgevraagde hoofdtaak bestaat niet (meer) in de database." });
+            setErrors({fetchError: "Error: De opgevraagde hoofdtaak bestaat niet (meer) in de database."});
         }
     }
 
@@ -99,6 +100,7 @@ function Subtask() {
         }
 
         setErrors({});
+        setSubmitting(true)
 
         try {
             const res = await fetch(
@@ -144,7 +146,7 @@ function Subtask() {
                     <p className="text-lg font-paragraph font-bold">
                         {errors.fetchError}
                     </p>
-                    <div className="w-[75%] md:w-[25%] mx-auto flex flex-col items-center text-center mb-5">
+                    <div className="w-[75%] md:w-[30%] mx-auto">
                         <MainButton link={"/hoofdtaken"}>
                             Terug naar overzicht
                         </MainButton>
@@ -152,14 +154,14 @@ function Subtask() {
                 </div>
             ) : (
                 <>
-                    <h1 className="text-3xl font-headers flex items-center justify-center">
+                    <h1 className="text-3xl font-headers flex items-center justify-center mt-3">
                         {details?.title}
                     </h1>
 
                     <section>
                         <form onSubmit={handleSubmit} className="flex flex-col gap-10">
                             <TapeCard variant="quaternary">
-                                <label htmlFor="context" className="block font-headers mb-4">
+                                <label htmlFor="context" className="block font-headers text-lg text-left mb-4">
                                     Context:
                                 </label>
 
@@ -169,6 +171,7 @@ function Subtask() {
                                     value={formData.context}
                                     onChange={handleInputChange}
                                     className="w-full min-h-30 bg-white/80 p-3 outline-none resize-none"
+                                    placeholder="Geef context mee aan de AI."
                                 />
 
                                 {errors.context && (
@@ -180,7 +183,7 @@ function Subtask() {
 
                             <TapeCard variant="tertiary">
 
-                                <label htmlFor="niveau" className="block font-headers mb-4">
+                                <label htmlFor="niveau" className="block font-headers mb-4 text-lg text-left">
                                     Niveau:
                                 </label>
 
@@ -229,11 +232,13 @@ function Subtask() {
                                 </div>
                             </TapeCard>
 
-                            {errors.general && <div role="alert" className="mt-1 rounded-lg flex justify-center text-(--ruas-red) font-semibold text-lg">{errors.general}</div>}
+                            {errors.general &&
+                                <p role="alert"
+                                   className="mt-1 rounded-lg flex justify-center text-(--ruas-red) font-semibold text-lg">{errors.general}</p>}
 
-                            <div className="w-[45%] md:w-[15%] mx-auto flex flex-col items-center text-center mb-5">
+                            <div className="w-[60%] md:w-[30%] mx-auto mb-5">
                                 <SubmitButton>
-                                    Genereren
+                                    {submitting ? "AI is aan het werk..." : "Genereren"}
                                 </SubmitButton>
                             </div>
                         </form>

@@ -35,6 +35,7 @@ class SubTaskController extends Controller
                 'title' => $request->title,
                 'user_id' => $userId,
                 'description' => $request->description,
+                'deadline' => $request->deadline,
                 'main_task_id' => $request->main_task_id,
             ]);
 

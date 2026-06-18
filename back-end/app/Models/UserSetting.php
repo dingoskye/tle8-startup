@@ -12,6 +12,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 #[fillable(['user_id', 'theme_id', 'written_font'])]
 class UserSetting extends Model
 {
+    protected $fillable = [
+        'user_id', 'theme_id', 'written_font'
+    ];
+
     use SoftDeletes;
 
     public function user(): BelongsTo
@@ -19,8 +23,8 @@ class UserSetting extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function theme(): HasOne
+    public function theme(): BelongsTo
     {
-        return $this->hasOne(Theme::class);
+        return $this->belongsTo(Theme::class);
     }
 }

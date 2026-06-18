@@ -15,7 +15,7 @@ class Theme extends Model
 {
     use SoftDeletes;
 
-    public function userSetting(): HasMany
+    public function userSettings(): HasMany
     {
         return $this->hasMany(UserSetting::class);
     }

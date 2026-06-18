@@ -64,7 +64,7 @@ function TaskDetails() {
                             <div className="w-full flex justify-end">
                                 <div className="w-[35%]">
                                     <button
-                                        className={`flex gap-2 justify-center w-full rounded-full border-white border-3 shadow-sm p-1 mt-2 items-center text-sm ${showCompleted ? "bg-button-purple" : "bg-gray-300"}`}
+                                        className={`flex gap-2 justify-center w-full rounded-full border-white border-3 shadow-sm p-1 mt-2 items-center text-sm ${showCompleted ? "bg-button-purple" : "bg-gray-300 text-black"}`}
                                         onClick={() => setShowCompleted(!showCompleted)}
                                         aria-label={showCompleted ? "Afgevinkte taken niet tonen" : "Afgevinkte taken wel tonen"}>
                                         <FaFilter/> {showCompleted ? "Niet tonen" : "Wel tonen"}

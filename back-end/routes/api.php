@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\MomentController;
 use App\Http\Controllers\SubTaskController;
+use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MainTaskController;
 use App\Http\Controllers\GroupController;
@@ -13,6 +14,8 @@ Route::middleware('throttle:60,1')->group(function () {
     Route::post('/user/login', [UserController::class, 'login']);
     Route::post('/user/register', [UserController::class, 'register']);
 });
+Route::post('/user/login', [UserController::class, 'login']);
+Route::post('/user/register', [UserController::class, 'register']);
 
 Route::middleware('jwt')->group(function () {
     Route::get('/user', [UserController::class, 'index']);
@@ -24,6 +27,8 @@ Route::middleware('jwt')->group(function () {
     Route::get('/main-tasks/{id}/generate-subtasks', [SubtaskAiController::class, 'generate']);
     Route::post('/main-tasks/{mainTask}/generate-subtasks', [SubtaskAiController::class, 'generate']);
 
+    //Group controller routes
+//Group controller routes
     //Group controller routes
     Route::post('/group/create', [GroupController::class, 'create']);
     Route::get('/group/', [GroupController::class, 'index']);
@@ -46,12 +51,18 @@ Route::middleware('jwt')->group(function () {
     Route::delete('/moment/delete/{id}', [MomentController::class, 'delete']);
 
     //Subtask controller routes
+    //Sub task controller routes
     Route::post('/sub/create', [SubTaskController::class, 'create']);
     Route::get('/sub/', [SubTaskController::class, 'index']);
     Route::get('/sub/{id}', [SubTaskController::class, 'show']);
     Route::put('/sub/edit/{id}', [SubTaskController::class, 'edit']);
     Route::patch('/sub/complete/{id}', [SubTaskController::class, 'completed']);
     Route::delete('/sub/delete/{id}', [SubTaskController::class, 'delete']);
+
+    //Theme controller routes
+    Route::get('/theme', [ThemeController::class, 'index']);
+    Route::get('/theme/details', [ThemeController::class, 'show']);
+    Route::put('/theme/edit', [ThemeController::class, 'update']);
 });
 
 // ToDo dit in auth zetten

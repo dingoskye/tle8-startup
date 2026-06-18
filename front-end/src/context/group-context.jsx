@@ -6,9 +6,6 @@ const GroupContext = createContext()
 export function GroupProvider({children}) {
     const {apiFetch, token} = useApi();
     const [groups, setGroups] = useState(null)
-    const [code, setCode] = useState(null)
-    const [acceptData, setAcceptData] = useState(null)
-
 
     async function fetchGroups() {
         try {
@@ -24,39 +21,19 @@ export function GroupProvider({children}) {
         } catch (e) {
             console.log(e.message)
         }
-
-
     }
 
-    async function fetchCode(id) {
+    async function fetchGroup(id) {
         try {
-            console.log('------ fetchCode ------')
-            const data = await apiFetch(`/group/link/${id}`, {
-                method: "PATCH",
+            const data = await apiFetch(`/group/${id}`, {
+                method: "GET",
                 headers: {
                     Accept: "application/json",
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`,
-                },
+                }
             })
-            setCode(data)
-        } catch (e) {
-            console.log(e.message)
-        }
-    }
-
-    async function fetchAccept(formData) {
-        try {
-            console.log('------ fetchCode ------')
-            const data = await apiFetch(`/group/link`, {
-                method: "PATCH",
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`,
-                }, body: JSON.stringify(formData)
-            })
-            setAcceptData(data)
+            return (data)
         } catch (e) {
             console.log(e.message)
         }
@@ -65,11 +42,9 @@ export function GroupProvider({children}) {
     return (
         <GroupContext.Provider value={{
             groups,
+            setGroups,
             fetchGroups,
-            code,
-            fetchCode,
-            fetchAccept,
-            acceptData
+            fetchGroup
         }}>
             {children}
         </GroupContext.Provider>

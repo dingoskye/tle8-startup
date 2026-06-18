@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 
-#[fillable(['title', 'description', 'completed', 'deadline', 'user_id', 'main_task_id'])]
+#[fillable(['title','deadline', 'description', 'completed', 'deadline', 'user_id', 'main_task_id'])]
 class SubTask extends Model
 {
     use SoftDeletes;
