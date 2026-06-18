@@ -1,12 +1,11 @@
 ## Project Overview
 
-Board-it is a app that helps students with ADHD to get the feeling of urgency to start tasks earlier. This is achieved
-with peer pressure and making progression visual.
+Board-it is a app that helps students with ADHD to get the feeling of urgency to start tasks earlier. This is achieved with peer pressure (working together), deviding tasks and making progression visual.
 
 ## Key Features
 
 - Devide tasks in to smaller tasks with AI or make them yourself.
-- Get the urge to work by peer pressure with your friends.
+- Get the urge to work by studing together with your friends.
 - Add deadlines to your subtasks.
 - Progression is visual.
 
@@ -109,7 +108,7 @@ erDiagram
 
 ### Users
 
-- `GET /user/` ~ Get all the users
+- `GET /user/` ~ Get all the users only user_name and id (Requires AUTH)
 - `GET /user/{id}` ~ Get user details (Requires AUTH)
 - `PUT /user/edit/{id}` ~ Edit user details (Requires AUTH)
 
@@ -137,13 +136,19 @@ erDiagram
 - `PATCH /sub/complete/{id}` ~ Complete a subtask (Requires AUTH)
 - `DELETE /sub/delete/{id}` ~ Delete the subtask (Requires AUTH)
 
+### AI routes
+- `POST /main-tasks/{id}/generate-subtasks` ~ Generate subtasks with AI (Requires AUTH)
+
+### Theme routes
+- `GET /theme/` ~ Get the theme of the user (Requires AUTH)
+
 ## Deployment
 
 ## AI Integration
 
 ## Edge Cases
 
-### Authdentication:
+### Authentication:
 
 - Multiple login attempts what triggers rate limit.
 - Token becomes invalid when logged in.
