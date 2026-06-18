@@ -8,7 +8,7 @@ import {Card} from "@/components/ui/cards.jsx";
 import {Link} from "react-router";
 import DeadlineCard from "@/components/ui/deadline-card.jsx";
 import Progressbar from "@/components/ui/progressbar.jsx";
-import {ErrorComponent} from "@/pages/Error.jsx";
+import {ErrorComponent} from "@/pages/error.jsx";
 import PopUp from "@/components/pop-up.jsx";
 import {FunctionButton} from "@/components/ui/buttons.jsx";
 
