@@ -23,7 +23,53 @@ with peer pressure (working together), deviding tasks and making progression vis
 | AI                  | Laravel AI SDK | -                   |
 | AI                  | GPT-4          | -                   |
 
-## Installation & Setup (thomas)
+## Installation & Setup
+
+- Node.js
+- npm
+- composer
+- mySQL
+- Git
+
+### clone repository
+
+```bash
+git clone 
+```
+
+### Install Dependencies
+
+```bash
+cd back-end
+composer install
+```
+
+```bash
+cd front-end
+npm install
+```
+
+### Set up database
+
+```bash
+php artisan migrate:fresh 
+```
+
+drag database.sqlite in database slot in PHPStorm.
+
+- copy the env.example file and remove the example and add:
+    - AI_KEY=
+    - JWT_SECRET=
+
+```bash
+cd front-end
+npm run dev
+```
+
+```bash
+cd front-end
+php artisan serve
+```
 
 ## Project Structure
 
@@ -31,48 +77,50 @@ In this repository we have worked with front-end and back-end in the same reposi
 looks like this because of it:
 
 ````
+
 board-it/
 ├── back-end/
-    ├── app/
-    ├── bootstrap/
-    ├── config/
-    ├── database/
-    ├── public/
-    ├── resources/
-    ├── routes/
-    ├── storage/
-    ├── stubs/
-    ├── tests/
-    ├── .env
-    ├── .gitignore
-    ├── composer.json
-    ├── composer.lock
-    ├── package.json
-    ├── package-lock.json
+├── app/
+├── bootstrap/
+├── config/
+├── database/
+├── public/
+├── resources/
+├── routes/
+├── storage/
+├── stubs/
+├── tests/
+├── .env
+├── .gitignore
+├── composer.json
+├── composer.lock
+├── package.json
+├── package-lock.json
 ├── front-end/
-    ├── public/
-    ├── src/
-        ├── assets/
-        ├── components/
-        ├── context/
-        ├── lib/
-        ├── pages/
-        ├── app.jsx
-        ├── index.css
-        ├── layout.jsx
-        ├── main.jsx
-    ├── .gitignore
-    ├── components.json
-    ├── eslint.config.js
-    ├── index.html
-    ├── jsconfig.json
-    ├── package.json
-    ├── package-lock.json
-    ├── vite.config.js
+├── public/
+├── src/
+├── assets/
+├── components/
+├── context/
+├── lib/
+├── pages/
+├── app.jsx
+├── index.css
+├── layout.jsx
+├── main.jsx
+├── .gitignore
+├── components.json
+├── eslint.config.js
+├── index.html
+├── jsconfig.json
+├── package.json
+├── package-lock.json
+├── vite.config.js
 ├── README.md
+
 ````
 
-## ERD (thomas)
+## ERD
 
 ```mermaid
 erDiagram
@@ -134,6 +182,11 @@ erDiagram
         DATETIME deadline
         DATETIME datetime
     }
+    moments {
+        BIGINT id
+        BIGINT group_id
+    }
+
     users ||--o{ user_main_tasks: has
     main_tasks ||--o{ user_main_tasks: has
     users ||--o{ sub_tasks: has
@@ -143,10 +196,11 @@ erDiagram
     groups ||--o{ user_main_tasks: has
     user_main_tasks ||--o{ sub_tasks: has
     groups ||--o{ user_groups: has
+    groups ||--o{ moments: has
 
 ```
 
-## API Endpoints (christa)
+## API Endpoints
 
 ### Authentication & Login/register
 
@@ -197,7 +251,7 @@ erDiagram
 
 ## AI Integration (skye)
 
-## Edge Cases (thomas)
+## Edge Cases
 
 ### Authentication:
 
