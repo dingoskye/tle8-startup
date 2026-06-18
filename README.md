@@ -28,9 +28,9 @@ with peer pressure (working together), deviding tasks and making progression vis
 ### rerequisites
 
 - Node.js
-- npm
-- composer
-- mySQL
+- Npm
+- Composer
+- MySQL
 - Git
 
 ### clone repository
@@ -42,12 +42,12 @@ git clone
 ### Install Dependencies
 
 ```bash
-cd back-end
+cd front-end
 composer install
 ```
 
 ```bash
-cd front-end
+cd back-end
 npm install
 ```
 
@@ -57,11 +57,13 @@ npm install
 php artisan migrate:fresh 
 ```
 
-drag database.sqlite in database slot in PHPStorm.
+Drag database.sqlite in database slot in PHPStorm.
 
-- copy the env.example file and remove the example and add:
+- Copy the env.example file and remove the example and add:
     - AI_KEY=
     - JWT_SECRET=
+
+### Run the application
 
 ```bash
 cd front-end
@@ -69,7 +71,7 @@ npm run dev
 ```
 
 ```bash
-cd front-end
+cd back-end
 php artisan serve
 ```
 
