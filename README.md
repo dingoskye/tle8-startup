@@ -253,8 +253,6 @@ erDiagram
 
 ## Deployment (christa)
 
-## AI Integration (skye)
-
 ## AI Integration
 
 In this project, we integrated AI to support users in breaking down larger tasks into smaller, more manageable subtasks. The AI is used as a planning assistant that helps generate structured subtasks based on the information provided by the user and the linked document that belongs to the main task.
