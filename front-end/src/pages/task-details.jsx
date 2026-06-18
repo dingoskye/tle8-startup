@@ -49,7 +49,7 @@ function TaskDetails() {
     return (
         task !== null ?
             task?.status ?
-                <ErrorComponent code={task.status} message="Taak bestaat niet"/> :
+                <ErrorComponent code={task.status} message="Taak is niet beschikbaar"/> :
                 <div>
                     <header role="banner" className="text-center p-1 mt-2 relative">
                         <div className="bg-bg-white w-full p-4 rounded-lg shadow-md">

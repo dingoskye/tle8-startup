@@ -1,10 +1,11 @@
 import {createContext, useContext, useEffect, useState} from "react"
 import {useApi} from "@/context/api-context.jsx";
+import {useLocation} from "react-router";
 
 const ThemeContext = createContext()
 
 export function ThemeProvider({children}) {
-    const {apiFetch, token} = useApi();
+    const {apiFetch, token, loginData} = useApi();
     const [theme, setTheme] = useState("theme-default")
     const [font, setFont] = useState("font-default")
     const [knownThemes, setKnownThemes] = useState(null)
@@ -66,8 +67,10 @@ export function ThemeProvider({children}) {
     }
 
     useEffect(() => {
-        fetchSettings()
-    }, [])
+        if (!loginData) return;
+
+        fetchSettings();
+    }, [loginData]);
 
     useEffect(() => {
         document.documentElement.classList.remove(
