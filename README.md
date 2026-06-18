@@ -20,11 +20,11 @@ Board-it is a app that helps students with ADHD to get the feeling of urgency to
 | AI                  | Laravel AI   | -                   |
 | AI                  | GPT-4        | -                   |
 
-## Installation & Setup
+## Installation & Setup (thomas)
 
-## Project Structure
+## Project Structure (christa)
 
-## ERD
+## ERD (thomas)
 
 ```mermaid
 erDiagram
@@ -99,7 +99,7 @@ erDiagram
 
 ```
 
-## API Endpoints
+## API Endpoints (christa)
 
 ### Authentication & Login/register
 
@@ -142,11 +142,11 @@ erDiagram
 ### Theme routes
 - `GET /theme/` ~ Get the theme of the user (Requires AUTH)
 
-## Deployment
+## Deployment (christa)
 
-## AI Integration
+## AI Integration (skye)
 
-## Edge Cases
+## Edge Cases (thomas)
 
 ### Authentication:
 
