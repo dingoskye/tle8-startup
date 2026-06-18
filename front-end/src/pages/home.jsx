@@ -8,7 +8,6 @@ import GroupCard from "@/components/group-card.jsx";
 import {useMainTask} from "@/context/task-context.jsx";
 import {useGroup} from "@/context/group-context.jsx";
 import {useApi} from "@/context/api-context.jsx";
-import {useTheme} from "@/context/theme-context.jsx";
 
 function Home() {
     const {fetchMainTasks, mainTasks} = useMainTask()
