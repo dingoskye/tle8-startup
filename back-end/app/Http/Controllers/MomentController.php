@@ -56,19 +56,17 @@ class MomentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
         try {
-            $userId = JWTAuth::parseToken()->authenticate()->id;
-            $moment = Moment::with('group.users')->findOrFail($id);
+            $moment = Moment::findOrFail($id);
 
-            if ($moment->group->users->contains('id', $userId)) {
-                return $moment;
-            } else {
-                return response()->json(['error' => 'you are not authorized'], 403);
-            }
-        } catch (ModelNotFoundException $e) {
-            return response(['error' => 'Moment not found'], 404);
+            return response()->json($moment, 200);
+
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['message' => 'Moment niet gevonden'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Server fout: ' . $e->getMessage()], 500);
         }
     }
 

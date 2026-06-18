@@ -28,8 +28,6 @@ Route::middleware('jwt')->group(function () {
     Route::post('/main-tasks/{mainTask}/generate-subtasks', [SubtaskAiController::class, 'generate']);
 
     //Group controller routes
-//Group controller routes
-    //Group controller routes
     Route::post('/group/create', [GroupController::class, 'create']);
     Route::get('/group/', [GroupController::class, 'index']);
     Route::get('/group/{id}', [GroupController::class, 'show']);
@@ -50,7 +48,6 @@ Route::middleware('jwt')->group(function () {
     Route::put('/moment/edit/{id}', [MomentController::class, 'edit']);
     Route::delete('/moment/delete/{id}', [MomentController::class, 'delete']);
 
-    //Subtask controller routes
     //Sub task controller routes
     Route::post('/sub/create', [SubTaskController::class, 'create']);
     Route::get('/sub/', [SubTaskController::class, 'index']);
@@ -65,6 +62,4 @@ Route::middleware('jwt')->group(function () {
     Route::put('/theme/edit', [ThemeController::class, 'update']);
 });
 
-// ToDo dit in auth zetten
-Route::patch('/group/link/{id}', [GroupController::class, 'createLink']);
-Route::patch('/group/link', [GroupController::class, 'addUser']);
+

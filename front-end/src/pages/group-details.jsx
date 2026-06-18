@@ -8,8 +8,6 @@ import {Link, useParams} from "react-router";
 import {FaPlus} from "react-icons/fa";
 import {ErrorComponent} from "@/pages/Error.jsx";
 import DeadlineCard from "@/components/ui/deadline-card.jsx";
-import {LuSquare, LuSquareCheckBig} from "react-icons/lu";
-import Progressbar from "@/components/ui/progressbar.jsx";
 import Tape from "@/components/ui/tape.jsx";
 import {IoPerson} from "react-icons/io5";
 
