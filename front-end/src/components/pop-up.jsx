@@ -22,7 +22,7 @@ function PopUp({
                 onClick={onClose}
                 aria-hidden="true"
             />
-            <div className="relative z-10 w-[90%] md:w-[40vw] h-[30%] md:h-[50%] m-auto">
+            <div className="relative z-10 w-[90%] md:w-[40vw] md:h-[50%] m-auto">
                 <Card variant="white">
                     {children}
                 </Card>
