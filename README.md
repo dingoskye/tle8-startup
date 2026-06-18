@@ -33,7 +33,7 @@ with peer pressure (working together), deviding tasks and making progression vis
 - MySQL
 - Git
 
-### clone repository
+### Clone repository
 
 ```bash
 git clone 
