@@ -66,10 +66,10 @@ export function ThemeProvider({children}) {
     }
 
     useEffect(() => {
-        if (!loginData) return;
+        if (!loginData && token === null) return;
 
         fetchSettings();
-    }, [loginData]);
+    }, [token]);
 
     useEffect(() => {
         document.documentElement.classList.remove(

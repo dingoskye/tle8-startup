@@ -128,7 +128,7 @@ function Subtask() {
                                 name="context"
                                 value={formData.context}
                                 onChange={handleInputChange}
-                                className="w-full min-h-30 bg-white/80 p-3 outline-none resize-none"
+                                className="w-full min-h-30 bg-bg-white p-3 outline-none resize-none"
                                 placeholder="Geef context mee aan de AI."
                             />
 
@@ -147,7 +147,7 @@ function Subtask() {
 
                             <div className="relative">
                                 {/* lijn */}
-                                <div className="absolute left-0 right-0 top-6 h-0.5 bg-black"></div>
+                                <div className="absolute left-0 right-0 top-6 h-0.5 bg-text"></div>
 
                                 {/* slider */}
                                 <div className="grid grid-cols-4">
@@ -165,7 +165,7 @@ function Subtask() {
                                             }
                                             className="relative flex h-12 justify-center">
                                             {/* verticale lijn */}
-                                            <span className="absolute top-0 h-12 w-0.5 bg-black"></span>
+                                            <span className="absolute top-0 h-12 w-0.5 bg-text"></span>
 
                                             {/* slider dot */}
                                             {Number(formData.niveau) === value && (
