@@ -253,7 +253,15 @@ erDiagram
 
 ## Deployment (christa)
 
-## AI Integration (skye)
+## AI Integration
+
+In this project, we integrated AI to support users in breaking down larger tasks into smaller, more manageable subtasks. The AI is used as a planning assistant that helps generate structured subtasks based on the information provided by the user and the linked document that belongs to the main task.
+
+The AI integration was planned to be handled through the backend using the Laravel AI SDK, but it didn't seem to work properly in our region. Instead of using Laravel AI SDK to it's full potential, we used a try/catch method to get it to work properly. The frontend sends the user input, such as the context and the selected difficulty level, to the backend. The backend then retrieves the linked AI file from the main task and combines this document content with the form input. This information is sent to the AI model with a clear prompt that explains how the subtasks should be generated.
+
+The AI is instructed to only use the information from the form and the linked document. It does not use the title or description of the main task, and it does not add external information or make assumptions. This makes the generated subtasks more relevant to the actual assignment and keeps the output focused on the provided material. The generated output consists of multiple subtasks (between 8 and 20), each containing a title and a description. These subtasks are returned as structured JSON, so they can be processed by the backend and saved in the database. This allows the application to display the generated subtasks to the user in a clear and organized way.
+
+We use AI in this project to make planning easier, especially for users who struggle with turning a large assignment into smaller steps. Instead of creating all subtasks manually, the AI gives users a useful starting point that they can follow, adjust, or expand if needed.
 
 ## Edge Cases
 
