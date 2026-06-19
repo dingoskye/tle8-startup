@@ -64,6 +64,12 @@ class SubtaskAiController extends Controller
                 // Optioneel: Ruim eventuele overbodige witruimtes op die de parser achterlaat
                 $documentContent = trim(preg_replace('/\s+/', ' ', $documentContent));
 
+                $documentContent = iconv(
+                    'UTF-8',
+                    'UTF-8//IGNORE',
+                    $documentContent
+                );
+
             } catch (\Exception $e) {
                 return response()->json([
                     'message' => 'Er is iets misgegaan tijdens het uitlezen van het PDF-bestand.',
@@ -77,7 +83,7 @@ class SubtaskAiController extends Controller
             ], 422);
         }
 
-        $systemPrompt =  '
+        $systemPrompt = '
         Je bent een ervaren projectplanner en werkvoorbereider.
 
         Je taak is om op basis van de informatie die in het formulier is ingevuld en de inhoud van het gekoppelde document een logische opsplitsing van het werk te maken in subtaken.
