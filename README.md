@@ -84,42 +84,42 @@ looks like this because of it:
 
 board-it/
 ├── back-end/
-├── app/
-├── bootstrap/
-├── config/
-├── database/
-├── public/
-├── resources/
-├── routes/
-├── storage/
-├── stubs/
-├── tests/
-├── .env
-├── .gitignore
-├── composer.json
-├── composer.lock
-├── package.json
-├── package-lock.json
+----├── app/
+----├── bootstrap/
+----├── config/
+----├── database/
+----├── public/
+----├── resources/
+----├── routes/
+----├── storage/
+----├── stubs/
+----├── tests/
+----├── .env
+----├── .gitignore
+----├── composer.json
+----├── composer.lock
+----├── package.json
+----├── package-lock.json
 ├── front-end/
-├── public/
-├── src/
-├── assets/
-├── components/
-├── context/
-├── lib/
-├── pages/
-├── app.jsx
-├── index.css
-├── layout.jsx
-├── main.jsx
-├── .gitignore
-├── components.json
-├── eslint.config.js
-├── index.html
-├── jsconfig.json
-├── package.json
-├── package-lock.json
-├── vite.config.js
+----├── public/
+----├── src/
+--------├── assets/
+--------├── components/
+--------├── context/
+--------├── lib/
+--------├── pages/
+--------├── app.jsx
+--------├── index.css
+--------├── layout.jsx
+--------├── main.jsx
+----├── .gitignore
+----├── components.json
+----├── eslint.config.js
+----├── index.html
+----├── jsconfig.json
+----├── package.json
+----├── package-lock.json
+----├── vite.config.js
 ├── README.md
 
 ````
@@ -251,17 +251,253 @@ erDiagram
 - `GET /theme/details` ~ Get the theme settings of the user (Requires AUTH)
 - `PUT /theme/edit` ~ Update de theme settings of the user (Requires AUTH)
 
-## Deployment (christa)
+## Deployment
+
+If this is the first time that you deploy the project on the server you need to create a script with `nano ./<name>.sh`
+and name it something like: `configure_webserver` with this script:
+
+```bash
+#!/bin/bash
+
+echo -n "Please provide your git (SSH!) repo link: "
+read -r git_repo_link
+
+echo -n "Please provide your project machine name (lowercase/no spaces): "
+read -r project_machine_name
+
+echo -n "Please provide your project normal human name: "
+read -r project_name
+
+###############################################################################
+
+# Clone repository
+
+###############################################################################
+
+rm -rf ~/www/"$project_machine_name"
+mkdir -p ~/www
+
+git clone "$git_repo_link" ~/www/"$project_machine_name" || exit 1
+
+###############################################################################
+
+# Backend (Laravel)
+
+###############################################################################
+
+cd ~/www/"$project_machine_name"/back-end || exit 1
+
+composer install --no-interaction --prefer-dist --optimize-autoloader || exit 1
+
+php artisan key:generate --force
+php artisan migrate --force
+
+###############################################################################
+
+# Frontend (React/Vite)
+
+###############################################################################
+
+cd ~/www/"$project_machine_name"/front-end || exit 1
+
+npm install || exit 1
+npm run build || exit 1
+
+###############################################################################
+
+# Deploy backend
+
+###############################################################################
+
+sudo rm -rf /var/www/backend
+sudo mkdir -p /var/www/backend
+
+sudo cp -R ~/www/"$project_machine_name"/back-end/. /var/www/backend
+
+###############################################################################
+
+# Deploy frontend
+
+###############################################################################
+
+sudo rm -rf /var/www/frontend
+sudo mkdir -p /var/www/frontend
+
+sudo cp -R ~/www/"$project_machine_name"/front-end/dist/. /var/www/frontend
+
+###############################################################################
+
+# Laravel permissions
+
+###############################################################################
+
+sudo chown -R www-data:www-data /var/www/backend
+sudo chown -R www-data:www-data /var/www/frontend
+
+sudo chmod -R 775 /var/www/backend/storage
+sudo chmod -R 775 /var/www/backend/bootstrap/cache
+
+###############################################################################
+
+# Laravel storage link
+
+###############################################################################
+
+cd /var/www/backend || exit 1
+
+sudo php artisan storage:link
+
+###############################################################################
+
+# Nginx
+
+###############################################################################
+
+sudo cp ~/nginx.conf /etc/nginx/sites-available/"$project_machine_name"
+
+sudo ln -sf /etc/nginx/sites-available/"$project_machine_name" /etc/nginx/sites-enabled/"$project_machine_name"
+
+sudo rm -f /etc/nginx/sites-enabled/default
+
+###############################################################################
+
+# Restart services
+
+###############################################################################
+
+sudo nginx -t || exit 1
+
+sudo service php8.4-fpm restart
+sudo service nginx restart
+
+echo ""
+echo "========================================"
+echo "Deployment completed successfully!"
+echo "========================================"
+```
+
+When you want to run the script you login on your server and type `./configure_webserver.sh` doing this will run the
+script you made. Don't forget to put your .env file in the back-end folder on the server. You can do this with filezila
+were you can just drag your own file in the server or you can make a new one with `nano .env` when your in the back-end
+folder and copy and paste the lines that are in your .env in the server one. Make sure you change the `APP_URL` to the
+right URL of the server and turn `APP_DEBUG` off.
+
+After that the server should work already. When you want to deploy a new version of the main branche on the server you
+need to make a new script with `nano ./<name>.sh` call it something like: `deploy` and and this script in there:
+
+```bash
+#!/bin/bash
+
+echo -n "Please provide your project machine name (lowercase/no spaces): "
+read -r project_machine_name
+
+###############################################################################
+
+# Git update
+
+###############################################################################
+
+cd ~/www/"$project_machine_name" || exit 1
+
+git reset --hard HEAD
+
+RESULT=$(git pull)
+
+###############################################################################
+
+# Backend (Laravel)
+###############################################################################
+
+cd ~/www/"$project_machine_name"/back-end || exit 1
+
+composer install --no-interaction --prefer-dist --optimize-autoloader || exit 1
+
+if [ ! -f .env ]; then
+echo "ERROR: back-end/.env not found"
+exit 1
+fi
+
+php artisan migrate:fresh --force || exit 1
+php artisan db:seed --force || exit 1
+
+###############################################################################
+
+# Frontend (React)
+
+###############################################################################
+
+cd ~/www/"$project_machine_name"/front-end || exit 1
+
+npm install || exit 1
+npm run build || exit 1
+
+###############################################################################
+
+# Deploy backend
+
+###############################################################################
+
+sudo rsync -av --delete --exclude 'storage/' --exclude 'bootstrap/cache/' ~/www/"$project_machine_name"/back-end/ /var/www/backend/
+
+###############################################################################
+
+# Deploy frontend
+
+###############################################################################
+
+sudo rsync -av --delete ~/www/"$project_machine_name"/front-end/dist/ /var/www/frontend/
+
+###############################################################################
+
+# Permissions
+
+###############################################################################
+
+sudo chown -R www-data:www-data /var/www/backend
+sudo chown -R www-data:www-data /var/www/frontend
+
+sudo chmod -R 775 /var/www/backend/storage
+sudo chmod -R 775 /var/www/backend/bootstrap/cache
+
+###############################################################################
+
+# Run migrations on live copy
+
+###############################################################################
+
+cd /var/www/backend || exit 1
+
+sudo -u www-data php artisan migrate --force
+
+echo "Deployment successful!"
+```
+
+To run this script you do the same thing as with the first one so you do `./deploy.sh` to run it. Important note: the
+script does a migrate:fresh so your database will be empty. If you have important data in the database change that line
+to `php artisan migrate --force || exit 1` !
 
 ## AI Integration
 
-In this project, we integrated AI to support users in breaking down larger tasks into smaller, more manageable subtasks. The AI is used as a planning assistant that helps generate structured subtasks based on the information provided by the user and the linked document that belongs to the main task.
+In this project, we integrated AI to support users in breaking down larger tasks into smaller, more manageable subtasks.
+The AI is used as a planning assistant that helps generate structured subtasks based on the information provided by the
+user and the linked document that belongs to the main task.
 
-The AI integration was planned to be handled through the backend using the Laravel AI SDK, but it didn't seem to work properly in our region. Instead of using Laravel AI SDK to it's full potential, we used a try/catch method to get it to work properly. The frontend sends the user input, such as the context and the selected difficulty level, to the backend. The backend then retrieves the linked AI file from the main task and combines this document content with the form input. This information is sent to the AI model with a clear prompt that explains how the subtasks should be generated.
+The AI integration was planned to be handled through the backend using the Laravel AI SDK, but it didn't seem to work
+properly in our region. Instead of using Laravel AI SDK to it's full potential, we used a try/catch method to get it to
+work properly. The frontend sends the user input, such as the context and the selected difficulty level, to the backend.
+The backend then retrieves the linked AI file from the main task and combines this document content with the form input.
+This information is sent to the AI model with a clear prompt that explains how the subtasks should be generated.
 
-The AI is instructed to only use the information from the form and the linked document. It does not use the title or description of the main task, and it does not add external information or make assumptions. This makes the generated subtasks more relevant to the actual assignment and keeps the output focused on the provided material. The generated output consists of multiple subtasks (between 8 and 20), each containing a title and a description. These subtasks are returned as structured JSON, so they can be processed by the backend and saved in the database. This allows the application to display the generated subtasks to the user in a clear and organized way.
+The AI is instructed to only use the information from the form and the linked document. It does not use the title or
+description of the main task, and it does not add external information or make assumptions. This makes the generated
+subtasks more relevant to the actual assignment and keeps the output focused on the provided material. The generated
+output consists of multiple subtasks (between 8 and 20), each containing a title and a description. These subtasks are
+returned as structured JSON, so they can be processed by the backend and saved in the database. This allows the
+application to display the generated subtasks to the user in a clear and organized way.
 
-We use AI in this project to make planning easier, especially for users who struggle with turning a large assignment into smaller steps. Instead of creating all subtasks manually, the AI gives users a useful starting point that they can follow, adjust, or expand if needed.
+We use AI in this project to make planning easier, especially for users who struggle with turning a large assignment
+into smaller steps. Instead of creating all subtasks manually, the AI gives users a useful starting point that they can
+follow, adjust, or expand if needed.
 
 ## Edge Cases
 
