@@ -1,11 +1,11 @@
 ## Project Overview
 
 Board-it is a app that helps students with ADHD to get the feeling of urgency to start tasks earlier. This is achieved
-with peer pressure (working together), deviding tasks and making progression visual.
+with peer pressure (working together), dividing tasks and making progression visual.
 
 ## Key Features
 
-- Devide tasks in to smaller tasks with AI or make them yourself.
+- Divide tasks into smaller tasks with AI or make them yourself.
 - Get the urge to work by studing together with your friends.
 - Add deadlines to your subtasks.
 - Progression is visual.
@@ -25,7 +25,7 @@ with peer pressure (working together), deviding tasks and making progression vis
 
 ## Installation & Setup
 
-### rerequisites
+### Prerequisites
 
 - Node.js
 - Npm
@@ -59,7 +59,7 @@ php artisan migrate:fresh
 
 Drag database.sqlite in database slot in PHPStorm.
 
-- Copy the env.example file and remove the example and add:
+- Copy the env.example file, remove the example and add:
     - AI_KEY=
     - JWT_SECRET=
 
