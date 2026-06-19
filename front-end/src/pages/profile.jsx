@@ -79,7 +79,7 @@ function Profile() {
                 <form className="h-full flex gap-4 flex-col" onSubmit={handleSubmit}>
                     <Card variant="secondary">
                         <h3 className="text-xl font-headers mt-2">Kleuren:</h3>
-                        {knownThemes !== null && knownThemes.length > 0 ? knownThemes.map((theme) =>
+                        {knownThemes !== null && knownThemes.length > 0 ? knownThemes.slice(0, 3).map((theme) =>
                             <div className="flex gap-4 w-full justify-between">
                                 <div className="flex gap-4">
                                     <input type="radio" id={theme.name} name="theme"
@@ -98,7 +98,7 @@ function Profile() {
                         ) : null}
                     </Card>
                     <Card variant="tertiary">
-                        <h3 className="text-xl font-headers mt-2">Text:</h3>
+                        <h3 className="text-xl font-headers mt-2">Tekst:</h3>
                         <div className="flex gap-3 justify-center">
                             <label htmlFor="written_font" className="text-lg">Wil je een geschreven fontje?</label>
                             <input id="written_font" type="checkbox"
